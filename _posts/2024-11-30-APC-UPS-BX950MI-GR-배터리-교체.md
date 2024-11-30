@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2024-11-30
-title: "[랑프두잇] "
+title: "APC UPS BX950MI-GR 배터리 교체"
 tags: [BX950MI, UPS, ]
 categories: [FixIT, ]
 ---
