@@ -211,8 +211,5 @@ Subscription: 3 Event: next(🍊)
 PublishSubject, ReplaySubject, 그리고 BehaviorSubject는 해제(Dispose)될 때 자동으로 **Completed 이벤트**를 방출하지 않습니다.
 
 
-출처: 
-
-
-[link_preview](https://github.com/ReactiveX/RxSwift)
+출처: [https://github.com/ReactiveX/RxSwift](https://github.com/ReactiveX/RxSwift)
 
