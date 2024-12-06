@@ -11,7 +11,7 @@ categories: [FixIT, ]
 ### 안녕하세요. 랑프입니다.
 
 
-[video](https://youtu.be/l8HzhEoHXaM)
+{% include embed/youtube.html id='l8HzhEoHXaM' %}
 
 
 나스 사용자한테 **520W** 까지 지원하는
