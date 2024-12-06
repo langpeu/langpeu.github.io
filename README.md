@@ -1,6 +1,7 @@
 [![Build and Deploy](https://github.com/langpeu/langpeu.github.io/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/langpeu/langpeu.github.io/actions/workflows/pages-deploy.yml)
 
 ## Feature
+- kekyyII-theme-chirpy 기반
 - 노션에 블로그 템플릿으로 글들을 작성하면
 - 해당 내용을 가져와 notion-to-md 로 변환
 - md to jekyll-theme-chirpy html 로 변환
