@@ -42,9 +42,14 @@ function replaceTitleOutsideRawBlocks(body) {
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
 n2m.setCustomTransformer("embed", async (block) => {
-  const { embed } = block as any;
-  if (!embed?.url) return "";
-  return `{% include embed/youtube.html id='"${embed?.url.get('v')}"' %}`;
+  const embed = block.embed;
+  if (!embed || !embed.url) return "";
+  
+  // URL에서 'v' 파라미터 추출
+  const urlParams = new URLSearchParams(new URL(embed.url).search);
+  const videoId = urlParams.get('v');
+  
+  return `{% include embed/youtube.html id='"${videoId}"' %}`;
 });
 
 (async () => {
