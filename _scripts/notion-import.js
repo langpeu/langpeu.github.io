@@ -13,7 +13,7 @@ const notion = new Client({
 
 function convertYoutubeMarkdown(body) {
     const regex = /\[video\]\((https:\/\/youtu\.be\/([\w-]+))\)/g;
-    return mdText.replace(regex, (_, url, id) => `{% include embed/youtube.html id='${id}' %}`);
+    return body.replace(regex, (_, url, id) => `{% include embed/youtube.html id='${id}' %}`);
 }
 
 function escapeCodeBlock(body) {
