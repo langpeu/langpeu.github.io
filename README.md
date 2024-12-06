@@ -13,11 +13,11 @@
 
 ## Usage
 
-[morethan-log](https://github.com/morethanmin/morethan-log)
-[notion to JekyII](https://aymanbagabas.com/blog/2022/03/29/import-notion-pages-to-jekyll.html)
-[notion to md](https://github.com/souvikinator/notion-to-md)
-[Lourcode](https://lourcode.kr/posts/Jekyll-%EA%B8%B0%EB%B0%98-Github-Pages%EC%99%80-Notion-Page-%EC%97%B0%EB%8F%99/)
-[jekyll-theme-chirpy](https://github.com/cotes2020/jekyll-theme-chirpy#documentation).
+- [morethan-log](https://github.com/morethanmin/morethan-log)
+- [notion to JekyII](https://aymanbagabas.com/blog/2022/03/29/import-notion-pages-to-jekyll.html)
+- [notion to md](https://github.com/souvikinator/notion-to-md)
+- [Lourcode](https://lourcode.kr/posts/Jekyll-%EA%B8%B0%EB%B0%98-Github-Pages%EC%99%80-Notion-Page-%EC%97%B0%EB%8F%99/)
+- [jekyll-theme-chirpy](https://github.com/cotes2020/jekyll-theme-chirpy#documentation).
 
 ## License
 
