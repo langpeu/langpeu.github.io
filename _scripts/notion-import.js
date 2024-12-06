@@ -41,6 +41,12 @@ function replaceTitleOutsideRawBlocks(body) {
 // passing notion client to the option
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
+n2m.setCustomTransformer("embed", async (block) => {
+  const { embed } = block as any;
+  if (!embed?.url) return "";
+  return `{% include embed/youtube.html id='"${embed?.url.get('v')}"' %}`;
+});
+
 (async () => {
   // ensure directory exists
   const root = "_posts";
