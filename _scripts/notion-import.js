@@ -11,6 +11,11 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
+function convertYoutubeMarkdown(body) {
+    const regex = /\[video\]\((https:\/\/youtu\.be\/([\w-]+))\)/g;
+    return mdText.replace(regex, (_, url, id) => `{% include embed/youtube.html id='${id}' %}`);
+}
+
 function escapeCodeBlock(body) {
   const regex = /```([\s\S]*?)```/g;
   return body.replace(regex, function (match, htmlBlock) {
@@ -40,17 +45,6 @@ function replaceTitleOutsideRawBlocks(body) {
 
 // passing notion client to the option
 const n2m = new NotionToMarkdown({ notionClient: notion });
-
-n2m.setCustomTransformer("embed", async (block) => {
-  const embed = block.embed;
-  if (!embed || !embed.url) return "";
-  
-  // URL에서 'v' 파라미터 추출
-  const urlParams = new URLSearchParams(new URL(embed.url).search);
-  const videoId = urlParams.get('v');
-  
-  return `{% include embed/youtube.html id='"${videoId}"' %}`;
-});
 
 (async () => {
   // ensure directory exists
@@ -149,8 +143,8 @@ title: "${title}"${fmtags}${fmcats}
     }
     md = escapeCodeBlock(md);
     md = replaceTitleOutsideRawBlocks(md);
+    md = convertYoutubeMarkdown(md);
     
-
     const ftitle = `${date}-${title.replaceAll(" ", "-")}.md`;
 
     let index = 0;
