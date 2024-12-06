@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   importer:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
@@ -54,7 +54,7 @@ jobs:
  
   build:
     needs: importer
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:           
       - name: Checkout
@@ -68,7 +68,7 @@ jobs:
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v1
+        uses: actions/configure-pages@v5
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -94,7 +94,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages
