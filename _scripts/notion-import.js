@@ -142,12 +142,15 @@ title: "${title}"${fmtags}${fmcats}
 
 `;
     const mdblocks = await n2m.pageToMarkdown(id);
-    let md = n2m.toMarkdownString(mdblocks)["parent"];
+    let custommd = n2m.blockToMarkdown(mdblocks);
+    let md = n2m.toMarkdownString(custommd)["parent"];
+          
     if (md === "") {
       continue;
     }
     md = escapeCodeBlock(md);
     md = replaceTitleOutsideRawBlocks(md);
+    
 
     const ftitle = `${date}-${title.replaceAll(" ", "-")}.md`;
 
