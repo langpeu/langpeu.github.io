@@ -1,37 +1,14 @@
-[![Build and Deploy](https://github.com/LOURC0D3/LOURC0D3.github.io/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/LOURC0D3/LOURC0D3.github.io/actions/workflows/pages-deploy.yml)
+[![Build and Deploy](https://github.com/langpeu/langpeu.github.io/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/langpeu/langpeu.github.io/actions/workflows/pages-deploy.yml)
 
-# Chirpy Starter [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)](https://rubygems.org/gems/jekyll-theme-chirpy) [![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+## Feature
+노션에 블로그 템플릿으로 글들을 작성하면
+-> 해당 내용을 가져와 notion-to-md 로 변환
+-> md to jekyll-theme-chirpy html 로 변환
+-> github.io page 로 배포
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders `_includes`, `_layout`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file from the theme's gem. If you have ever installed this theme gem, you can use the command `bundle info --path jekyll-theme-chirpy` to locate these files.
-
-The Jekyll organization claims that this is to leave the ball in the user’s court, but this also results in users not being able to enjoy the out-of-the-box experience when using feature-rich themes.
-
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your Jekyll site. The following is a list of targets:
-
-```shell
-.
-├── _config.yml
-├── _data
-├── _plugins
-├── _tabs
-└── index.html
-```
-
-In order to save your time, and to prevent you from missing some files when copying, we extract those files/configurations of the latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
-
-## Prerequisites
-
-Follow the instructions in the [Jekyll Docs](https://jekyllrb.com/docs/installation/) to complete the installation of `Ruby`, `RubyGems`, `Jekyll` and `Bundler`.
-
-## Installation
-
-[**Use this template**][use-template] to generate a brand new repository and name it `<GH_USERNAME>.github.io`, where `GH_USERNAME` represents your GitHub username.
-
-Then clone it to your local machine and run:
-
-```
-$ bundle
-```
+## I changed some
+- 노션에 embed 한 유튜브 영상 제대로 나오게 수정 
+- workflow 에 오래된 action 들 최신 버전으로 변경
 
 ## Usage
 
