@@ -11,6 +11,9 @@
 - 노션에 embed 한 유튜브 영상 제대로 나오게 수정 
 - workflow 에 오래된 action 들 최신 버전으로 변경
 
+## Result
+[LANGPEU](https://langpeu.github.io/)
+
 ## Usage
 
 - [morethan-log](https://github.com/morethanmin/morethan-log)
