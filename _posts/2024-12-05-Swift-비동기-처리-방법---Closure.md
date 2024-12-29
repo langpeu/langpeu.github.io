@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2024-12-05
-title: "Swift 비동기 처리 방법 - Closure 클로저"
+title: "Swift 비동기 처리 방법 - Closure"
 tags: [Tips, ]
 categories: [Swift, ]
 ---
