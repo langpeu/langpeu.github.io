@@ -76,7 +76,7 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 [https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
 
 
-[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=040c96f420fa3f662f4ef7869eecee5a9313a14e4e272e214576cb83aa0ae20d&X-Amz-SignedHeaders=host&x-id=GetObject)
+[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T091258Z&X-Amz-Expires=3600&X-Amz-Signature=891423515d595d58919d90a0ca1cb1eb80867d30243c302ce6229ab53e9da24c&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
 컬러테마 출처
@@ -85,10 +85,10 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 [https://github.com/mbadolato/iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=e7fa54510ab48a07358341af0e4e4d3739318338c66d76d43e1e4f6d2155d19a&X-Amz-SignedHeaders=host&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T091258Z&X-Amz-Expires=3600&X-Amz-Signature=1a9a3505db40a477dc2568dc2a5dae92b4d056969730c40508721a232b1c8fe4&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=73eb1b74cc547dfade822abe445e2f51785f09f074990e50a7f6d817295184f7&X-Amz-SignedHeaders=host&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T091258Z&X-Amz-Expires=3600&X-Amz-Signature=0f196c2b32adec04a91f3aebda0f9f043a7b27005c7200efb8ceb934a20637ea&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
 
