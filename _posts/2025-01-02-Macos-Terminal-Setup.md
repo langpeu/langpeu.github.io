@@ -73,22 +73,22 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 폰트 출처
 
 
-[link_preview](https://github.com/romkatv/powerlevel10k)
+[https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
 
 
-[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T034101Z&X-Amz-Expires=3600&X-Amz-Signature=29196e0a124539ff977dae2b5a3004df8c83ed524ce9fc0d09f641148c39751d&X-Amz-SignedHeaders=host&x-id=GetObject)
+[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=040c96f420fa3f662f4ef7869eecee5a9313a14e4e272e214576cb83aa0ae20d&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
 컬러테마 출처
 
 
-[link_preview](https://github.com/mbadolato/iTerm2-Color-Schemes)
+[https://github.com/mbadolato/iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T034101Z&X-Amz-Expires=3600&X-Amz-Signature=746a4d6c77bd810c50b1a4ce02588e4452027d2db77600e8d72c9fbcad1d49b4&X-Amz-SignedHeaders=host&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=e7fa54510ab48a07358341af0e4e4d3739318338c66d76d43e1e4f6d2155d19a&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T034101Z&X-Amz-Expires=3600&X-Amz-Signature=8b1c437d635c80587d235199248efbb1c1d0eb26dc2e16b8bb57b85037800662&X-Amz-SignedHeaders=host&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250105%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250105T045847Z&X-Amz-Expires=3600&X-Amz-Signature=73eb1b74cc547dfade822abe445e2f51785f09f074990e50a7f6d817295184f7&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
 
@@ -108,7 +108,7 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 ## Install Oh My ZSH!
 
 
-[bookmark](https://ohmyz.sh/)
+[https://ohmyz.sh/](https://ohmyz.sh/)
 
 
 To install:
@@ -127,7 +127,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ## Install PowerlineFont
 
 
-[bookmark](https://github.com/powerline/fonts/tree/master/SourceCodePro)
+[https://github.com/powerline/fonts/tree/master/SourceCodePro](https://github.com/powerline/fonts/tree/master/SourceCodePro)
 
 
 
@@ -150,7 +150,7 @@ rm -rf fonts
 ## Install iTerm2
 
 
-[bookmark](https://iterm2.com/)
+[https://iterm2.com/](https://iterm2.com/)
 
 
 다운로드 링크
