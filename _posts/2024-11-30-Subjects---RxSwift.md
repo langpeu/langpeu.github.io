@@ -7,7 +7,7 @@ categories: [RxSwift, ]
 ---
 
 
-![0](/assets/img/2024-11-30-Subjects---RxSwift.md/0.png)_rxswift_subjects.png_
+![0](/assets/img/2024-11-30-Subjects---RxSwift.md/0.png)
 
 
 

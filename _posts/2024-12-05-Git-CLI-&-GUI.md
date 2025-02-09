@@ -37,7 +37,7 @@ git version 2.47.1
 
 
 
-![0](/assets/img/2024-12-05-Git-CLI-&-GUI.md/0.png)_스크린샷_2025-01-05_오후_2.14.47.png_
+![0](/assets/img/2024-12-05-Git-CLI-&-GUI.md/0.png)
 
 
 
@@ -96,7 +96,7 @@ logs/**/debug.log
 
 
 
-![1](/assets/img/2024-12-05-Git-CLI-&-GUI.md/1.png)_스크린샷_2025-01-05_오후_2.19.38.png_
+![1](/assets/img/2024-12-05-Git-CLI-&-GUI.md/1.png)
 
 
 
@@ -108,7 +108,7 @@ logs/**/debug.log
 
 
 
-![2](/assets/img/2024-12-05-Git-CLI-&-GUI.md/2.png)_스크린샷_2025-01-05_오후_2.25.36.png_
+![2](/assets/img/2024-12-05-Git-CLI-&-GUI.md/2.png)
 
 
 
@@ -156,10 +156,10 @@ leopards.yaml 이 추가되고 수정된 내역이 있는데
 leopards.yaml 추가했던 commit 를 revert 하려고 할때 뜨는 이슈
 
 
-![3](/assets/img/2024-12-05-Git-CLI-&-GUI.md/3.png)_스크린샷_2025-01-05_오후_3.02.52.png_
+![3](/assets/img/2024-12-05-Git-CLI-&-GUI.md/3.png)
 
 
-![4](/assets/img/2024-12-05-Git-CLI-&-GUI.md/4.png)_스크린샷_2025-01-05_오후_3.03.17.png_
+![4](/assets/img/2024-12-05-Git-CLI-&-GUI.md/4.png)
 
 
 
@@ -175,7 +175,7 @@ leopards.yaml 추가했던 commit 를 revert 하려고 할때 뜨는 이슈
 
 
 
-![5](/assets/img/2024-12-05-Git-CLI-&-GUI.md/5.png)_스크린샷_2025-01-05_오후_3.19.36.png_
+![5](/assets/img/2024-12-05-Git-CLI-&-GUI.md/5.png)
 
 
 
@@ -188,7 +188,7 @@ leopards.yaml 추가했던 commit 를 revert 하려고 할때 뜨는 이슈
 
 
 
-![6](/assets/img/2024-12-05-Git-CLI-&-GUI.md/6.png)_스크린샷_2025-01-05_오후_3.20.46.png_
+![6](/assets/img/2024-12-05-Git-CLI-&-GUI.md/6.png)
 
 
 
@@ -201,7 +201,7 @@ leopards.yaml 추가했던 commit 를 revert 하려고 할때 뜨는 이슈
 
 
 
-![7](/assets/img/2024-12-05-Git-CLI-&-GUI.md/7.png)_스크린샷_2025-01-05_오후_3.21.27.png_
+![7](/assets/img/2024-12-05-Git-CLI-&-GUI.md/7.png)
 
 
 
@@ -230,10 +230,10 @@ leopards.yaml 추가했던 commit 를 revert 하려고 할때 뜨는 이슈
 
 
 
-![8](/assets/img/2024-12-05-Git-CLI-&-GUI.md/8.png)_스크린샷_2025-01-05_오후_3.35.04.png_
+![8](/assets/img/2024-12-05-Git-CLI-&-GUI.md/8.png)
 
 
-![9](/assets/img/2024-12-05-Git-CLI-&-GUI.md/9.png)_스크린샷_2025-01-05_오후_3.35.13.png_
+![9](/assets/img/2024-12-05-Git-CLI-&-GUI.md/9.png)
 
 
 Merge
@@ -267,7 +267,7 @@ Rebase
 
 
 
-![10](/assets/img/2024-12-05-Git-CLI-&-GUI.md/10.png)_스크린샷_2025-01-05_오후_3.47.20.png_
+![10](/assets/img/2024-12-05-Git-CLI-&-GUI.md/10.png)
 
 
 
@@ -292,16 +292,16 @@ Rebase
 
 
 
-![11](/assets/img/2024-12-05-Git-CLI-&-GUI.md/11.png)_스크린샷_2025-01-05_오후_3.57.09.png_
+![11](/assets/img/2024-12-05-Git-CLI-&-GUI.md/11.png)
 
 
-![12](/assets/img/2024-12-05-Git-CLI-&-GUI.md/12.png)_스크린샷_2025-01-05_오후_3.55.20.png_
+![12](/assets/img/2024-12-05-Git-CLI-&-GUI.md/12.png)
 
 
 ---
 
 
-![13](/assets/img/2024-12-05-Git-CLI-&-GUI.md/13.png)_스크린샷_2025-01-05_오후_4.48.30.png_
+![13](/assets/img/2024-12-05-Git-CLI-&-GUI.md/13.png)
 
 
 
@@ -323,7 +323,7 @@ Rebase
 
 
 
-![14](/assets/img/2024-12-05-Git-CLI-&-GUI.md/14.png)_스크린샷_2025-01-05_오후_4.57.56.png_
+![14](/assets/img/2024-12-05-Git-CLI-&-GUI.md/14.png)
 
 
 HEAD 나 자신 main 브랜치
@@ -342,10 +342,10 @@ HEAD 나 자신 main 브랜치
 
 
 
-![15](/assets/img/2024-12-05-Git-CLI-&-GUI.md/15.png)_스크린샷_2025-01-05_오후_5.00.51.png_
+![15](/assets/img/2024-12-05-Git-CLI-&-GUI.md/15.png)
 
 
-![16](/assets/img/2024-12-05-Git-CLI-&-GUI.md/16.png)_스크린샷_2025-01-05_오후_5.02.03.png_
+![16](/assets/img/2024-12-05-Git-CLI-&-GUI.md/16.png)
 
 
 충돌 부분 수정후 
@@ -362,10 +362,10 @@ HEAD 나 자신 main 브랜치
 
 
 
-![17](/assets/img/2024-12-05-Git-CLI-&-GUI.md/17.png)_스크린샷_2025-01-05_오후_5.01.53.png_
+![17](/assets/img/2024-12-05-Git-CLI-&-GUI.md/17.png)
 
 
-![18](/assets/img/2024-12-05-Git-CLI-&-GUI.md/18.png)_스크린샷_2025-01-05_오후_5.03.35.png_
+![18](/assets/img/2024-12-05-Git-CLI-&-GUI.md/18.png)
 
 
 ---
@@ -385,7 +385,7 @@ HEAD 나 자신 main 브랜치
 
 
 
-![19](/assets/img/2024-12-05-Git-CLI-&-GUI.md/19.png)_스크린샷_2025-01-05_오후_5.05.29.png_
+![19](/assets/img/2024-12-05-Git-CLI-&-GUI.md/19.png)
 
 
 
@@ -405,10 +405,10 @@ HEAD 나 자신 main 브랜치
 
 
 
-![20](/assets/img/2024-12-05-Git-CLI-&-GUI.md/20.png)_스크린샷_2025-01-05_오후_5.11.56.png_
+![20](/assets/img/2024-12-05-Git-CLI-&-GUI.md/20.png)
 
 
-![21](/assets/img/2024-12-05-Git-CLI-&-GUI.md/21.png)_스크린샷_2025-01-05_오후_5.14.56.png_
+![21](/assets/img/2024-12-05-Git-CLI-&-GUI.md/21.png)
 
 
 
@@ -423,7 +423,7 @@ HEAD 나 자신 main 브랜치
 
 
 
-![22](/assets/img/2024-12-05-Git-CLI-&-GUI.md/22.png)_스크린샷_2025-01-05_오후_5.13.36.png_
+![22](/assets/img/2024-12-05-Git-CLI-&-GUI.md/22.png)
 
 
 
@@ -437,7 +437,7 @@ HEAD 나 자신 main 브랜치
 
 
 
-![23](/assets/img/2024-12-05-Git-CLI-&-GUI.md/23.png)_스크린샷_2025-01-05_오후_5.20.24.png_
+![23](/assets/img/2024-12-05-Git-CLI-&-GUI.md/23.png)
 
 
 ---
@@ -450,10 +450,10 @@ HEAD 나 자신 main 브랜치
 iOS 앱 프로젝트
 
 
-[gittest.zip](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/6c8b443a-f138-4391-a0fc-7af57ed1c72b/gittest.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466UDSR3UOI%2F20250209%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250209T012758Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCICflf6Svjd%2BiYMJcfcQLAtviBbV6drMmfFki8qbRvTXTAiBMqpK%2B7boGPNPE1YK33O0v%2Fiw2k6NlaOXt3HgrtZ2XNiqIBAia%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMQjZtree0m0tPtmt%2BKtwDwH18LoKQYXSmearNPzE91wV7weUyG9Fgjzhg5X6I4F%2FzdjR6JLb7OAqrjk4qtuJPjaXy8kFkjZs6fKiLJp4OMwNlv92IQ9ka7zxGF6p2cA5MbaTr1fG81jmOCfUFCRtEg1aG3IjeVEZLpBa%2Boie0gWhtsUZbrz68Up8mqJHtegMYnSre1zmL7nlfUTFgP2%2FcN2Nfd3Dkm11ci4f8gjVd3TyQuZ0XBsIn1ba0JPrX%2FukvlZwE5Bp9Z70In%2F%2F6SJtBWq4Zxrc7XJ1UFMIHqGGwHMy7r44RmLTkcfgoEhzniwTbqWIJUHgHkO7zRNSiaSqPN2LjjfmmWhWazX2xVYSrSZeK2fWYlBSwmIVWdnjR4Yum%2FjbWcrz8ryPNvh42LhPl48YJu%2FaxtLfSIQo5VueaWn3kQG9YJmhQHOFJFfv3aIHgf3xph6D7hgsj%2FMHIt%2BTOoMciHUcr2b%2B4olFDh%2FUfejNCMAok1MuJE66MOeIXqPFy5hpd09UMZLZ2ri7AXVzA5Move5AGRd8bKtS0gxqaaSQEkiF6h0Ial%2FQiubRbBQ6%2BOkAZIJQOuRrAXBuybsSDUOO9D6DplGvmobppCHs3x0VSURaj7MFpfKAffougLV3cahRuDY%2FG6DqySTww%2B%2FKfvQY6pgE4ncHf5EFlI12Mx5UT4zAX5vq8DPrAWxpa%2BT9CN93MBOOmjRUWab1iIU%2Bssz%2FzlBZTGDu%2BhBtUxvyP3Pb1buTTj%2BcZYIQH0wUPpJm5xkaKHhZpv8TnH4cSdRg4pu6Q%2BHKeUin%2F%2B7EASWJKLFGieuE8WRpFnFZTwOFbPnPVb2noic4KkWF5IenyUUskWn85Dd2UT5WlpgHkZji7sgAQrHiYFI9TY1vF&X-Amz-Signature=7885d98b4217de1bb9835bda248d88fb176c88235264dafc0450e40536019c38&X-Amz-SignedHeaders=host&x-id=GetObject)
+[gittest.zip](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/6c8b443a-f138-4391-a0fc-7af57ed1c72b/gittest.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466RM3ZOAXT%2F20250209%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250209T014654Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIFCQ0unNMQ8hF%2FJojNY3goMQmV5Ufa96XHHcJbGiAMAZAiEA10i%2Fdx%2BVE2nPr43VDfISYI7%2FhX9AfJO5E1N1EQjh%2BTEqiAQImv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDCTz6LIIe6auZDgSmyrcA7QQ9CGR3iUq29Wmap9dhGzbAefhamdsS8Re7p0LRCB4%2FVN8Iwbq5vBBCyXACqH3%2FTb8TzS7xkURlnELZRmh5AZXSE%2FtUQeua3Ywqi9e9wYCCWX2FuVjrNYna5RZz%2F1%2Bg6A8SSSLjmDoIXyAHJhmcp1dkDQJ4k4FSG%2FzUu%2FysP742Ht5Z7jKs1NDCFwQmsOvy03Sz6%2BPBy7LnrNjDse%2BGzgtRGjY3IOJOBq1Lya1f4n0AJrpLkTp4vdj67BDyZ5a34uQj4FTT9ZcUqlspwrk6qxGTnYwYEanuOUUFSXYlskYEFJAmrcrxk3Q4Sfr6LM8CYHBf4Bjjv5bws8IRLnxp9daXpMN%2FeDG0Y2LadPgwDYt6owJsrxNQx1o6oGwbIsMQt0LfpJ0VaLaDvokPHWaPypVgHObEKCxuB5tYijDJHvNirRSKMFCASFriiFcffHbMCAMCnnapQM4xW9u5%2F21ouUJE%2BXch1ZnElS3wf4M8LBzUGCvjsDvtrlO3V9wM3dxTSqnkpB6YhPutYUZNWGtwgfS8Zq0cztaifWyPiySKNKpJxSI6CCJkhv4S%2FozCVLGrb2XBn%2F6p6cfSBkTbEFEg1ko6WMibGxbboC0Jq%2FzAoe3c%2B%2BNryqCohlPpWG1MLnzn70GOqUBLnHfCUm2%2BSgfeq7AQoeLFuMV6hgCHOUhxlKDiFlQVqNK7RJFv6d6OQOsvNard74WGiJ89wNExoVb%2B2OanlQSaPsaCu9ldPLeZHdR1AUlPswrGF44QTyY7MkRlnvbdgfkjJdFEhHLuI3jtQi%2FmjJS3MNu%2FgaO6RgnzLPbYJ9TV%2BhQFq8gFf3EZ6Ji52lz65bbKiymGGFfhwLtX1avOO2tZ1xUj3Ih&X-Amz-Signature=45836a068e9744ba0cec6411055dc9735bc9e937071b69f80ddafa750876b7dc&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
-![24](/assets/img/2024-12-05-Git-CLI-&-GUI.md/24.png)_스크린샷_2025-01-05_오후_5.50.45.png_
+![24](/assets/img/2024-12-05-Git-CLI-&-GUI.md/24.png)
 
 1. conflict-1 을 main 에 merge 하시오
 
@@ -482,7 +482,7 @@ coach: Grace
 
 
 
-![25](/assets/img/2024-12-05-Git-CLI-&-GUI.md/25.png)_스크린샷_2025-01-05_오후_6.12.10.png_
+![25](/assets/img/2024-12-05-Git-CLI-&-GUI.md/25.png)
 
 1. conflict-2 를 main 에 rebase 하시오.
 
@@ -507,7 +507,7 @@ coach: Grace
 아래 와 같이 나와야 한다.
 
 
-![26](/assets/img/2024-12-05-Git-CLI-&-GUI.md/26.png)_스크린샷_2025-01-05_오후_6.08.09.png_
+![26](/assets/img/2024-12-05-Git-CLI-&-GUI.md/26.png)
 
 
 
