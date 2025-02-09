@@ -174,7 +174,10 @@ title: "${title}"${fmtags}${fmcats}
         if (p1 === "") res = "";
         else res = `_${p1}_`;
 
-        return `![${index++}](/${filename})${decodeURIComponent(res)}`;
+        //첨부파일명 url인코딩뺌.
+        //return `![${index++}](/${filename})${decodeURIComponent(res)}`;
+        //첨부파일명 노출뺌.
+          return `![${index++}](/${filename})`;
       }
     );
 
