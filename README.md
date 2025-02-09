@@ -9,6 +9,7 @@
 ## I Add More
 - 노션에 embed 한 유튜브 영상 제대로 나오게 수정 
 - workflow 에 오래된 action 들 최신 버전으로 변경
+- 첨부파일 한글명 url 인코딩으로 나오는거 제대로 나오게 수정
 
 ## Result
 [LANGPEU](https://langpeu.github.io/)
