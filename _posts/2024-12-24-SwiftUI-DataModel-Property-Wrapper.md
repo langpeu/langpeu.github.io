@@ -17,7 +17,7 @@ categories: [SwiftUI, ]
 - Struct 내의 프로퍼티를 수정할 수 있게 만듬
 - @State 로 선언된 변수를 변경 했을때, 이 변수가 포함된 body내의 모든 View를 다시 그림
 
-![0](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/0.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_1.10.14.png_
+![0](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/0.png)_스크린샷_2024-12-29_오후_1.10.14.png_
 
 
 
@@ -62,10 +62,10 @@ struct ContentView: View {
       $(Projected Value)를 통해 Binding<T> 으로 변환해서 반환시켜줌
 
 
-![1](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/1.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.12.14.png_
+![1](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/1.png)_스크린샷_2024-12-29_오후_3.12.14.png_
 
 
-![2](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/2.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.22.17.png_
+![2](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/2.png)_스크린샷_2024-12-29_오후_3.22.17.png_
 
 
 데이터 기준으로 의존성을 표기 하기에 관계는 아래 같다.
@@ -149,7 +149,7 @@ struct SubView: View {
 - Class 참조타입을 감지하기 위해 위에 3가지 필요함
 - ObserveableObject 는 프로토콜이고, @Published, @ObservedObject 는 프로퍼티래퍼다.
 
-![3](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/3.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_1.10.14.png_
+![3](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/3.png)_스크린샷_2024-12-29_오후_1.10.14.png_
 
 - ObservableObject 프로토콜 : 감지되어야 할 클래스에 붙여줌
 - @Published : 클래스내 감지되어야할 프로퍼티에 붙여줌
@@ -199,7 +199,7 @@ struct ContentView: View {
 재 갱신시 새로 생성하지 않고 기존껄 가지고 있는다.
 
 
-![4](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/4.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_4.17.06.png_
+![4](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/4.png)_스크린샷_2024-12-29_오후_4.17.06.png_
 
 
 
@@ -252,7 +252,7 @@ struct ContentView: View {
 ChildView 에 프로퍼티로 전달한다. 해당 numberCounter 는 ContentView body 밖에서 생성하기 때문에 이전에 생성했던 numberCounter 값으로 ChildView를 다시 그린다.
 
 
-![5](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/5.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_4.29.25.png_
+![5](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/5.png)_스크린샷_2024-12-29_오후_4.29.25.png_
 
 
 
@@ -354,7 +354,7 @@ struct ContentView: View {
 
 - 시스템에 이미 세팅되어 있는 환경값을 SwiftUI 뷰에서 아무곳에서나 꺼내 쓸수 있다.
 
-![6](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/6.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_2.14.35.png_
+![6](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/6.png)_스크린샷_2024-12-29_오후_2.14.35.png_
 
 
 
@@ -377,7 +377,7 @@ struct ContentView: View {
 
 
 
-![7](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/7.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_4.37.17.png_
+![7](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/7.png)_스크린샷_2024-12-29_오후_4.37.17.png_
 
 
 
@@ -388,7 +388,7 @@ struct ContentView: View {
 ### 변경점 요약
 
 
-![8](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/8.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_5.54.17.png_
+![8](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/8.png)_스크린샷_2024-12-29_오후_5.54.17.png_
 
 - @Published 프로퍼티가 변경되면 View에서 사용되는게 아니어도 전체 View가 다시 리로드 되었는데 @Observable 매크로 사용시 @Published 작성할 필요도 없고, 특히 View에 사용된 프로퍼티만 변경시 리로드 되게 감시가 효율적으로 변경됨
 - ObservableObject 프로토콜 사용시에는 옵셔널과 객체들에 대한 감시가 불가능 했다.
@@ -491,7 +491,7 @@ struct ContentView: View {
 ### @EnvrionmentObject → @Environment 통합
 
 
-![9](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/9.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_5.49.17.png_
+![9](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/9.png)_스크린샷_2024-12-29_오후_5.49.17.png_
 
 
 
@@ -544,7 +544,7 @@ struct ContentView: View {
 @ObservedObject  를 @Bindable 로 변경
 
 
-![10](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/10.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_9.18.49.png_
+![10](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/10.png)_스크린샷_2024-12-29_오후_9.18.49.png_
 
 
 **데이터 소유권**:
@@ -559,7 +559,7 @@ struct ContentView: View {
  @State는 뷰 내부의 상태 관리에 적합하고, @Bindable은 외부 객체와의 데이터 동기화 및 공유에 적합합니다.
 
 
-![11](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/11.png)_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-12-29_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_9.46.38.png_
+![11](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/11.png)_스크린샷_2024-12-29_오후_9.46.38.png_
 
 
 
