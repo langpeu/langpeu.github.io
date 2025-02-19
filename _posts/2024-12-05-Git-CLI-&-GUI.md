@@ -127,7 +127,6 @@ logs/**/debug.log
 
 {% raw %}
 ```shell
-
 # 마지막 커밋 상태로 돌아가고 싶을때
 >git reset --hard
 
@@ -257,7 +256,6 @@ Rebase
 
 {% raw %}
 ```shell
-
 # Merge 머지
 # add-coard -> main 에 머지하려면
 # branch 를 main 으로 이동후 아래 명령어 사용
@@ -450,7 +448,7 @@ HEAD 나 자신 main 브랜치
 iOS 앱 프로젝트
 
 
-[gittest.zip](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/6c8b443a-f138-4391-a0fc-7af57ed1c72b/gittest.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4663FVZTJNZ%2F20250209%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250209T030230Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIG9BX0RSXW3xaQz6OiNfGh8z3HNhtnE3JHkM5uVyWhSIAiAPOTaGJWJyQDEU3dm3g7kGPTCr4I2E6mHoKF6Ksb%2FXFCqIBAib%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMmpzs5KPikKtZyd4uKtwD8Tuzsp0AD15MeJCHqZUu%2FnQ9VU%2Ft34V4qgvqfIZExek%2FE%2BOld0l5escK8Be6Vgy75RU40crr1li%2BcPxGHkvyxywbypITVYtk2qv%2BFSN8oyVJkTNP%2Fzqo0iOp1FY6XM0oVe60QVYsOdd7KqLPZask49eVrtor6r%2F%2Budr6oK0mbddpqA4%2BbutLqOwXVKHbjeeS538%2BWbMKyARHv4B2RcDoP3MeP%2FqH%2FctE9GkuhfdafhMzuHrpg46NOe%2Bm7K%2BkBrsW4GO7C3Hx%2BGQYZwiwl7kmgSAIdvbrhxNiNnkKzf%2BMpsMc7sSZ1PoHaGdaukwCOlcZbJfmlzI5WjRpYMnCSx2f1ltBea3b3E3OjHyCfsFA9U8VCCp8Er1VUmsX4gRk4xlzgQZHX711I5key7%2Bj0ZmPngyziF1bMAZnYU06xC9kyT9VndxA2hCnjR1Gyrs5sBM3HzVDWqAjLoAfyLD8B3oQinybhVylsY7D%2BHF32ICXt81xPFZ9t6HY0CEpZyH0sxL1CFrB8QyNNRWCnwJB8haaVFbe62cVOrV%2Bt0dDqSPRtJlnzrcyxz%2FMDb3HPcdTcu2sICfam5vfzlszTJTrL5wfWkqyPAojSmVjc0mhoGGn0q8OfFxIuH0H9nxOcu4wtaCgvQY6pgH3rs2ZBq3S1VYrXGfNukMzkdRHO01dLW7iSm9uZXiI0ab1aG%2Bhnodqj9yjMtxSabHQ1xyqYQ0DKjq4ILj%2B%2BfhhPLjWBZgmytgjoRrDQZEQfw3blyMQrQ3lkhc4kbbZENlO2Avs6chMwWW0NQT2bx5v1EPdDeoUvLJKPa%2BaZ9XlyV2%2FlnZrWBRfQ2qx%2FFsyKMqrc1V%2FlLIas2tKR8s9foR6um%2F6%2FRL5&X-Amz-Signature=0a29bcdabb3777ab8300b961e48412dc2de4969046a21b76ad5407cca1d6e4ea&X-Amz-SignedHeaders=host&x-id=GetObject)
+[gittest.zip](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/6c8b443a-f138-4391-a0fc-7af57ed1c72b/gittest.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4664NAD5JD3%2F20250219%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250219T131246Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHsaCXVzLXdlc3QtMiJIMEYCIQDnG8F1V27BvRhg46HBHZqE5qqoCgpD4UjslkfCH8c0sQIhALXVNvg0dYq%2B3%2BJGH%2BsAnvfyPp6N%2FcNGZ9nifm2gFwwbKogECKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1IgwHF0lsg2SwGtvfQN0q3ANKyVFT5B1UKhJJI0zjgD7tcixJxnjHJptH2OHawqJv6BrVDeSmYPG%2BovVN9mxWV1sQqiDVD5HCjkYFseA7qb3BhrA2UX%2Fl5qGgDjQi6OztHmMKHs19ODDh%2FBOW20cB%2FefWqJd%2BpCBmLaEY8B80gOfvi4gLdg7yl61Jg3eNJ6RX3KukB7UM0f%2BrYse4P%2BDZZRAhvPk%2BVlCfn%2Bp2%2BozSatr1V5zCs3qLfWsZyxmow%2BQTve4%2BqPp%2BhU1Xzn1TJ0QKKNuOrcXCVEuimuWU%2Fz6MM7FMjly5ABJCGlh%2FEfXfkqNMFGp54B0xdaeSId5RJ2ocZZcZK62qe9T6lx8tzNmL%2FdpWNlnFh8Mi8PMr2zBeu0mgu%2FAN4246WiiLnmWaciTFOGCEObkEsJd0juKuNqNDbr8Lyv3UL5p4NUXW7K5iR3Cd%2Br8w9A2LEpQI5ctYl1TyhOHnpYsQd%2BvTx4zfeE3D3UHX54nlrm23Rvx3mHKpNRyIoyetxWcMUeFoS2os1emkDFjqt4FHfFf2gMfm%2FUAswjdjDmtVsKk9nFgemxEw3CN1SLc6%2BfRxOtVEC1PDXFcbbKujigJDeiLIyI%2FpEnNGkxonUStnvyiM15WRMK9iusaUs6IvBGPGqywaHvN%2BJDD1%2Bda9BjqkAep2UxiEW9PicbLRKXVmuRkrsSUQjKnexJcPzEA0pnjhKSGd1tz%2BlOXoWggjN6I4H0W%2F8N%2FFIkGigJkq39mhvx%2Fd4y4hU6VZGURBMGr%2B2dFJMtA8wv%2Fps0S15e%2Ff%2Bu4WSxMSmoIhYXiiZU8B13fk5AgZnsP%2FGL7QjpW8nab0VuGCBiIOYtH9ZOro%2FGtQA6UJzVpTpYkyrFv7Qam%2BvCs6MgswpFyA&X-Amz-Signature=4428134badb592962cf4a70908d85ae51b558de8f93d8548093e295523bf7131&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 
 ![24](/assets/img/2024-12-05-Git-CLI-&-GUI.md/24.png)
