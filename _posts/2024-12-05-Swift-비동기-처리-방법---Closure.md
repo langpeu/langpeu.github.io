@@ -12,7 +12,7 @@ categories: [Swift, ]
 
 - Result<Success, Failure> 활용
 
-	Result 는 제너릭 타입을 가진 enum 으로 아래처럼 선택한 case에 맞는 성공데이터 또는 실패 에러코드를 전달 한다.
+    Result 는 제너릭 타입을 가진 enum 으로 아래처럼 선택한 case에 맞는 성공데이터 또는 실패 에러코드를 전달 한다.
 
 
 
@@ -94,7 +94,7 @@ static func fetchTodos(page: Int = 1, completion: @escaping (Result<BaseListResp
 
 - 연쇄 API 호출
 
-	할일을 등록후 성공이면 이어서 전체목록을 조회해 오는 연속 API 호출
+    할일을 등록후 성공이면 이어서 전체목록을 조회해 오는 연속 API 호출
 
 
 
@@ -130,7 +130,7 @@ static func addATodoAndFetchTodos(title: String,
 
 - 동시 API 호출 [Int] 응답 - Dispatch Group 활용
 
-	선택한 할일들을 동시에 삭제후 삭제가 성공한 녀석들만 todoId 값을 [Int] 리턴하는 함수
+    선택한 할일들을 동시에 삭제후 삭제가 성공한 녀석들만 todoId 값을 [Int] 리턴하는 함수
 
 
 
