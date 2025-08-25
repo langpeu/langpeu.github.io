@@ -1,20 +1,10 @@
 ---
 layout: post
 date: 2025-08-25
-title: "SourceTree + GitLab CE 환경 설정"
+title: "✅ SourceTree + GitLab CE 환경 설정"
 tags: [Tips, ]
 categories: [DevOps, ]
 ---
-
-
-좋습니다 🙆 GitLab CE + SourceTree 최신 버전 조합에서 **계정(Account) 등록은 불가능**하므로, 대신 **Working Copy 방식**으로만 안정적으로 사용하는 방법을 정리해드릴게요.
-
-
----
-
-
-
-## **✅ SourceTree + GitLab CE 환경 설정 체크리스트**
 
 
 ---
