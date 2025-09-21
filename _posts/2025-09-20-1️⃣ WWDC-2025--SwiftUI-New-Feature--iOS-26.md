@@ -17,7 +17,7 @@ categories: [SwiftUI, ]
 그럼 이제 이 글래스 효과를 앱에 어떻게 추가할 수 있는지 살펴봅시다.
 
 
-[ScreenRecording_09-20-2025_12-36-25_1.mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/4910adcc-b66a-48a1-9f53-24351b53daaf/ScreenRecording_09-20-2025_12-36-25_1.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466ZHZFC7XL%2F20250921%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250921T003415Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIEhpxdXvVzaeSqtDHZCsRIsqICVtIXaCHfGeyQrz5S%2BJAiBdHsaGfXBJamU9Yxtxcu3JBcN0%2BAbkVyM6Ad3Q1OqwxCqIBAj5%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMSnSeBx4kNy%2BGaNPLKtwDbTIJmBpXmRCG2vQlzdNGOAWG8P6eIjIxU1wKfFLxMMewa7Lh1eBQHqqKA%2BsnnI1%2FyVh9KCmQZGHe8ihwfEeOUkMtPQwcF8L23ByUGPa7JfxxvaKGzx8w9XSuaQASHAwzrxZnjrxniBo5JFslrxgXmUc6W3sqScZ1g3t2pQmpDPBCpeYTexxj5RfEyFRPpfpER2wcUkCvn4JAU36HO5vEivTIbyHz%2Bp50umuV9h4FalQGX6m1dr%2BiSQX9WMx9n52sQuBnwMSD4ksIpcwhJjbeABcUURL7Z0arQoR9IDFdtEiOn%2FkKyqYfKU7pTqnXMvU5oIG0TOFOO9u5Upi%2FIj2qds%2FQwFelWd9UOpatZFShc4AEIt%2BrnQtNcRUXLRfofD%2F38xujMcqfuj3TM%2F%2Bm5ftXWHXoz%2FzeAgktesvU5U8XG3ys9rtScPM9RbRW4RJRr3T3P8HwlBibx3akfPgFFRXW7AiCbTCJgIEOGMeWtSqdwpqO4X4Yzta%2BwO39TC5tXLbj0aCUqCL%2BIAc6ttz7V4JpZm6ew5TkQ8fRFViMov7sqis9AmkkdHbwekagbJrE%2BIBM7gGivaJHxKk73KH%2FbEcs4EZuqLO9yQTC6txpGeSyVfpCyxsce0HWrEb8O%2B0w8ou9xgY6pgFKzJOxRt3bmlTt7J67aPJdZlbETIBmqx2v4jTt59uxJnAfvof2udIVj4Tj6CwQsLFtHzj1m53kKlIZDdrskIjyEqxG61ri%2F2kW6ZSQjSwQVhx2islvMoPOhZ4TICNiRIgQapraPdX6LmErsI6zyrtnaNEjja21pBLEzdTw2Zc7WdE0lK7LY8dlv9U1gLgdlx46xPL9OKqkUFEsUrQWO396P%2FRXg6O1&X-Amz-Signature=1926e46800f3129ce08572f9e18a2e875a4b442d3d01227060061ef54ba5b079&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+![0](/assets/img/2025-09-20-1️⃣ WWDC-2025--SwiftUI-New-Feature--iOS-26.md/0.png)
 
 
 
@@ -73,7 +73,7 @@ SwiftUI는 GlassEffectContainer라는 네이티브 컨테이너를 제공합니�
 (예: “Reduce Animations” 토글), 이 모디파이어를 사용하여 모핑 효과와 애니메이션을 제거할 수 있습니다!
 
 
-[ScreenRecording_09-20-2025_12-41-51_1.mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/79b8b5fe-9638-42c0-9157-1422c51e0b9a/ScreenRecording_09-20-2025_12-41-51_1.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466ZHZFC7XL%2F20250921%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250921T003415Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIEhpxdXvVzaeSqtDHZCsRIsqICVtIXaCHfGeyQrz5S%2BJAiBdHsaGfXBJamU9Yxtxcu3JBcN0%2BAbkVyM6Ad3Q1OqwxCqIBAj5%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMSnSeBx4kNy%2BGaNPLKtwDbTIJmBpXmRCG2vQlzdNGOAWG8P6eIjIxU1wKfFLxMMewa7Lh1eBQHqqKA%2BsnnI1%2FyVh9KCmQZGHe8ihwfEeOUkMtPQwcF8L23ByUGPa7JfxxvaKGzx8w9XSuaQASHAwzrxZnjrxniBo5JFslrxgXmUc6W3sqScZ1g3t2pQmpDPBCpeYTexxj5RfEyFRPpfpER2wcUkCvn4JAU36HO5vEivTIbyHz%2Bp50umuV9h4FalQGX6m1dr%2BiSQX9WMx9n52sQuBnwMSD4ksIpcwhJjbeABcUURL7Z0arQoR9IDFdtEiOn%2FkKyqYfKU7pTqnXMvU5oIG0TOFOO9u5Upi%2FIj2qds%2FQwFelWd9UOpatZFShc4AEIt%2BrnQtNcRUXLRfofD%2F38xujMcqfuj3TM%2F%2Bm5ftXWHXoz%2FzeAgktesvU5U8XG3ys9rtScPM9RbRW4RJRr3T3P8HwlBibx3akfPgFFRXW7AiCbTCJgIEOGMeWtSqdwpqO4X4Yzta%2BwO39TC5tXLbj0aCUqCL%2BIAc6ttz7V4JpZm6ew5TkQ8fRFViMov7sqis9AmkkdHbwekagbJrE%2BIBM7gGivaJHxKk73KH%2FbEcs4EZuqLO9yQTC6txpGeSyVfpCyxsce0HWrEb8O%2B0w8ou9xgY6pgFKzJOxRt3bmlTt7J67aPJdZlbETIBmqx2v4jTt59uxJnAfvof2udIVj4Tj6CwQsLFtHzj1m53kKlIZDdrskIjyEqxG61ri%2F2kW6ZSQjSwQVhx2islvMoPOhZ4TICNiRIgQapraPdX6LmErsI6zyrtnaNEjja21pBLEzdTw2Zc7WdE0lK7LY8dlv9U1gLgdlx46xPL9OKqkUFEsUrQWO396P%2FRXg6O1&X-Amz-Signature=28f23b456993d786241117c44d90e2f6e18b95fc0b98f0d103ddaa412abf70a2&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+![1](/assets/img/2025-09-20-1️⃣ WWDC-2025--SwiftUI-New-Feature--iOS-26.md/1.png)
 
 
 
@@ -142,7 +142,7 @@ struct ContentView: View {
 이 모디파이어는 각 뷰가 개별적으로 효과를 가지는 대신, 단일 글래스 효과를 적용합니다!
 
 
-![0](/assets/img/2025-09-20-1️⃣ WWDC-2025--SwiftUI-New-Feature--iOS-26.md/0.png)
+![2](/assets/img/2025-09-20-1️⃣ WWDC-2025--SwiftUI-New-Feature--iOS-26.md/2.png)
 
 
 
