@@ -73,6 +73,8 @@ async function getImageLayoutInfo(pageId) {
                 if (imageUrl) {
                   columnImages.push({
                     url: imageUrl,
+                    width: child.image.width || null,
+                    height: child.image.height || null,
                     caption: child.image.caption?.map(c => c.plain_text).join('') || '',
                     blockId: child.id
                   });
@@ -217,7 +219,32 @@ function processImageMarkdown(md, imageInfo, columnGroups, ftitle) {
         
         downloadImage(img.url, filename);
         
-        const imgElement = `<img src="/${filename}" alt="${img.caption}" style="width: 100%; height: auto; margin-bottom: 10px;" />\n`;
+        // 이미지 사이즈 정보 적용
+        let styleAttr = 'width: 100%; height: auto; margin-bottom: 10px;';
+        
+        // Notion에서 설정한 크기 정보가 있으면 적용
+        if (img.width || img.height) {
+          styleAttr = '';
+          
+          if (img.width) {
+            const width = typeof img.width === 'number' ? 
+              `${img.width}px` : 
+              img.width;
+            styleAttr += `width: ${width}; `;
+          }
+          
+          if (img.height) {
+            const height = typeof img.height === 'number' ? 
+              `${img.height}px` : 
+              img.height;
+            styleAttr += `height: ${height}; `;
+          }
+          
+          // 컬럼 내에서는 최대 너비 제한 및 반응형 적용
+          styleAttr += 'max-width: 100%; height: auto; margin-bottom: 10px;';
+        }
+        
+        const imgElement = `<img src="/${filename}" alt="${img.caption}" style="${styleAttr}" />\n`;
         columnHtml += imgElement;
         
         processedUrls.add(img.url);
