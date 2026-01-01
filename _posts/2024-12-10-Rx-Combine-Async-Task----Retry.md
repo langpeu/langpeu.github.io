@@ -44,6 +44,8 @@ categories: [Swift, ]
 아래 .retry 기준 위에는 Upstream, 아래는 Downstream 으로 구분 짓는다.
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 800)
 ----------------↑ Upstream ↑-----------------
@@ -59,6 +61,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
@@ -75,6 +79,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
 retry 는 에러 발생시 자동으로 타게 된다.
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 800)
             .retry(3)
@@ -88,6 +94,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
@@ -107,6 +115,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
 이때 take 를 사용하면 횟수 제한을 걸 수 있다.
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 800)
             .retry(when: { (observableErr: Observable<Error>) in
@@ -126,6 +136,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
@@ -138,6 +150,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
 그리고 throw err 를 통해 subscribe 에 onError 를 넘길 수 있다.
 
 
+
+{% raw %}
 ```swift
 var requestCount: Int = 1
         var retryCount: Int = 3
@@ -166,22 +180,30 @@ var requestCount: Int = 1
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
 ### .delay 를 넣어서 호출간에 지연을 넣을 수 있다.
 
 
+
+{% raw %}
 ```swift
 return Observable<Void>.just(())
                        .delay(.seconds(3), scheduler: MainScheduler.instance)
 ```
+{% endraw %}
+
 
 
 
 ### 특정 에러, noContent 에러일때 리트라이 3회 실행하게 해보기
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 1)
             .retry(when: { (observableErr: Observable<Error>) in
@@ -213,12 +235,16 @@ TodosAPI.fetchTodosWithObservable(page: 1)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
 ### if case 를 사용해 간결하게 변경 가능
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 1)
             .retry(when: { (observableErr: Observable<Error>) in
@@ -246,6 +272,8 @@ TodosAPI.fetchTodosWithObservable(page: 1)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
@@ -255,6 +283,8 @@ TodosAPI.fetchTodosWithObservable(page: 1)
 retry 활용
 
 
+
+{% raw %}
 ```swift
 extension ObservableType {
     
@@ -286,6 +316,8 @@ extension ObservableType {
     }
 }
 ```
+{% endraw %}
+
 
 
 
@@ -295,6 +327,8 @@ extension ObservableType {
 catch 활용
 
 
+
+{% raw %}
 ```swift
 extension ObservableType {
     
@@ -321,11 +355,15 @@ extension ObservableType {
     }
 }
 ```
+{% endraw %}
+
 
 
 when 클로저를 옵셔널로 처리.  필수가 아니게 변경
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithObservable(page: 800)
             //지정된 카운트,딜레이 만큼 고정으로 재호출
@@ -348,6 +386,8 @@ TodosAPI.fetchTodosWithObservable(page: 800)
                 print("onDisposed")
             }).disposed(by: disposeBag)
 ```
+{% endraw %}
+
 
 
 
@@ -364,9 +404,13 @@ TodosAPI.fetchTodosWithObservable(page: 800)
   Swift에서 Void는 사실 빈 튜플 ()로 정의되어 있습니다.
 
 
+
+{% raw %}
 ```swift
 typealias Void = ()
 ```
+{% endraw %}
+
 
 1. **구조적인 일관성 유지**:
 
@@ -376,6 +420,8 @@ typealias Void = ()
 **실전 예시**
 
 
+
+{% raw %}
 ```swift
 // 1. 특정 작업이 완료되었음을 알림
 let observable = Observable<Void>.just(())
@@ -389,6 +435,8 @@ trigger.subscribe(onNext: { _ in
     print("Triggered an action!")
 })
 ```
+{% endraw %}
+
 
 
 
@@ -398,6 +446,8 @@ trigger.subscribe(onNext: { _ in
 retry / delay 사용
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithPublisher(page: 800)
             .delay(for: 3, scheduler: DispatchQueue.main)
@@ -413,11 +463,15 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
                 print("response: \(response)")
             }.store(in: &subscriptions)
 ```
+{% endraw %}
+
 
 
 trayCatch 사용
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithPublisher(page: 800)
             .tryCatch({ errPublisher in
@@ -440,6 +494,8 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
                 print("response: \(response)")
             }.store(in: &subscriptions)
 ```
+{% endraw %}
+
 
 
 
@@ -449,6 +505,8 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
 tryCatch
 
 
+
+{% raw %}
 ```swift
 //MARK: - Combine retry
 extension Publisher {
@@ -474,11 +532,15 @@ extension Publisher {
     }
 }
 ```
+{% endraw %}
+
 
 
 에러가 noContent 일때 2초다마 총 3회 실행
 
 
+
+{% raw %}
 ```swift
 TodosAPI.fetchTodosWithPublisher(page: 800)
             .retryWithDelayAndCondition(retryCount: 3, delay: 2, when: { err in
@@ -498,6 +560,8 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
                 print("response: \(response)")
             }.store(in: &subscriptions)
 ```
+{% endraw %}
+
 
 
 
@@ -507,6 +571,8 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
 간단한 Async 에서 Retry 해보기
 
 
+
+{% raw %}
 ```swift
 let retryCount: Int = 3
         
@@ -534,12 +600,16 @@ let retryCount: Int = 3
             
         }
 ```
+{% endraw %}
+
 
 
 
 ### Extension 확장
 
 
+
+{% raw %}
 ```swift
 //MARK: - Async Retry
 
@@ -582,11 +652,15 @@ extension Task where Failure == Error {
     }
 }
 ```
+{% endraw %}
+
 
 
 Task.retry 는 asyncWork 의 task 를 리턴한다.
 
 
+
+{% raw %}
 ```swift
 let fetchTodosTask = Task.retry(retryCount: 3,
                                         delay: 2,
@@ -608,11 +682,15 @@ let fetchTodosTask = Task.retry(retryCount: 3,
             }
         }
 ```
+{% endraw %}
+
 
 
 when 없이 사용
 
 
+
+{% raw %}
 ```swift
 let fetchTodosTask = Task.retry(retryCount: 3,
                                         delay: 2, asyncWork: {
@@ -628,6 +706,8 @@ let fetchTodosTask = Task.retry(retryCount: 3,
             }
         }
 ```
+{% endraw %}
+
 
 
 
@@ -680,6 +760,8 @@ let fetchTodosTask = Task.retry(retryCount: 3,
     • 예를 들어:
 
 
+
+{% raw %}
 ```swift
 func handleDirection(_ direction: Direction) {
     switch direction {
@@ -695,6 +777,8 @@ func handleDirection(_ direction: Direction) {
     }
 }
 ```
+{% endraw %}
+
 
 
 3.	**변경 가능성 제한**:

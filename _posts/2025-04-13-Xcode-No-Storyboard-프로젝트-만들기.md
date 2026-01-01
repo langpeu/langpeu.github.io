@@ -59,6 +59,8 @@ categories: [Swift, Development, ]
 ## 6️⃣ SceneDelegate.swift 파일 수정
 
 
+
+{% raw %}
 ```swift
 func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -69,6 +71,8 @@ func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options conn
         window.makeKeyAndVisible()
     }
 ```
+{% endraw %}
+
 
 
 
@@ -77,6 +81,8 @@ func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options conn
 - **SceneDelegate.swift 삭제**
 - AppDelegate.swift 수정
 
+
+{% raw %}
 ```swift
 import UIKit
 
@@ -96,6 +102,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 ```
+{% endraw %}
+
 
 - Info 내 **Application Scene Manifest** 항목 **Back 키로 전부 삭제**
 

@@ -15,9 +15,13 @@ categories: [DevOps, ]
 
 1. 로컬에서 키 생성
 
+
+{% raw %}
 ```plain text
 ssh-keygen -t ed25519 -C "you@example.com"
 ```
+{% endraw %}
+
 
 1. → ~/.ssh/id_ed25519 (개인키), id_ed25519.pub (공개키)
 2. 공개키 등록
@@ -33,6 +37,8 @@ ssh-keygen -t ed25519 -C "you@example.com"
 ~/.ssh/config 파일 생성/수정:
 
 
+
+{% raw %}
 ```plain text
 Host git.xx.com
   HostName git.xx.com
@@ -40,6 +46,8 @@ Host git.xx.com
   Port 9022
   IdentityFile ~/.ssh/id_ed25519
 ```
+{% endraw %}
+
 
 
 → 이렇게 해두면 git@git.xx.com:group/repo.git 주소만 써도 자동으로 9022로 접속됨.
@@ -52,17 +60,25 @@ Host git.xx.com
 ### **3. 연결 테스트**
 
 
+
+{% raw %}
 ```plain text
 ssh -T git@git.xx.com
 ```
+{% endraw %}
+
 
 
 → 성공 시:
 
 
+
+{% raw %}
 ```plain text
 Welcome to GitLab, @username!
 ```
+{% endraw %}
+
 
 
 ---
@@ -73,9 +89,13 @@ Welcome to GitLab, @username!
 
 1. Clone (SSH 주소 사용)
 
+
+{% raw %}
 ```plain text
 git clone git@git.xx.com:username/bitapi.git
 ```
+{% endraw %}
+
 
 1. 
 2. SourceTree → **Add Working Copy** → 로컬 경로 지정
