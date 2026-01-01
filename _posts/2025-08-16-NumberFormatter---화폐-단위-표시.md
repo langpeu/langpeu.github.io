@@ -7,8 +7,6 @@ categories: [Swift, ]
 ---
 
 
-
-{% raw %}
 ```swift
 var moneyString: String {
         let formatter: NumberFormatter = NumberFormatter()
@@ -21,17 +19,11 @@ var moneyString: String {
 이 코드로 출력하면  10,000원 으로 나온다.
 콤바 표시는 어디에서 처리가 되는거야 ?
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 formatter.numberStyle = .decimal
 ```
-{% endraw %}
-
 
 
 👉 바로 이 설정 덕분에 숫자가 3자리마다 구분 기호(Thousands Separator)로 끊어집니다.
@@ -49,13 +41,9 @@ formatter.numberStyle = .decimal
 즉, **콤마는 NumberFormatter 가 로케일에 맞게 자동으로 넣어주는 것**이에요 
 
 
-
-{% raw %}
 ```swift
 decimal 뜻이 10진수 아냐 ?
 ```
-{% endraw %}
-
 
 
 맞아요 🤔 decimal 하면 흔히 **10진수** 떠올리죠.

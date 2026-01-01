@@ -15,8 +15,6 @@ categories: [Swift, ]
 ### continuation 활용
 
 
-
-{% raw %}
 ```swift
 /// 모든 할 일 목록 가져오기
     static func fetchTodos(page: Int = 1, completion: @escaping (Result<BaseListResponse<Todo>, ApiError>) -> Void ) {
@@ -66,8 +64,6 @@ categories: [Swift, ]
         }.resume()
     }
 ```
-{% endraw %}
-
 
 
 
@@ -80,8 +76,6 @@ categories: [Swift, ]
 두번 탭을 통해 스트림 여러개가 누락없이 전부 오는것을 볼 수 있다.
 
 
-
-{% raw %}
 ```swift
 testBtn.rx.tap
             .scan(0) { aNumber, _ -> Int in
@@ -96,12 +90,8 @@ testBtn.rx.tap
                 // print(#line, "- \(intervalNumber)") (보기 편하게 주석 처리함)
             }).disposed(by: distposeBag)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 tapped 첫 탭
 44 tapNumber: 1 - inervalNumber: 0
@@ -119,8 +109,6 @@ tapped 두번째 탭
 44 tapNumber: 2 - inervalNumber: 3
 44 tapNumber: 1 - inervalNumber: 8
 ```
-{% endraw %}
-
 
 
 
@@ -133,8 +121,6 @@ tapped 두번째 탭
 최신 생성한 두번째 탭 이벤트만 전달 하는걸 볼 수 있다.
 
 
-
-{% raw %}
 ```swift
 testBtn.rx.tap
                     .scan(0) { aNumber, _ -> Int in
@@ -149,12 +135,8 @@ testBtn.rx.tap
                         // print(#line, "- \(intervalNumber)")
                     }).disposed(by: distposeBag)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 tapped 첫 탭
 57 tapNumber: 1 - inervalNumber: 0
@@ -168,8 +150,6 @@ tapped 두번째 탭
 57 tapNumber: 2 - inervalNumber: 3
 57 tapNumber: 2 - inervalNumber: 4
 ```
-{% endraw %}
-
 
 
 
@@ -183,8 +163,6 @@ tapped 두번째 탭
 RxSwift 와 동일하게 사용하면 된다.
 
 
-
-{% raw %}
 ```swift
 testBtn.tapPublisher
                     .handleEvents(receiveOutput: {
@@ -206,12 +184,8 @@ testBtn.tapPublisher
                         //print(#line, "- \(intervalNumber)")
                     }).store(in: &subscriptions)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 tapped
 77 tapNumber: 1 - intervalNumber: 1
@@ -227,8 +201,6 @@ tapped
 77 tapNumber: 2 - intervalNumber: 3
 77 tapNumber: 1 - intervalNumber: 8
 ```
-{% endraw %}
-
 
 
 
@@ -241,8 +213,6 @@ flatMap → map 으로 변경
 .sink 위에 .switchToLatest() 를 추가 해야 한다.
 
 
-
-{% raw %}
 ```swift
 testBtn.tapPublisher
                     .handleEvents(receiveOutput: {
@@ -265,12 +235,8 @@ testBtn.tapPublisher
                         //print(#line, "- \(intervalNumber)")
                     }).store(in: &subscriptions)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 tapped
 98 tapNumber: 1 - intervalNumber: 1
@@ -283,6 +249,4 @@ tapped
 98 tapNumber: 2 - intervalNumber: 3
 98 tapNumber: 2 - intervalNumber: 4
 ```
-{% endraw %}
-
 

@@ -20,8 +20,6 @@ categories: [SwiftUI, ]
 ![0](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/0.png)
 
 
-
-{% raw %}
 ```swift
 import SwiftUI
 
@@ -40,8 +38,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -74,17 +70,11 @@ struct ContentView: View {
 (클린 아키텍처 기준으론 반대로 되어 있는 거라, 기분이 안좋은데 일단 기초개념만 참고하자)
 
 
-
-{% raw %}
 ```swift
 ContentView (데이터 소유) -> SubView (데이터 참조)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 struct ContentView: View {
     @State var number = 0
@@ -101,12 +91,8 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 struct SubView: View {
     @Binding var number: Int
@@ -119,8 +105,6 @@ struct SubView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -130,15 +114,11 @@ struct SubView: View {
 - 값 수정이 불가능 하기에 상수라는 뜻의 constant 를 사용함
 - 개발중 또는 #Preview 에서 임시 바인딩 객체가 필요할때 사용
 
-
-{% raw %}
 ```swift
 .constant("String")
 .constant(100)
 .constant(true)
 ```
-{% endraw %}
-
 
 
 
@@ -155,8 +135,6 @@ struct SubView: View {
 - @Published : 클래스내 감지되어야할 프로퍼티에 붙여줌
 - @ObservedObject: 사용할 ObservableObject 클래스 인스턴스 변수에 생성시 붙여줌
 
-
-{% raw %}
 ```swift
 class NumberCounter: ObservableObject {
     @Published var number: Int = 0
@@ -181,8 +159,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -202,8 +178,6 @@ struct ContentView: View {
 ![4](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/4.png)
 
 
-
-{% raw %}
 ```swift
 class NumberCounter: ObservableObject {
     @Published var number: Int = 0
@@ -244,8 +218,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 1. ContentView 에서 NumberCounter 클래스 객체를 ObservedObject 로 생성해서
 
@@ -255,8 +227,6 @@ ChildView 에 프로퍼티로 전달한다. 해당 numberCounter 는 ContentView
 ![5](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/5.png)
 
 
-
-{% raw %}
 ```swift
 class NumberCounter: ObservableObject {
     @Published var number: Int = 0
@@ -298,8 +268,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -308,8 +276,6 @@ struct ContentView: View {
 - 상속된 모든 뷰에서 공통적으로 사용할수 있게 해줌
 - 필요한 차일드 뷰에서만 불러와 사용 할 수 있음
 
-
-{% raw %}
 ```swift
 class NumberCounter: ObservableObject {
     @Published var number: Int = 0
@@ -345,8 +311,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -357,8 +321,6 @@ struct ContentView: View {
 ![6](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/6.png)
 
 
-
-{% raw %}
 ```swift
 import SwiftUI
 
@@ -373,8 +335,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 ![7](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/7.png)
@@ -401,8 +361,6 @@ struct ContentView: View {
 ObservableObject 걷어내고 @Observable 매크로로 변경
 
 
-
-{% raw %}
 ```swift
 @Observable
 class NumberCounter {
@@ -429,8 +387,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -440,8 +396,6 @@ struct ContentView: View {
 @Observable 매크로로 변경 및  @StateObject 는 @State 로 변경
 
 
-
-{% raw %}
 ```swift
 @Observable
 class NumberCounter {
@@ -483,8 +437,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -494,8 +446,6 @@ struct ContentView: View {
 ![9](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/9.png)
 
 
-
-{% raw %}
 ```swift
 @Observable
 class NumberCounter {
@@ -533,8 +483,6 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
 
 
@@ -562,8 +510,6 @@ struct ContentView: View {
 ![11](/assets/img/2024-12-24-SwiftUI-DataModel-Property-Wrapper.md/11.png)
 
 
-
-{% raw %}
 ```swift
 @Observable // class 에만 사용 가능
 class Ramen {
@@ -607,6 +553,4 @@ struct ContentView: View {
     }
 }
 ```
-{% endraw %}
-
 
