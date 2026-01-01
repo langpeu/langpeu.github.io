@@ -17,17 +17,11 @@ RxCombine 라이브러리 사용
 [https://github.com/CombineCommunity/RxCombine](https://github.com/CombineCommunity/RxCombine)
 
 
-
-{% raw %}
 ```swift
 .package(url: "https://github.com/CombineCommunity/RxCombine.git", from: "1.6.0")
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 TodosAPI.fetchTodosWithPublisher(page: 1)
             .asObservable()
@@ -56,12 +50,8 @@ TodosAPI.fetchTodosWithPublisher(page: 1)
                 print("response:\(response)")
             }.store(in: &subscriptions)
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 static func fetchTodosWithPublisher(page: Int = 1) -> AnyPublisher<BaseListResponse<Todo>, ApiError> {
         
@@ -124,12 +114,8 @@ static func fetchTodosWithPublisher(page: Int = 1) -> AnyPublisher<BaseListRespo
         
     }
 ```
-{% endraw %}
 
 
-
-
-{% raw %}
 ```swift
 static func fetchTodosWithObservable(page: Int = 1) -> Observable<BaseListResponse<Todo>> {
         
@@ -186,6 +172,4 @@ static func fetchTodosWithObservable(page: Int = 1) -> Observable<BaseListRespon
             })
     }
 ```
-{% endraw %}
-
 
