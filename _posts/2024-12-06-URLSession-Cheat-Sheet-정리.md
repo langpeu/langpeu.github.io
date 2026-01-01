@@ -17,6 +17,8 @@ categories: [Swift, ]
 **Simple GET request**
 
 
+
+{% raw %}
 ```swift
 //URL, URLReqeust 형태로 호출이 가능
 URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -27,11 +29,15 @@ URLSession.shared.dataTask(with: url) { (data, response, error) in
     // handle status code
 }.resume()
 ```
+{% endraw %}
+
 
 
 **Query parameters**
 
 
+
+{% raw %}
 ```swift
 var urlComponents = URLComponents(string: "https://www.google.com")!
 urlComponents.queryItems = [
@@ -40,11 +46,15 @@ urlComponents.queryItems = [
 ]
 let url = urlComponents.url // https://www.google.com?foo1=bar&foo2=baz
 ```
+{% endraw %}
+
 
 
 **Extension example**
 
 
+
+{% raw %}
 ```swift
 extension URL {
     init?(baseUrl: String, queryItems: [String: String]) {
@@ -55,11 +65,15 @@ extension URL {
     }
 }
 ```
+{% endraw %}
+
 
 
 **Method, body and headers**
 
 
+
+{% raw %}
 ```swift
 var request = URLRequest(url: url)
 request.httpMethod = "POST"
@@ -67,11 +81,15 @@ request.httpBody = data
 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 request.addValue("*/*", forHTTPHeaderField: "Accept")
 ```
+{% endraw %}
+
 
 
 **Extension example**
 
 
+
+{% raw %}
 ```swift
 extension URLRequest {
     static func request(url: URL, headers: [String: String] = [:], method: String = "GET", data: Data? = nil) -> URLRequest {
@@ -85,6 +103,8 @@ extension URLRequest {
     }
 }
 ```
+{% endraw %}
+
 
 
 **JSON**
@@ -96,34 +116,46 @@ extension URLRequest {
 사용 httpBody
 
 
+
+{% raw %}
 ```swift
 guard let data = try? JSONSerialization.data(withJSONObject: dictionary, options: [.prettyPrinted]) else {
     // JSON serialization failed
     return
 }
 ```
+{% endraw %}
+
 
 
 **From JSON object to Data**
 
 
+
+{% raw %}
 ```swift
 guard let data = try? JSONSerialization.data(withJSONObject: jsonObject, options: []) else {
     // JSON serialization failed
     return
 }
 ```
+{% endraw %}
+
 
 
 **From Data to JSON object**
 
 
+
+{% raw %}
 ```swift
 guard let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
     // JSON serialization failed
     return
 }
 ```
+{% endraw %}
+
 
 
 출처: [link] [https://github.com/alexpaul/UIKit](https://github.com/alexpaul/UIKit)
@@ -162,11 +194,15 @@ guard let json = try? JSONSerialization.jsonObject(with: data, options: []) else
 `Result` type is an `enum` type that has two arguments, a `success` state and an `failure` state.
 
 
+
+{% raw %}
 ```swift
 func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
  // netowrking code here
 }
 ```
+{% endraw %}
+
 
 
 **Perform a GET request using** **`URLSession`**
@@ -175,17 +211,23 @@ func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
 `URLSession.shared` is a singleton instance on `URLSession` with basic networking configurations.
 
 
+
+{% raw %}
 ```swift
 let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
   // networking code here
 }
 dataTask.resume()
 ```
+{% endraw %}
+
 
 
 **Check that the** **`HTTPURLResponse`** **status code is within the valid range of** **`200...299`** **indicating a successful response**
 
 
+
+{% raw %}
 ```swift
 guard let httpResponse = response as? HTTPURLResponse,
       (200...299).contains(httpResponse.statusCode) else {
@@ -193,11 +235,15 @@ guard let httpResponse = response as? HTTPURLResponse,
   return
 }
 ```
+{% endraw %}
+
 
 
 **Converting** **`JSON`** **data to Swift objects**
 
 
+
+{% raw %}
 ```swift
 do {
   let topLevelModel = try JSONDecoder().decode(TopLevelModel.self, from: jsonData)
@@ -208,11 +254,15 @@ do {
   completion(.failure(error))
 }
 ```
+{% endraw %}
+
 
 
 **Using the** **`Codable`** **protocol to parse JSON to Swift model(s)**
 
 
+
+{% raw %}
 ```swift
 struct CovidCountriesWrapper: Codable {
   let countries: [CountrySummary]
@@ -235,6 +285,8 @@ struct CountrySummary: Codable {
   }
 }
 ```
+{% endraw %}
+
 
 
 **The** **`CodingKeys`** **built-in** **`enum`** **type allows us to change JSON property names to our own custom names**
@@ -243,6 +295,8 @@ struct CountrySummary: Codable {
 In this example we change `Countries` to a more Swift naming conventional name `countries`.
 
 
+
+{% raw %}
 ```swift
 struct CovidCountriesWrapper: Codable {
   let countries: [CountrySummary]
@@ -253,11 +307,15 @@ struct CovidCountriesWrapper: Codable {
   }
 }
 ```
+{% endraw %}
+
 
 
 **Completed API Client to fetch web data**
 
 
+
+{% raw %}
 ```swift
 func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
     // 1. - endpoint URL string
@@ -301,11 +359,15 @@ func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
     dataTask.resume()
   }
 ```
+{% endraw %}
+
 
 
 **dictionary -> Urlencoded 처리**
 
 
+
+{% raw %}
 ```swift
 extension URLRequest {
   
@@ -352,4 +414,6 @@ let task = session.dataTask(with: request) { data, response, error in
 }
 task.resume()
 ```
+{% endraw %}
+
 

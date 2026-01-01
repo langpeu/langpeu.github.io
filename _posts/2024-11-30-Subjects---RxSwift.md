@@ -36,6 +36,8 @@ Observable + Observer 역학을 모두 가지고 있다
 플레이 그라운드에서 아래 extension 세팅후 샘플 코드 시작
 
 
+
+{% raw %}
 ```swift
 extension ObservableType {
     
@@ -55,6 +57,8 @@ func writeSequenceToConsole<Source: ObservableType>(name: String, sequence: Sour
     }
 }
 ```
+{% endraw %}
+
 
 
 
@@ -64,6 +68,8 @@ func writeSequenceToConsole<Source: ObservableType>(name: String, sequence: Sour
 구독 시점부터 모든 옵저버에게 새로운 이벤트를 전달합니다.
 
 
+
+{% raw %}
 ```swift
 example("PublishSubject") {
     let disposeBag = DisposeBag()
@@ -78,8 +84,12 @@ example("PublishSubject") {
     subject.onNext("🅱️")
 }
 ```
+{% endraw %}
 
 
+
+
+{% raw %}
 ```swift
 --- PublishSubject example ---
 Subscription: 1 Event: next(🐶)
@@ -89,6 +99,8 @@ Subscription: 2 Event: next(🅰️)
 Subscription: 1 Event: next(🅱️)
 Subscription: 2 Event: next(🅱️)
 ```
+{% endraw %}
+
 
 
 이 예제에서는 onNext(_:) 편의 메서드 사용을 소개합니다. 이는 on(.next(_))와 동일하며, 제공된 요소를 포함한 새로운 Next 이벤트를 구독자에게 전달합니다.
@@ -102,6 +114,8 @@ Subscription: 2 Event: next(🅱️)
 새로운 이벤트를 모든 구독자에게 전달하며, 새 구독자에게는 지정된 bufferSize만큼의 이전 이벤트도 전달합니다.
 
 
+
+{% raw %}
 ```swift
 example("ReplaySubject") {
     let disposeBag = DisposeBag()
@@ -116,8 +130,12 @@ example("ReplaySubject") {
     subject.onNext("🅱️")
 }
 ```
+{% endraw %}
 
 
+
+
+{% raw %}
 ```swift
 --- ReplaySubject example ---
 Subscription: 1 Event: next(🐶)
@@ -128,6 +146,8 @@ Subscription: 2 Event: next(🅰️)
 Subscription: 1 Event: next(🅱️)
 Subscription: 2 Event: next(🅱️)
 ```
+{% endraw %}
+
 
 
 
@@ -137,6 +157,8 @@ Subscription: 2 Event: next(🅱️)
 새로운 이벤트를 모든 구독자에게 전달하며, 새 구독자에게는 가장 최근의 값(또는 초기 값)을 전달합니다.
 
 
+
+{% raw %}
 ```swift
 example("BehaviorSubject") {
     let disposeBag = DisposeBag()
@@ -155,8 +177,12 @@ example("BehaviorSubject") {
     subject.onNext("🍊")
 }
 ```
+{% endraw %}
 
 
+
+
+{% raw %}
 ```swift
 --- BehaviorSubject example ---
 Subscription: 1 Event: next(🔴)
@@ -175,6 +201,8 @@ Subscription: 1 Event: next(🍊)
 Subscription: 2 Event: next(🍊)
 Subscription: 3 Event: next(🍊)
 ```
+{% endraw %}
+
 
 
 이전 예제들에서 빠져있는 것을 보셨나요? **Completed 이벤트**입니다.
