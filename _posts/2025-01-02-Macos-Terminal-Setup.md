@@ -14,13 +14,13 @@ categories: [Apple, ]
 ## Setup Terminal
 
 
-
-{% raw %}
 ```shell
-#Install Brew
+
+##Install Brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-#Install zsh
+
+##Install zsh
 brew install zsh
 
 zsh --version
@@ -29,16 +29,19 @@ zsh 5.9 (arm64-apple-darwin24.0)
 which zsh
 /bin/zsh
 
-#Change bash -> zsh
+
+##Change bash -> zsh
 chsh -s 'which zsh'
 
 echo $SHELL
 /bin/zsh
 
-#Install oh-my-zsh
+
+##Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-#Update oh-my-zsh setting
+
+##Update oh-my-zsh setting
 vi ~/.zshrc
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -49,27 +52,29 @@ ZSH_THEME="agnoster"
 
 plugins=(git, autojump, zsh-autosuggestions, zsh-syntax-highlighting)
 
-#update oh-my-zsh
+
+##update oh-my-zsh
 source ~/.zshrc
 
-#iTerm2 설치
+
+##iTerm2 설치
 
 https://iterm2.com/downloads/stable/latest
 
 
 
-#Powerline Font 설치
+
+##Powerline Font 설치
 git clone https://github.com/powerline/fonts.git --depth=1
 cd fonts
 ./install.sh
 cd ..
 rm -rf fonts
 
-#iTerm2 ColorSet
+
+##iTerm2 ColorSet
 curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Framer.itermcolors
 ```
-{% endraw %}
-
 
 
 폰트 출처
@@ -78,7 +83,7 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 [https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
 
 
-[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466V4E7WJX7%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T160019Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJIMEYCIQDoa2OXEzNCQfKQFXHnBbP4jfJ24cnlotgcfVdYsGdGbQIhAL%2F0iYoFBkGxobA0aWu9nneD6Hi4WbDz%2FrJpiENl5Vc8KogECOb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1IgzsGFOUqFC5bituX18q3AOJ4aESRZHaDWqh55T2l3A9Ll%2FBan1sRq33eRjmG9XNUW4a7mV5e%2FYGjlGHYmB9ddmtpHQ2%2B1Q0Uk8Dj2%2F4XfXJYgv87rifV%2F%2Bi4ccxSUjbuUUXRjG1w25HqQPzxwg7pcAzZc2tSUeHhshOJDCXcEkV2pkNHPWAhCn1cH3UJercdAJH%2BuolDG5g8zvbvGi1L3dqgc%2FO%2FqCHyvna8yZ97YYgMMXiZPB7RhVG%2Fz9OFv09qYcX0RT5fjY8ocnzIlpatJcop7nyYvVq92v7Cddu3D8xkyM%2FltOTI7Lx%2FO4Z9PT28tMLdnmpMNq%2FOtepvOvNTyHhUODMRAC7kR1SrZ59uX%2FicAUK15tfI5cCDQf7APoCb03c8P5NRILzV8nmUsUAJy1tM%2F0%2B9wtk%2FFikkWbUhfnBvf8zpnyP9E6URv7cP2PlX%2FrQ13ClSsAXkD5vUyaUyIhz9rcWc54Ib1qvuaDK2SBeLXbm9e1JHRjzGxuJNZs92sGlgnypWgWXskc2jHMdppWiWSOfqHNj0TRzOrzcIPipruqX77NPuStWpnTnqEuLvuX9KNTvzjye9b%2Fugln%2BaxaqrPUegigDUg88VMJi8oh7UxtW3SfXXs4UtchJ05cbhFdMtK2gj44h27Zu8zD95dnKBjqkAZW5%2FSEVtAQtnV7v%2FJLlzu%2FZJaz5xIVQtV0hKw2ip6Saa%2BqKBtr72xSkc5ghNtAPOwx28NUbcl4o3JaL6R%2BF%2FNwPZahjFKHcjmEUDAbeed4YQF91msLjhVaP3LQH3ieDXgL2%2BQUoDNJobC%2FJ2F47ClGIp3%2Busx5f%2BKK6Ft4NYQvrGvy9B4OJkKTnjeOINrIpp9LSbftws987rYFoU9wQnF3T%2Fves&X-Amz-Signature=1d12ce3ed3bfeb4ded987569bceb20e041ca4f94a6b01741ab598aaa07eb483f&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+[MesloLGS_NF_Regular.ttf](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/3230b59b-0400-4488-9b1f-e87eed5e220b/MesloLGS_NF_Regular.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466ZHSTR5O6%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T161406Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJGMEQCICrGDGwJjjr8q4m7RG%2FE5vu1zYyaFE3Ul7NgMYV%2BiE46AiBFgt1BDNhJtZIUT0Uxfc8rZCfBvihPgKlgie7RFviWaiqIBAjm%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMtJq%2BJAxF2vrdXyf6KtwDhWConvVpZeJbBKYZRrxZk7HRPghhUbgSlYnyYhyrVqDMAL3XZRcFUHjgwi6MgtAivdSF4rzGj%2FgNyFhhK%2F%2FyVZf%2B%2Bm81FTXc0I%2BnY%2FtMLEKGngzmC9Wa%2BHx1z15esYEJITDO2mR%2FOGSgz6CvoDdVYi3Kd0rJdHbizbH213VPzqiYMBUkJ6O9FX3JOX3yOtt6e90DUPIjLsPdMR%2Bf1qYx4aVCX9a97QW8fnVp2mAxX8mxbS%2BZ0xIwUb1XYnCPJVcSIRxifyhVsjf94h%2FhAZhbaCeDryj59k5Iyt83RCfD0L8H%2FxsgwaxfsBsJHrhhF8hc3YGuVkWuYxjsVxeaSqVRQdMu5F84RFhOuaaQzyqi6RI9Un%2F43HYVju4exUD45gN8BWklHDJLquJ7MzFmCsIKgTyQ1GuSBMAx6QMsIplu4sr%2Ff2V1ZGA6xTbMUUTspv%2BV0W8jaCO5TYhEfwsMKuLT2p8lkhZwmOWCtc%2FEYkDW2K25xPZHungJzlXNtMjLhvOAMWewqaHmthTStH6l3KHG%2BUYkZJyzK%2B0djt7LI3e1WQSnbbCYhDSXFkzf5EqtfoOcvBffQp%2Fvxr%2B5cpcXF0JFFAGgK041UzJcbFZ4WzliXAFTCdkcm0vZfUBhTM0wwObZygY6pgE9v4i3JUCYV%2BpQVtvE18wtL51ZMiA7BQor%2FjW9gnyaQWy3BHvKLd%2BdT0dvlkBvDWvEnZ46yyY%2FnwR04qasz4SpMvk6ye2n22dGryBhAUivCLOTetoIjvO3agyr689LqPsOyn7Dt87t4a4T1oZgFnQkPhJ4lZnYcbYqWQlGZkkEcL5T3KgVcW8LPog1xX%2F9GO3Be66II8LqnzOPbSgkN6T2NUMKMsLh&X-Amz-Signature=f54eedca6a91e3059ee6f9e315476781329cbc4fd24d80eb9814ffe9766d5b28&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
 
 컬러테마 출처
@@ -91,26 +96,22 @@ curl -O https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/Fr
 터미널용 컬러 테마
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466V4E7WJX7%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T160019Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJIMEYCIQDoa2OXEzNCQfKQFXHnBbP4jfJ24cnlotgcfVdYsGdGbQIhAL%2F0iYoFBkGxobA0aWu9nneD6Hi4WbDz%2FrJpiENl5Vc8KogECOb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1IgzsGFOUqFC5bituX18q3AOJ4aESRZHaDWqh55T2l3A9Ll%2FBan1sRq33eRjmG9XNUW4a7mV5e%2FYGjlGHYmB9ddmtpHQ2%2B1Q0Uk8Dj2%2F4XfXJYgv87rifV%2F%2Bi4ccxSUjbuUUXRjG1w25HqQPzxwg7pcAzZc2tSUeHhshOJDCXcEkV2pkNHPWAhCn1cH3UJercdAJH%2BuolDG5g8zvbvGi1L3dqgc%2FO%2FqCHyvna8yZ97YYgMMXiZPB7RhVG%2Fz9OFv09qYcX0RT5fjY8ocnzIlpatJcop7nyYvVq92v7Cddu3D8xkyM%2FltOTI7Lx%2FO4Z9PT28tMLdnmpMNq%2FOtepvOvNTyHhUODMRAC7kR1SrZ59uX%2FicAUK15tfI5cCDQf7APoCb03c8P5NRILzV8nmUsUAJy1tM%2F0%2B9wtk%2FFikkWbUhfnBvf8zpnyP9E6URv7cP2PlX%2FrQ13ClSsAXkD5vUyaUyIhz9rcWc54Ib1qvuaDK2SBeLXbm9e1JHRjzGxuJNZs92sGlgnypWgWXskc2jHMdppWiWSOfqHNj0TRzOrzcIPipruqX77NPuStWpnTnqEuLvuX9KNTvzjye9b%2Fugln%2BaxaqrPUegigDUg88VMJi8oh7UxtW3SfXXs4UtchJ05cbhFdMtK2gj44h27Zu8zD95dnKBjqkAZW5%2FSEVtAQtnV7v%2FJLlzu%2FZJaz5xIVQtV0hKw2ip6Saa%2BqKBtr72xSkc5ghNtAPOwx28NUbcl4o3JaL6R%2BF%2FNwPZahjFKHcjmEUDAbeed4YQF91msLjhVaP3LQH3ieDXgL2%2BQUoDNJobC%2FJ2F47ClGIp3%2Busx5f%2BKK6Ft4NYQvrGvy9B4OJkKTnjeOINrIpp9LSbftws987rYFoU9wQnF3T%2Fves&X-Amz-Signature=392fec913c5dc09a404a770d617977a363a48ce14b87ec5cf2965355a37d89e8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/d3a6c42d-c62b-4f75-bb68-59d217cc4e17/Framer.terminal?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466ZHSTR5O6%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T161406Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJGMEQCICrGDGwJjjr8q4m7RG%2FE5vu1zYyaFE3Ul7NgMYV%2BiE46AiBFgt1BDNhJtZIUT0Uxfc8rZCfBvihPgKlgie7RFviWaiqIBAjm%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMtJq%2BJAxF2vrdXyf6KtwDhWConvVpZeJbBKYZRrxZk7HRPghhUbgSlYnyYhyrVqDMAL3XZRcFUHjgwi6MgtAivdSF4rzGj%2FgNyFhhK%2F%2FyVZf%2B%2Bm81FTXc0I%2BnY%2FtMLEKGngzmC9Wa%2BHx1z15esYEJITDO2mR%2FOGSgz6CvoDdVYi3Kd0rJdHbizbH213VPzqiYMBUkJ6O9FX3JOX3yOtt6e90DUPIjLsPdMR%2Bf1qYx4aVCX9a97QW8fnVp2mAxX8mxbS%2BZ0xIwUb1XYnCPJVcSIRxifyhVsjf94h%2FhAZhbaCeDryj59k5Iyt83RCfD0L8H%2FxsgwaxfsBsJHrhhF8hc3YGuVkWuYxjsVxeaSqVRQdMu5F84RFhOuaaQzyqi6RI9Un%2F43HYVju4exUD45gN8BWklHDJLquJ7MzFmCsIKgTyQ1GuSBMAx6QMsIplu4sr%2Ff2V1ZGA6xTbMUUTspv%2BV0W8jaCO5TYhEfwsMKuLT2p8lkhZwmOWCtc%2FEYkDW2K25xPZHungJzlXNtMjLhvOAMWewqaHmthTStH6l3KHG%2BUYkZJyzK%2B0djt7LI3e1WQSnbbCYhDSXFkzf5EqtfoOcvBffQp%2Fvxr%2B5cpcXF0JFFAGgK041UzJcbFZ4WzliXAFTCdkcm0vZfUBhTM0wwObZygY6pgE9v4i3JUCYV%2BpQVtvE18wtL51ZMiA7BQor%2FjW9gnyaQWy3BHvKLd%2BdT0dvlkBvDWvEnZ46yyY%2FnwR04qasz4SpMvk6ye2n22dGryBhAUivCLOTetoIjvO3agyr689LqPsOyn7Dt87t4a4T1oZgFnQkPhJ4lZnYcbYqWQlGZkkEcL5T3KgVcW8LPog1xX%2F9GO3Be66II8LqnzOPbSgkN6T2NUMKMsLh&X-Amz-Signature=0ebbfb4e21ab2cdace5aa1a604097ec5f71720861b64e0901fc4f1c18256a812&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
 
 iTerm2 용 컬러 테마
 
 
-[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466V4E7WJX7%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T160019Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJIMEYCIQDoa2OXEzNCQfKQFXHnBbP4jfJ24cnlotgcfVdYsGdGbQIhAL%2F0iYoFBkGxobA0aWu9nneD6Hi4WbDz%2FrJpiENl5Vc8KogECOb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1IgzsGFOUqFC5bituX18q3AOJ4aESRZHaDWqh55T2l3A9Ll%2FBan1sRq33eRjmG9XNUW4a7mV5e%2FYGjlGHYmB9ddmtpHQ2%2B1Q0Uk8Dj2%2F4XfXJYgv87rifV%2F%2Bi4ccxSUjbuUUXRjG1w25HqQPzxwg7pcAzZc2tSUeHhshOJDCXcEkV2pkNHPWAhCn1cH3UJercdAJH%2BuolDG5g8zvbvGi1L3dqgc%2FO%2FqCHyvna8yZ97YYgMMXiZPB7RhVG%2Fz9OFv09qYcX0RT5fjY8ocnzIlpatJcop7nyYvVq92v7Cddu3D8xkyM%2FltOTI7Lx%2FO4Z9PT28tMLdnmpMNq%2FOtepvOvNTyHhUODMRAC7kR1SrZ59uX%2FicAUK15tfI5cCDQf7APoCb03c8P5NRILzV8nmUsUAJy1tM%2F0%2B9wtk%2FFikkWbUhfnBvf8zpnyP9E6URv7cP2PlX%2FrQ13ClSsAXkD5vUyaUyIhz9rcWc54Ib1qvuaDK2SBeLXbm9e1JHRjzGxuJNZs92sGlgnypWgWXskc2jHMdppWiWSOfqHNj0TRzOrzcIPipruqX77NPuStWpnTnqEuLvuX9KNTvzjye9b%2Fugln%2BaxaqrPUegigDUg88VMJi8oh7UxtW3SfXXs4UtchJ05cbhFdMtK2gj44h27Zu8zD95dnKBjqkAZW5%2FSEVtAQtnV7v%2FJLlzu%2FZJaz5xIVQtV0hKw2ip6Saa%2BqKBtr72xSkc5ghNtAPOwx28NUbcl4o3JaL6R%2BF%2FNwPZahjFKHcjmEUDAbeed4YQF91msLjhVaP3LQH3ieDXgL2%2BQUoDNJobC%2FJ2F47ClGIp3%2Busx5f%2BKK6Ft4NYQvrGvy9B4OJkKTnjeOINrIpp9LSbftws987rYFoU9wQnF3T%2Fves&X-Amz-Signature=0e01a7fb9935ffe090d7d64face02e79e8778d31b728c059904a974342b42c7c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+[file](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/c0a60f17-c7c2-4720-9496-d840b2564836/Framer.itermcolors?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466ZHSTR5O6%2F20260101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260101T161406Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB0aCXVzLXdlc3QtMiJGMEQCICrGDGwJjjr8q4m7RG%2FE5vu1zYyaFE3Ul7NgMYV%2BiE46AiBFgt1BDNhJtZIUT0Uxfc8rZCfBvihPgKlgie7RFviWaiqIBAjm%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDYzNzQyMzE4MzgwNSIMtJq%2BJAxF2vrdXyf6KtwDhWConvVpZeJbBKYZRrxZk7HRPghhUbgSlYnyYhyrVqDMAL3XZRcFUHjgwi6MgtAivdSF4rzGj%2FgNyFhhK%2F%2FyVZf%2B%2Bm81FTXc0I%2BnY%2FtMLEKGngzmC9Wa%2BHx1z15esYEJITDO2mR%2FOGSgz6CvoDdVYi3Kd0rJdHbizbH213VPzqiYMBUkJ6O9FX3JOX3yOtt6e90DUPIjLsPdMR%2Bf1qYx4aVCX9a97QW8fnVp2mAxX8mxbS%2BZ0xIwUb1XYnCPJVcSIRxifyhVsjf94h%2FhAZhbaCeDryj59k5Iyt83RCfD0L8H%2FxsgwaxfsBsJHrhhF8hc3YGuVkWuYxjsVxeaSqVRQdMu5F84RFhOuaaQzyqi6RI9Un%2F43HYVju4exUD45gN8BWklHDJLquJ7MzFmCsIKgTyQ1GuSBMAx6QMsIplu4sr%2Ff2V1ZGA6xTbMUUTspv%2BV0W8jaCO5TYhEfwsMKuLT2p8lkhZwmOWCtc%2FEYkDW2K25xPZHungJzlXNtMjLhvOAMWewqaHmthTStH6l3KHG%2BUYkZJyzK%2B0djt7LI3e1WQSnbbCYhDSXFkzf5EqtfoOcvBffQp%2Fvxr%2B5cpcXF0JFFAGgK041UzJcbFZ4WzliXAFTCdkcm0vZfUBhTM0wwObZygY6pgE9v4i3JUCYV%2BpQVtvE18wtL51ZMiA7BQor%2FjW9gnyaQWy3BHvKLd%2BdT0dvlkBvDWvEnZ46yyY%2FnwR04qasz4SpMvk6ye2n22dGryBhAUivCLOTetoIjvO3agyr689LqPsOyn7Dt87t4a4T1oZgFnQkPhJ4lZnYcbYqWQlGZkkEcL5T3KgVcW8LPog1xX%2F9GO3Be66II8LqnzOPbSgkN6T2NUMKMsLh&X-Amz-Signature=c6fa0c634ab5359678de8e0d910e56dda99a3b96167ee57e0778fe4159a27865&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
 
 
 ## Install Homebrew
 
 
-
-{% raw %}
 ```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-{% endraw %}
-
 
 
 
@@ -123,13 +124,9 @@ iTerm2 용 컬러 테마
 To install:
 
 
-
-{% raw %}
 ```shell
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
-{% endraw %}
-
 
 
 
@@ -139,20 +136,19 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 [https://github.com/powerline/fonts/tree/master/SourceCodePro](https://github.com/powerline/fonts/tree/master/SourceCodePro)
 
 
-
-{% raw %}
 ```shell
-# clone
+
+## clone
 git clone https://github.com/powerline/fonts.git --depth=1
-# install
+
+## install
 cd fonts
 ./install.sh
-# clean-up a bit
+
+## clean-up a bit
 cd ..
 rm -rf fonts
 ```
-{% endraw %}
-
 
 
 
@@ -176,11 +172,7 @@ rm -rf fonts
 To Install:
 
 
-
-{% raw %}
 ```shell
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 ```
-{% endraw %}
-
 

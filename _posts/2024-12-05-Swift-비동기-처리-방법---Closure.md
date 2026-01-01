@@ -15,8 +15,6 @@ categories: [Swift, ]
     Result 는 제너릭 타입을 가진 enum 으로 아래처럼 선택한 case에 맞는 성공데이터 또는 실패 에러코드를 전달 한다.
 
 
-
-{% raw %}
 ```swift
 @frozen public enum Result<Success, Failure> where Failure : Error, Success : ~Copyable {}
 
@@ -24,13 +22,9 @@ categories: [Swift, ]
 .success(BaseListResponse<Todo>)
 .fail(ApiError)
 ```
-{% endraw %}
-
 
 - Todo 목록을 조회하는 API 호출 함수
 
-
-{% raw %}
 ```swift
 static func fetchTodos(page: Int = 1, completion: @escaping (Result<BaseListResponse<Todo>, ApiError>) -> Void ) {
         
@@ -89,16 +83,12 @@ static func fetchTodos(page: Int = 1, completion: @escaping (Result<BaseListResp
         }.resume()
     }
 ```
-{% endraw %}
-
 
 - 연쇄 API 호출
 
     할일을 등록후 성공이면 이어서 전체목록을 조회해 오는 연속 API 호출
 
 
-
-{% raw %}
 ```swift
 static func addATodoAndFetchTodos(title: String,
                                       isDone: Bool = false, completion: @escaping (Result<BaseListResponse<Todo>, ApiError>) -> Void) {
@@ -125,16 +115,12 @@ static func addATodoAndFetchTodos(title: String,
         }
     }
 ```
-{% endraw %}
-
 
 - 동시 API 호출 [Int] 응답 - Dispatch Group 활용
 
     선택한 할일들을 동시에 삭제후 삭제가 성공한 녀석들만 todoId 값을 [Int] 리턴하는 함수
 
 
-
-{% raw %}
 ```swift
 static func deleteSelectedTodos(seletedTodoIds: [Int],
                                     completion: @escaping ([Int]) -> Void)  {
@@ -169,13 +155,9 @@ static func deleteSelectedTodos(seletedTodoIds: [Int],
         }
     }
 ```
-{% endraw %}
-
 
 - 동시 API 호출 Result<> 응답 - Dispatch Group 활용
 
-
-{% raw %}
 ```swift
 static func fetchSelectedTodos(seletedTodoIds: [Int],
                                    completion: @escaping (Result<[Todo], ApiError>) -> Void)  {
@@ -224,6 +206,4 @@ static func fetchSelectedTodos(seletedTodoIds: [Int],
         
     }
 ```
-{% endraw %}
-
 
