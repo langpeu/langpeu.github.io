@@ -16,23 +16,10 @@ function convertYoutubeMarkdown(body) {
     return body.replace(regex, (_, url, id) => `{% include embed/youtube.html id='${id}' %}`);
 }
 
-// function escapeCodeBlock(body) {
-//     const regex = /```([\s\S]*?)```/g;
-//     return body.replace(regex, function (match, htmlBlock) {
-//         return "\n{% raw %}\n```" + htmlBlock.trim() + "\n```\n{% endraw %}\n";
-//     });
-// }
-
 function escapeCodeBlock(body) {
     const regex = /```([\s\S]*?)```/g;
-
-    return body.replace(regex, (match, inner) => {
-        // inner 안에 liquid 패턴이 있을 때만 raw 적용
-        const hasLiquid = /({{[\s\S]*?}}|{%-?[\s\S]*?-?%})/.test(inner);
-
-        if (!hasLiquid) return match; // 그대로 둠 (Chirpy/Rouge 정상 동작)
-
-        return `\n{% raw %}\n\`\`\`${inner.trim()}\n\`\`\`\n{% endraw %}\n`;
+    return body.replace(regex, function (match, htmlBlock) {
+        return "\n{% raw %}\n```" + htmlBlock.trim() + "\n```\n{% endraw %}\n";
     });
 }
 
