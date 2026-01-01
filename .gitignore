@@ -22,3 +22,6 @@ package-lock.json
 assets/js/dist
 assets/lib
 assets/img
+
+#post
+_posts
