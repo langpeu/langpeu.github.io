@@ -18,10 +18,23 @@ function convertYoutubeMarkdown(body) {
 
 function escapeCodeBlock(body) {
     const regex = /```([\s\S]*?)```/g;
-    return body.replace(regex, function (match, htmlBlock) {
-        return "\n{% raw %}\n```" + htmlBlock.trim() + "\n```\n{% endraw %}\n";
+
+    return body.replace(regex, (match, inner) => {
+        // Liquid 패턴이 있을 때만 raw 적용
+        const hasLiquid = /({{[\s\S]*?}}|{%-?[\s\S]*?-?%})/.test(inner);
+
+        if (!hasLiquid) return match; // raw 없이 그대로
+
+        return `\n{% raw %}\n\`\`\`${inner.trim()}\n\`\`\`\n{% endraw %}\n`;
     });
 }
+
+// function escapeCodeBlock(body) {
+//     const regex = /```([\s\S]*?)```/g;
+//     return body.replace(regex, function (match, htmlBlock) {
+//         return "\n{% raw %}\n```" + htmlBlock.trim() + "\n```\n{% endraw %}\n";
+//     });
+// }
 
 function replaceTitleOutsideRawBlocks(body) {
     const rawBlocks = [];
