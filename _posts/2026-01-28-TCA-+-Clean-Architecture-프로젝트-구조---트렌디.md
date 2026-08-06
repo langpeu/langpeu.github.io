@@ -14,52 +14,49 @@ categories: [SwiftUI, TCA, ]
 
 ### 1. 폴더 구조
 
-
-```plain text
-AppStore/
-  ├── App/
-  │   ├── AppFeature.swift
-  │   └── AppStoreApp.swift
-  │
-  ├── Domain/                    // 비즈니스 로직
-  │   ├── Models/               // Entity (비즈니스 모델)
-  │   │   ├── User.swift
-  │   │   ├── Place.swift
-  │   │   └── YTVisitedPlace.swift
-  │   │
-  │   └── Services/             // UseCase + Repository 역할
-  │       ├── AuthService.swift
-  │       └── PlacesService.swift
-  │
-  ├── Data/                      // Infrastructure
-  │   ├── Clients/              // 외부 시스템 접근
-  │   │   ├── AppSupabaseClient.swift
-  │   │   ├── KeychainClient.swift
-  │   │   ├── LocationClient.swift
-  │   │   └── UserDefaultsClient.swift
-  │   │
-  │   └── DTOs/                 // API 응답 모델 (필요시만)
-  │       └── UserDTO.swift
-  │
-  ├── Features/                  // Presentation
-  │   ├── Login/
-  │   │   ├── LoginFeature.swift
-  │   │   └── LoginView.swift
-  │   └── HomeMap/
-  │       ├── HomeMapFeature.swift
-  │       └── HomeMapView.swift
-  │
-  ├── Shared/
-  │   ├── Components/
-  │   ├── Extensions/
-  │   └── Utils/
-  │
-  └── Config/
-      ├── Debug.xcconfig
-      ├── Release.xcconfig
-      └── Secrets.xcconfig
-```
-
+> AppStore/  
+>   ├── App/  
+>   │   ├── AppFeature.swift  
+>   │   └── AppStoreApp.swift  
+>   │  
+>   ├── Domain/                    // 비즈니스 로직  
+>   │   ├── Models/               // Entity (비즈니스 모델)  
+>   │   │   ├── User.swift  
+>   │   │   ├── Place.swift  
+>   │   │   └── YTVisitedPlace.swift  
+>   │   │  
+>   │   └── Services/             // UseCase + Repository 역할  
+>   │       ├── AuthService.swift  
+>   │       └── PlacesService.swift  
+>   │  
+>   ├── Data/                      // Infrastructure  
+>   │   ├── Clients/              // 외부 시스템 접근  
+>   │   │   ├── AppSupabaseClient.swift  
+>   │   │   ├── KeychainClient.swift  
+>   │   │   ├── LocationClient.swift  
+>   │   │   └── UserDefaultsClient.swift  
+>   │   │  
+>   │   └── DTOs/                 // API 응답 모델 (필요시만)  
+>   │       └── UserDTO.swift  
+>   │  
+>   ├── Features/                  // Presentation  
+>   │   ├── Login/  
+>   │   │   ├── LoginFeature.swift  
+>   │   │   └── LoginView.swift  
+>   │   └── HomeMap/  
+>   │       ├── HomeMapFeature.swift  
+>   │       └── HomeMapView.swift  
+>   │  
+>   ├── Shared/  
+>   │   ├── Components/  
+>   │   ├── Extensions/  
+>   │   └── Utils/  
+>   │  
+>   └── Config/  
+>       ├── Debug.xcconfig  
+>       ├── Release.xcconfig  
+>       └── Secrets.xcconfig  
+> 
 
 
 ### 2. 레이어별 역할
