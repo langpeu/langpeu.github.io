@@ -7,11 +7,45 @@ categories: [Synology, NAS, ]
 ---
 
 
+안녕하세요 랑프입니다.
+
+
 시놀로지 DSM 은  7.4.2 로 업데이트 하는 시점에서 하드 디스크 의 SMART 정보상세를 제외 했기에 여간 답답한게 아니다. 사실 나도 4년 정도 사용하면서 장애가 발생해서 디스크 상태 보려고 했는데 이제서야 해당 메뉴가 삭제된걸 알았다.
 
 
 그래서 아무래도 해외 포럼을 뒤지다 보니 알게된 scrutiny 라는 프로젝트를 알게되서 내 나스에 설치해 보았다.  제대로 하드 상태를 관리하려면 최소 일주일에 한번은 하드디스크 smart 빠른스캔 정도 돌리는게 좋다고 하기에 일단 세팅해 봤고 몇일 사용하고 설치 방법 기록겸 리뷰겸 남긴다.
 
+
+SMART 는 디스크 펌웨어 영역에 설치되어 있는 디스크 관리툴이다.
+
+> 
+>
+> **1. 상태 모니터링 (Self-Monitoring)**
+>
+>
+> 디스크 컨트롤러가 평소 동작 중에 계속 아래와 같은 지표들을 자체적으로 측정하고 기록합니다.
+>
+> - 배드 섹터 개수 (Reallocated Sector Count)
+> - 읽기/쓰기 오류율
+> - 시크(seek) 오류율
+> - 디스크 가동 시간 (Power-On Hours)
+> - 전원 켜고 끈 횟수 (Power Cycle Count)
+> - 온도
+> - (SSD의 경우) 남은 수명, 총 쓰기 바이트량(TBW), 웨어 레벨링 상태 등
+>
+> **2. 분석 (Analysis)**
+>
+> - 각 지표별로 제조사가 정한 **임계값(threshold)**과 비교해서, 정상 범위인지 위험 수준인지 판단합니다. 아래 검사 기능들은 수동이고, 디스크의 모터, 디스크 핵심영역이나 전체등을 물리적으로 검사합니다. SMART 속송값에 업데이트 되는게 아니라 별도의 TestLog 가 생성됩니다.
+> - Short scan(단축 검사): 제조사가 정한 디스크 일부 핵심 구간만 빠르게 점검
+> - Extended scan(정밀 검사): 디스크 표면 전체를 훑어서 배드 섹터 유무를 확인
+>
+> **3. 보고 (Reporting)**
+>
+> - 분석 결과를 디스크 내부 예약 영역에 저장해두고, 운영체제나 관리 툴(시놀로지의 Scrutiny, `smartctl` 등)이 요청하면 그 값을 읽어서 사용자에게 보여줍니다.
+> - 값이 임계치를 넘으면 "디스크 고장 임박" 같은 경고를 미리 띄워서, 데이터 유실 전에 백업/교체할 시간을 벌어줍니다.
+>
+> 핵심은 **디스크 안의 사용자 파일(문서, 사진 등)을 검사하는 게 아니라, 디스크라는 하드웨어 자체의 물리적/전기적 건강 상태를 스스로 진단하고 보고하는 기능**이라는 점입니다.
+> Scrunity 는 이 디스크의 펌웨어 영역에 저장되어 있는 SMART 속성 정보를 가져와서 웹UI로 보여주는 것이지 디스크에 단축,정밀 검사를 실행 하거나, 그 결과인 TestLog를 가져오지는 않습니다.
 
 ![0](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/0.png)
 
@@ -112,7 +146,7 @@ devices:
 
 > /docker/scrutiny/scrutiny.yaml
 
-[scrutiny.yaml](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/dad48fd0-b3ef-4ae1-8deb-9e7b515129f2/scrutiny.yaml?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4662225IZY3%2F20260806%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260806T022407Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGoaCXVzLXdlc3QtMiJHMEUCIE2odl5X1o1lqDvSukDH975FdYc7QElHSu4aRtNur7hJAiEA4YJ%2FKNoScPPHCUR73WzNiyB34AiW%2B9i%2FsO90ywOQ1%2FYq%2FwMIMxAAGgw2Mzc0MjMxODM4MDUiDEOArtsOHVmeWLnhryrcA5OGkMDtd8iZCjhZ66%2BKGMr4sj%2BkApHj2Nkr3Qk8I%2Bgq4HptOXV9v0Ovv7Gv5LkQov5s5U2dufFq56Zm1NFLJT2IrfP88pjj1yxhNB4GfP7TEtxpC%2BEzp1WfY9FL7KQP1zWwK8%2BLhhy74jWWeUGoIGYa%2FAgxgsnNmmlSpUrkLdSTmRdkLmrQw%2FBTeU6%2F1t9IO2Ue8v7qARJcogmWCT%2BCBPKpg%2F0N0whwDq0nTVq31dNwP%2FV9nPUA83roXWqeO1ZgGj2EQ3dO%2Fqcs4K06bKgLDatBA0JNRFYGDIyBGtFCA%2BvHNY2rQFg2iPhWc%2BRX6e7INmNRZ7gto3Iir1cBvSL0tJlK2YPbD1fIRz1qw96eeRy3Qe5XPKe77GQgwtGPl%2Fa6t9pvPqtZZezZT1%2FZPzl6Bb0SPnCt%2BscOdtrFuJe3LO8I7B3XQ7hDfBzLYjeo45y9KMQ1CG%2BTSnma81IDQkvPjZ2t7qcD9XnTmjRYnKRi1gDbIlfkeW5hvjmmrd8HPQ5XhUZlhC67PYzjXno9b534OliY5CZHwoeHZD4qG2Cg4msbZbhCKdtc60S8VWltBMmx9x8y3VQuIVRxc5WsHXtUfhaHwPpHNP30q0LCszK%2B9Fg5H5YHj4OcaJVAH37QMMjUz9MGOqUBV8kxSpnzrdRXlEBH4l8zbMYSBa12jKGqgyd4OAOq4JcOAL%2BWov7WrOSLa5zIm3dfWgr%2FgBD18jgbvbqYaAwoy%2B%2BVSJ6afdSzdgBcZrMcLrPMI%2F8%2BamNl3u0Lt%2FbIDOlYmfnm9wdOGgexJKWKlk18z0qtL2mPYrdFHM5eqkOHQznoOOp81CxxirEX3GNgaep884aHON%2BHXo71wnusRcEks9hB39M%2F&X-Amz-Signature=8e5eb11c13275e5434813f68d03bf6deadbd7869de3b2f8c485d5d3339234e10&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+[scrutiny.yaml](https://prod-files-secure.s3.us-west-2.amazonaws.com/6418cdd3-3974-4c93-91e2-ff78d8683257/dad48fd0-b3ef-4ae1-8deb-9e7b515129f2/scrutiny.yaml?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466XAKKIUZ5%2F20260806%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260806T025820Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGoaCXVzLXdlc3QtMiJHMEUCIAHapc1Zw6gZldqiqNckCqOJKaXOa6prO7kDgnCAm4UYAiEAgFy040I9ZZmHjPC9z3bNDdttAr57EktZZ%2BwwxaWvXu8q%2FwMIMxAAGgw2Mzc0MjMxODM4MDUiDPMo8v%2FHA4PqzLKoFSrcA3E2UYOziXCotd7LQv%2B1QkMTiB6OVxja7FZSgIcAg7jWDwYJiXH2wjTV%2BgIP3AWxW9RYUpDHjN0E5HYkqap4m3rUAgd4QrpA5%2BM%2FheQVfVqFuUBRljKuXeBm%2FlLmtCfRzMOzspZAly4Nngdxl7sH4VzU36dQ8G7Hq4wC00%2FevseiCLgN3NgPdHbGUgsBCaeyzjcquzfzXRrbZWhabtinO2poPhtRltPqr6TFEc0Vdckq7SP4KtDhPDFCEsBpKfTeVeMyo%2BalHJ8da%2B%2BqVodIvkuslW%2BFSqBnS7cpE7yHag6Vkif9ItxUGV1lcmEyw1A0pAse7dMjyGkR60gb4ysjYLXB7UET%2F59iHwRFq2hwmNxwOs2STaKsZHANjdvLGNJGLErQ3PHaMiNEBBE3Y9Dz66emcbQxh51L9I7uXeIrU%2FtdDcdF4dO1393hMAiw4EDTOV%2BgTqYudwbEtv4Z6FiH5KS3d5TpaADBQfcQV6fSBNMq9nQE7u4BOtF%2BlQVCeJVUJDf%2F5yabMUYaPHKTzCe1BT0h7l2k2kHdB5VQEH7scpWIwFWS5G2zvx9unu1VnNll37Ue%2FUJpT3gcS5Rpr3YIkYGGoSuVqR7MESSZdsjU0%2B6CGcV5lzXy9CRk%2FLc2MI7Xz9MGOqUBPA7TeZrMkAYE8l0N%2BB8vcRIenTlHCiAkxjP0HtCOffCtj4HpolsgypyVYtoiUsBrGgsAvYw2l0zDx5CIffcmQlFpO8yyRxmuIl1EO%2FPSRbYe6VCdFyXMcgAXJkyOfRS727bCAzysLvl4d%2FDFyWMNaODQlL2W9d0pvj8XJD1iH34UgRFUrDARrrwqyLIoKXMsGahmMFGnRbsXTuox7a8Klb4W%2F%2B8M&X-Amz-Signature=39f975f34eedcea0d48e70de509ff4e8705dab5f696a05b11f5da1561815a064&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
 
 ```bash
@@ -281,5 +315,30 @@ services:
 ![8](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/8.png)
 
 
-자료출처: [https://drfrankenstein.co.uk/scrutiny-in-container-manager-on-a-synology-nas/](https://drfrankenstein.co.uk/scrutiny-in-container-manager-on-a-synology-nas/)
+위에처럼 녹색불이 들어오면 브라우저 실행해서 아래 주소로 호출하면 된다
+
+> https://나스ip:6090
+
+![9](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/9.png)
+
+
+![10](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/10.png)
+
+
+우측 메뉴 선택하면 팝업 나오고 View Details 누르면 해당 디스크의 SMART 정보와, 외부 드라이브 통계 정보 기반으로 현재 하드 상태를 비교해서 알려준다.
+
+
+NVME 드라이브는 별도 Rated TBW 설정할수 있게 되어 있어 제조업체 스펙에 따른 현재 사용율과 수명을 단순하지만 알려준다.
+
+
+![11](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/11.png)
+
+
+![12](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/12.png)
+
+
+![13](/assets/img/2026-08-05-시놀로지-나스-디스크-Smart-관리툴-Scrutiny-세팅.md/13.png)
+
+
+참고: [https://drfrankenstein.co.uk/scrutiny-in-container-manager-on-a-synology-nas/](https://drfrankenstein.co.uk/scrutiny-in-container-manager-on-a-synology-nas/)
 
