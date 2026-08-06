@@ -151,6 +151,8 @@ title: "${title}"${fmtags}${fmcats}
         const mdblocks = await n2m.pageToMarkdown(id);
         let md = n2m.toMarkdownString(mdblocks)["parent"];
 
+        console.log(`[${title}] md length: ${md.length}`);
+        
         if (md === "") {
             continue;
         }
