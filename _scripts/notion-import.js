@@ -160,6 +160,8 @@ title: "${title}"${fmtags}${fmcats}
         md = replaceTitleOutsideRawBlocks(md);
         md = convertYoutubeMarkdown(md);
 
+        console.log(`[${title}] md length: ${md.length}`);
+        
         const ftitle = `${date}-${title.replaceAll(" ", "-")}.md`;
 
         let index = 0;
@@ -196,6 +198,8 @@ title: "${title}"${fmtags}${fmcats}
             }
         );
 
+        console.log(`[${title}] md length: ${edited_md.length}`);
+        
         //writing to file
         fs.writeFile(path.join(root, ftitle), fm + edited_md, (err) => {
             if (err) {
