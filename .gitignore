@@ -24,4 +24,4 @@ assets/lib
 assets/img
 
 #post
-_posts
+- _posts
