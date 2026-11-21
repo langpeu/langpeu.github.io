@@ -74,10 +74,10 @@
       <div class="calc-in"><input id="calc-x" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="예: 0.0232÷9.81÷0.401×1000" aria-label="계산식"><span class="live"></span></div>
       <div class="keys">
         ${K("C", "fn")}${K("(")}${K(")")}${K("⌫", "fn")}${K("÷")}
-        ${K("sin(", "fn", "sin")}${K("7", "num")}${K("8", "num")}${K("9", "num")}${K("×")}
-        ${K("cos(", "fn", "cos")}${K("4", "num")}${K("5", "num")}${K("6", "num")}${K("−")}
-        ${K("√(", "fn", "√")}${K("1", "num")}${K("2", "num")}${K("3", "num")}${K("+")}
-        ${K("²", "fn", "x²")}${K("0", "num")}${K(".", "num")}${K("π", "fn")}${K("=", "eq")}
+        ${K("sin(", "fn", "sin")}${K("7", "kn")}${K("8", "kn")}${K("9", "kn")}${K("×")}
+        ${K("cos(", "fn", "cos")}${K("4", "kn")}${K("5", "kn")}${K("6", "kn")}${K("−")}
+        ${K("√(", "fn", "√")}${K("1", "kn")}${K("2", "kn")}${K("3", "kn")}${K("+")}
+        ${K("²", "fn", "x²")}${K("0", "kn")}${K(".", "kn")}${K("π", "fn")}${K("=", "eq")}
         ${K("g", "fn", "g", "중력가속도 9.81")}${K("ans", "fn", "ans", "직전 결과")}${K("^", "fn", "xʸ")}${K("tan(", "fn", "tan")}
       </div>
       <div class="calc-foot"><span class="sp">g = 9.81 · 키보드로 입력, Enter = 계산</span>

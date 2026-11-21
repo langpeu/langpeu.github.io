@@ -112,8 +112,9 @@
     main.prepend(top);
     const side = document.createElement("aside"); side.className = "side"; side.id = "side"; side.setAttribute("aria-label", "문제 목록");
     side.innerHTML = `
-      <a class="brand" href="${ROOT}"><img class="logo" src="${ROOT}common/logo.jpg" alt="랑프 두잇 로고" width="36" height="36">
+      <div class="brand-row"><a class="brand" href="${ROOT}"><img class="logo" src="${ROOT}common/logo.jpg" alt="랑프 두잇 로고" width="36" height="36">
         <span><b>피지컬AI 실험실</b><small>OMX-AI로 배우는 기구학·동역학</small></span></a>
+        <button class="side-collapse" type="button" aria-label="목록 접기" title="목록 접기 ( [ 키 )">«</button></div>
       <div class="side-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="side-q" type="search" placeholder="문제·개념 찾기 (예: 관성, Kp)" aria-label="문제 찾기" autocomplete="off"></div>
       <div class="progress"><div class="row"><span>내 진행</span><span class="cnt"></span></div><div class="track"><span></span></div></div>
@@ -159,6 +160,9 @@
     }
     drawList();
     q.addEventListener("input", drawList);
+    // 목록 스크롤 위치: 다른 문제로 넘어가도 그대로 (탭 하나 안에서만 기억)
+    try { const y = +sessionStorage.getItem("omx-lab-side-scroll"); if (y) side.scrollTop = y; } catch (e) { /* 무시 */ }
+    side.addEventListener("scroll", () => { try { sessionStorage.setItem("omx-lab-side-scroll", String(Math.round(side.scrollTop))); } catch (e) { /* 무시 */ } }, { passive: true });
     nav.addEventListener("click", (e) => {
       const b = e.target.closest(".unit > button"); if (!b) return;
       const u = b.parentElement, key = u.dataset.u, now = !u.classList.contains("closed");
@@ -167,10 +171,20 @@
       LS.set("omx-lab-units", [...closed]);
     });
 
-    // 서랍 (좁은 화면)
+    // 서랍 (좁은 화면) / 접기 (넓은 화면)
     const menu = top.querySelector(".menu-btn");
+    const narrow = () => matchMedia("(max-width: 820px)").matches;
     const drawer = (open) => { app.classList.toggle("open", open); body.classList.toggle("drawer", open); menu.setAttribute("aria-expanded", String(open)); };
-    menu.addEventListener("click", () => drawer(!app.classList.contains("open")));
+    const collapse = (c) => { app.classList.toggle("collapsed", c); LS.set("omx-lab-side-closed", c); if (!c) side.querySelector(".side-collapse").focus(); else menu.focus(); };
+    if (LS.get("omx-lab-side-closed", false)) app.classList.add("collapsed");
+    menu.addEventListener("click", () => (narrow() ? drawer(!app.classList.contains("open")) : collapse(false)));
+    side.querySelector(".side-collapse").addEventListener("click", () => (narrow() ? drawer(false) : collapse(true)));
+    document.addEventListener("keydown", (e) => {
+      const t = e.target;
+      if (e.key === "[" && !narrow() && !e.ctrlKey && !e.metaKey && !e.altKey && !(t && t.closest && t.closest("input, textarea, select, [contenteditable]"))) {
+        e.preventDefault(); collapse(!app.classList.contains("collapsed"));
+      }
+    });
     scrim.addEventListener("click", () => drawer(false));
     nav.addEventListener("click", (e) => { if (e.target.closest("a.item")) drawer(false); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && app.classList.contains("open")) drawer(false); });
@@ -232,6 +246,7 @@
       const wrap = main.querySelector(".wrap"); (wrap || main).appendChild(pg);
     }
     refLinks(main);
+    body.classList.add("shelled");
   }
 
   // ---- 첫 화면: 단원별 카드 ----
