@@ -19,7 +19,6 @@ lib/                  mujoco.js/.wasm (MuJoCo 3.17.0), three.js r128
 model/                omx_lab.xml + meshes/*.stl (ROBOTIS 원본에서 생성)
 <id>/                 문제 하나: index.html(내용) + <id>.js(이 문제의 실험). 예: torque/, sag/
 tool-*/               도구: 서보 스펙 계산기, 단위 변환·어림 계산
-p00-basics/ … p10-payload/   옛 주소. 새 주소로 보내는 페이지만 있음
 tools/                개발용 (배포에서 뺌): build_xml.py, check_site.py, test.html, calc_test.html
 ```
 
