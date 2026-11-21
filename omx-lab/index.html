@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMX 동역학 실험실</title>
+<meta name="description" content="OMX 로봇팔이 이상하게 움직이는 상황마다 손으로 예측하고 브라우저 속 MuJoCo 시뮬레이션으로 확인하는 로봇 동역학 학습 자료.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>OMX 동역학 실험실</h1>
+    <p>OMX-AI 팔로워 팔(OMX-F)이 이상하게 움직이는 상황을 하나씩 골라, <b>손으로 예측 → 브라우저 속 MuJoCo 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인이 되는 동역학 개념을 익힙니다. 설치 없이 브라우저에서 바로 실행됩니다.</p>
+  </header>
+  <ul class="plist" id="plist" aria-label="상황 목록"></ul>
+</div>
+<footer class="foot" id="foot"></footer>
+<script src="common/lab.js"></script>
+<script>OmxLab.renderList(document.getElementById("plist"));</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+OMX 동역학 실험실 (비공식 학습 자료)
+이 프로젝트는 ROBOTIS와 관계없는 비공식 자료입니다.
+
+이 저장소에는 아래 제3자 자료가 포함되어 있습니다.
+
+1. ROBOTIS open_manipulator
+   https://github.com/ROBOTIS-GIT/open_manipulator
+   Copyright ROBOTIS CO., LTD. — Apache License 2.0
+   - model/omx_lab.xml : open_manipulator_description/mujoco/omx/omx.xml 과 scene.xml 을
+     한 파일로 합치고 메시 경로를 바꿈 (tools/build_xml.py). 물리 값은 바꾸지 않음.
+   - model/meshes/*.stl : open_manipulator_description/meshes/omx_f/ 의 파일을 그대로 복사.
+
+2. MuJoCo (npm @mujoco/mujoco 3.17.0)
+   https://github.com/google-deepmind/mujoco
+   Copyright DeepMind Technologies Limited — Apache License 2.0
+   - lib/mujoco.js, lib/mujoco.wasm : 수정 없이 그대로.
+
+3. three.js r128 (three.min.js, examples/js/controls/OrbitControls.js)
+   https://threejs.org/
+   Copyright © 2010-2021 three.js authors — MIT License (lib/LICENSE-three.txt)
+   - lib/three.min.js, lib/OrbitControls.js : 수정 없이 그대로.
+
+Apache License 2.0 전문은 LICENSE 파일에 있습니다.
