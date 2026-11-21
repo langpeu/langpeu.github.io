@@ -7,7 +7,7 @@
  */
 (() => {
   "use strict";
-  const { $, A, B, deg, smooth, logTable, pill, bracket, boundChip, narrow } = OmxLab;
+  const { $, A, B, deg, smooth, logTable, pill } = OmxLab;
   const X_EDGE = 0.06, HOLD = 3, TILT = 3;
   OmxLab.shell("tipping");
   const box = OmxLab.store("omx-lab-tipping"), state = box.get(), save = () => box.set(state);
@@ -20,36 +20,54 @@
   const wEl = $("sl-w"); const wu = () => { $("v-w").textContent = (+wEl.value).toFixed(2) + " kg"; }; wEl.addEventListener("input", wu); wu();
   const tilt = (d) => deg(2 * Math.asin(Math.min(1, Math.hypot(d.qpos[4], d.qpos[5], d.qpos[6]))));   // 베이스 쿼터니언 → 기울기
 
-  function run() {
-    const w = +wEl.value, T = +$("sel-T").value;
+  const run = (o = {}) => new Promise((resolve) => {
+    const w = o.w ?? +wEl.value, T = o.T ?? +$("sel-T").value;
     let mx = 0;
     plot.reset(T + HOLD);
     lab.run({
-      duration: T + HOLD,
+      duration: T + HOLD, speed: o.speed || 1,
       setup(model) { model.body_mass[B.link0] = m0 + w; },
       control(t, data) { const a = smooth(t / T); data.ctrl[A.j2] = 1.4 * a; data.ctrl[A.j3] = -1.4 * a; },
       sample(t, data) { const v = tilt(data); mx = Math.max(mx, v); plot.push(t, [Math.min(v, 30), TILT]); },
       judge() { const hold = mx < TILT; return { hold, mx, state: hold ? "버팀" : "넘어짐", cls: hold ? "hold" : "fall" }; },
-      done(r) { logs.push({ n: logs.length + 1, w, T, ...r }); render(); },
+      done(r) { logs.push({ n: logs.length + 1, w, T, ...r }); render(); resolve(r); },
     });
-  }
+  });
   function render() {
     logTable($("log"), logs, [
       { f: (r) => r.n, n: 1 }, { f: (r) => r.w.toFixed(2) + " kg", n: 1 }, { f: (r) => r.T + " s", n: 1 }, { f: (r) => r.mx.toFixed(1) + "°", n: 1 },
       { f: (r) => pill(r.hold, "버팀", "넘어짐") },
     ]);
-    const slow = bracket(logs.filter((r) => r.T === 5), "w", false), fast = bracket(logs.filter((r) => r.T === 0.4), "w", false);
-    $("bounds").innerHTML = boundChip("천천히(5초) 경계", slow, "kg", 0.02, 2) + boundChip("빠르게(0.4초) 경계", fast, "kg", 0.05, 2);
-    if (narrow(slow, 0.02) && fast) $("c3").classList.add("done");
+    $("p-w").textContent = state.predW != null && isFinite(state.predW) ? state.predW + " kg" : "아직 없음 (2단계에서 먼저 계산)";
+    if (state.okChk && state.fast) $("c3").classList.add("done");
   }
+  const needPred = (fb) => { if (state.predW != null && isFinite(state.predW) && state.predW > 0) return false; fb.hidden = false; fb.className = "fb no"; fb.textContent = "2단계에서 무게추를 먼저 예측하세요."; return true; };
+  $("btn-chk").addEventListener("click", async () => {
+    if (needPred($("fb-chk"))) return;
+    const r = await OmxLab.check3({
+      pred: state.predW, lowGood: false, good: "버팁니다", bad: "넘어집니다", fb: $("fb-chk"),
+      round: (v) => Math.round(v * 1000) / 1000, fmt: (v) => v.toFixed(3) + " kg",
+      run: (w) => run({ w, T: 5, speed: 3 }).then((x) => x.hold),
+      hint: "앞 모서리(x = 0.06) 기준 회전력: 로봇 M × (x무게중심 − 0.06) = 무게추 × (0.06 − x추) 를 확인해 보세요.",
+    });
+    if (r.ok) { state.okChk = 1; save(); render(); $("fb-chk").innerHTML += ` 계산값은 ${truth.w.toFixed(3)} kg입니다.`; }
+  });
+  $("btn-fast").addEventListener("click", async () => {
+    if (needPred($("fb-fast"))) return;
+    const w = Math.round(state.predW * 1.1 * 1000) / 1000, r = await run({ w, T: 0.4 }), fb = $("fb-fast");
+    fb.hidden = false; fb.className = "fb " + (r.hold ? "" : "ok");
+    fb.innerHTML = r.hold ? `${w.toFixed(3)} kg로 빠르게 뻗어도 버텼습니다(최대 ${r.mx.toFixed(1)}°). 예측이 넉넉했던 것 같습니다. 무게추를 줄여 다시 해 보세요.`
+      : `천천히는 버티던 ${w.toFixed(3)} kg인데, 빠르게 뻗으니 <b>넘어졌습니다</b>(최대 ${r.mx.toFixed(1)}°). 멈출 때 팔이 앞으로 쏠리는 관성 때문입니다. 4단계에서 이유를 확인해 보세요.`;
+    state.fast = 1; save(); render();
+  });
 
   $("btn-pred").addEventListener("click", () => {
     if (!lab) return;
-    const v = parseFloat($("pred-w").value); state.predW = v; save();
+    const v = parseFloat($("pred-w").value); state.predW = v; save(); render();
     if (OmxLab.checkPrediction($("fb-pred"), v, truth.w, 0.05, "kg", "천천히 뻗는 실험으로 확인해 보세요.", "앞 모서리(x = 0.06)를 기준으로 거리를 재야 합니다. 무게추는 모서리 뒤쪽에 있어서 거리 = 0.06 − x추 입니다."))
       { $("c1").classList.add("done"); $("c2").classList.add("done"); }
   });
-  $("btn-run").addEventListener("click", run);
+  $("btn-run").addEventListener("click", () => run());
   $("quiz").addEventListener("change", (e) => {
     const fb = $("fb-quiz"); fb.hidden = false;
     if (e.target.value === "b") { fb.className = "fb ok"; fb.textContent = "맞습니다. 정지 상태 조건(무게중심이 받침 안)은 천천히 움직일 때만 맞습니다. 빠르게 가속·감속하면 링크의 관성력까지 바닥이 받쳐야 해서, 실제로 바닥을 누르는 점(ZMP)이 무게중심보다 더 앞까지 갑니다. 보행 로봇이 빠르게 걸을 때 넘어지기 쉬운 것도 같은 이유입니다."; $("c4").classList.add("done"); }
@@ -62,8 +80,9 @@
     lab = l;
     for (const j of ["joint2", "joint3"]) qa[j] = lab.qadr(j);
     m0 = lab.model.body_mass[B.link0];
-    lab.onBusy((busy) => { $("btn-run").disabled = busy; });
-    $("btn-run").disabled = false;
+    const BTN = ["btn-run", "btn-chk", "btn-fast"];
+    lab.onBusy((busy) => BTN.forEach((id) => { $(id).disabled = busy; }));
+    BTN.forEach((id) => { $(id).disabled = false; });
     // 뻗은 자세의 전체 질량과 무게중심 (화면 표시용으로 MuJoCo에서 계산)
     const { mj, model, data } = lab;
     mj.mj_resetData(model, data); data.qpos[qa.joint2] = 1.4; data.qpos[qa.joint3] = -1.4; mj.mj_forward(model, data);

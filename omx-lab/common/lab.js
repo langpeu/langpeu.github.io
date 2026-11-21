@@ -30,9 +30,9 @@
   ];
   const PROBLEMS = [
     { n: 0, id: "basics", unit: "basics", ready: true, title: "기초 개념", concept: "식 하나, 기호 읽는 법, 단위, 용어 사전" },
-    { n: 1, id: "fk", unit: "kin", ready: false, title: "FK: 손끝은 어디에?", concept: "순기구학, 링크 길이, 각도 더하기" },
-    { n: 2, id: "ik", unit: "kin", ready: false, title: "IK: 공을 잡으려면 몇 도?", concept: "역기구학, 코사인 법칙, 해가 2개" },
-    { n: 3, id: "singularity", unit: "kin", ready: false, title: "손끝 속도와 특이점", concept: "자코비안 v = J·q̇, 특이점" },
+    { n: 1, id: "fk", unit: "kin", ready: true, title: "FK: 손끝은 어디에?", concept: "순기구학, 링크 길이, 각도 더하기" },
+    { n: 2, id: "ik", unit: "kin", ready: true, title: "IK: 공을 잡으려면 몇 도?", concept: "역기구학, 코사인 법칙, 해가 2개" },
+    { n: 3, id: "singularity", unit: "kin", ready: true, title: "손끝 속도와 특이점", concept: "자코비안 v = J·q̇, 특이점" },
     { n: 4, id: "torque", unit: "statics", ready: true, title: "명령을 보내도 안 움직임", concept: "중력 토크 g(q)와 모터 최대 토크" },
     { n: 5, id: "payload", unit: "statics", ready: true, title: "물체를 들면 동작 이상", concept: "페이로드 하중이 관절마다 퍼지는 방식 Jᵀ·F" },
     { n: 6, id: "push", unit: "statics", ready: false, title: "어느 방향으로 밀 때 제일 셀까", concept: "손끝 힘 방향과 τ = Jᵀ·F" },
@@ -321,6 +321,26 @@
       : `<tr><td colspan="${cols.length}" class="note">${empty || "아직 실험 기록이 없습니다."}</td></tr>`;
   }
   const pill = (ok, yes, no) => `<span class="pill ${ok ? "hold" : "fall"}">${ok ? yes : no}</span>`;
+
+  // ---- 예측 확인: 예측 ×0.9 / ×1 / ×1.1 세 번 실행 ----
+  // o: { pred, factors?, run(v) → Promise<good:boolean | {good, ...}>, lowGood: 작은 값에서 good 이어야 하면 true,
+  //      fmt(v) → 글자, good: "버팀", bad: "떨어짐", fb: 결과 표시 요소, hint?: 틀렸을 때 덧붙일 말,
+  //      round?(v) → 실제로 실행할 값 }
+  // 판정: 작은 값·큰 값 결과가 기대대로면 맞음. 예측값 그대로의 결과는 보여 주기만 함(경계 근처라 어느 쪽이든 가능)
+  async function check3(o) {
+    const f = o.factors || [0.9, 1, 1.1], vals = f.map((k) => (o.round ? o.round(o.pred * k) : o.pred * k));
+    const res = [];
+    for (const v of vals) { const r = await o.run(v); res.push(typeof r === "object" ? r : { good: r }); }
+    const [lo, mid, hi] = res, word = (r) => (r.good ? o.good : o.bad);
+    const okLo = lo.good === o.lowGood, okHi = hi.good === !o.lowGood, ok = okLo && okHi;
+    let msg = ok ? `예측이 맞습니다. ${o.fmt(vals[0])}에서는 ${word(lo)}. ${o.fmt(vals[2])}에서는 ${word(hi)}.`
+      : !okLo ? `${o.fmt(vals[0])}에서도 ${word(lo)}. 예측이 너무 큽니다.` : `${o.fmt(vals[2])}에서도 ${word(hi)}. 예측이 너무 작습니다.`;
+    msg += ` 예측값 그대로(${o.fmt(vals[1])})는 <b>${word(mid)}</b>.`;
+    if (ok) msg += " 경계 바로 근처라 예측값 자체는 어느 쪽이 나와도 이상하지 않습니다.";
+    else if (o.hint) msg += " " + o.hint;
+    if (o.fb) { o.fb.hidden = false; o.fb.className = "fb " + (ok ? "ok" : "no"); o.fb.innerHTML = msg; }
+    return { ok, res, vals };
+  }
 
   // ---- 시간 그래프 (canvas) ----
   // series: [{ name, color: css 변수 이름 또는 색, dash? }], yRange: [min,max] 또는 null(자동)
@@ -630,6 +650,34 @@
       requestAnimationFrame(loop);
     }
 
+    // -- 표시용 점·선 (시뮬레이션과 관계없음): 목표 공, 손끝 점, 손끝 경로 --
+    const col = (c) => new THREE.Color(c && c.startsWith("--") ? (cssVar(c) || "#888") : (c || "#888"));
+    const marks = {};
+    function marker(key, o) {
+      o = o || {};
+      let mk = marks[key];
+      if (!mk) {
+        const mat = new THREE.MeshStandardMaterial({ color: col(o.color || "--accent"), transparent: o.opacity != null, opacity: o.opacity ?? 1, depthTest: o.depthTest ?? true });
+        mk = marks[key] = new THREE.Mesh(new THREE.SphereGeometry(o.r || 0.008, 24, 16), mat);
+        mk.renderOrder = 5; scene.add(mk);
+      }
+      if (o.pos) mk.position.set(o.pos[0], o.pos[1], o.pos[2]);
+      if (o.color) mk.material.color.copy(col(o.color));
+      mk.visible = o.visible ?? true;
+      return mk;
+    }
+    function path(key, pts, o) {
+      o = o || {};
+      let ln = marks["path:" + key];
+      if (ln) { scene.remove(ln); ln.geometry.dispose(); }
+      if (!pts || pts.length < 2) { delete marks["path:" + key]; return null; }
+      const g = new THREE.BufferGeometry().setFromPoints(pts.map((p) => new THREE.Vector3(p[0], p[1], p[2])));
+      const mat = o.dash ? new THREE.LineDashedMaterial({ color: col(o.color || "--muted"), dashSize: 0.008, gapSize: 0.006 }) : new THREE.LineBasicMaterial({ color: col(o.color || "--muted") });
+      ln = marks["path:" + key] = new THREE.Line(g, mat);
+      if (o.dash) ln.computeLineDistances();
+      scene.add(ln); return ln;
+    }
+
     const ID_TYPES = { body: "mjOBJ_BODY", joint: "mjOBJ_JOINT", geom: "mjOBJ_GEOM", actuator: "mjOBJ_ACTUATOR" };
     const lab = {
       ROOT, Q, A, B, GRAV,
@@ -690,6 +738,10 @@
       /** 실행 시작/끝 알림: fn(true=실행 중) */
       onBusy(fn) { busyFns.push(fn); },
       showLever, setRunState,
+      /** 3D 점: marker(이름, { pos:[x,y,z], color: "--accent" 또는 색, r, opacity, visible }) — 같은 이름이면 옮김 */
+      marker,
+      /** 3D 선: path(이름, [[x,y,z], …], { color, dash }) — 점이 2개 미만이면 지움 */
+      path,
       /** 숫자 표시 줄. items: [{ k: 이름, v: (lab) => html }] */
       readouts(el, items) {
         el.insertAdjacentHTML("beforeend", `<div class="readouts">${items.map((it, i) =>
@@ -746,6 +798,6 @@
 
   window.OmxLab = {
     ROOT, UNITS, PROBLEMS, TOOLS, find, label, refLinks, Q, A, B, GRAV, $, deg, rad, smooth, fmt, shell, renderHome, store,
-    bracket, narrow, boundChip, checkPrediction, logTable, pill, Plot, start,
+    bracket, narrow, boundChip, checkPrediction, check3, logTable, pill, Plot, start,
   };
 })();

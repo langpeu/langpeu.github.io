@@ -56,23 +56,28 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: dt, 강성, 적분기</h2>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
         <p>실행하면 joint1이 10°로 움직이라는 명령을 받고 3초 동안 계산합니다. 값이 터지면 <span class="pill fall">발산</span>입니다.</p>
-        <div class="row"><label for="sel-kp">스프링 Kp</label>
-          <select id="sel-kp"><option value="50">50</option><option value="200" selected>200</option><option value="800">800</option></select></div>
-        <div class="row"><label for="sel-dt">dt</label>
-          <select id="sel-dt">
-            <option value="0.002" selected>2 ms (기본값)</option><option value="0.005">5 ms</option><option value="0.008">8 ms</option><option value="0.01">10 ms</option><option value="0.012">12 ms</option>
-            <option value="0.015">15 ms</option><option value="0.02">20 ms</option><option value="0.025">25 ms</option><option value="0.03">30 ms</option></select></div>
-        <div class="row"><label for="sel-int">적분기</label>
-          <select id="sel-int"><option value="0">Euler (MuJoCo 기본)</option><option value="1">RK4</option></select></div>
-        <div class="row"><button id="btn-run" disabled>실행</button></div>
-        <ol class="howto">
-          <li>Kp 200, Euler: dt를 늘려 가며 처음 발산하는 dt를 찾아 예측과 비교합니다.</li>
-          <li>Kp 800(4배)에서는 한계가 몇 ms가 되나요? (ω는 √4 = 2배)</li>
-          <li>Kp 200에서 Euler가 터진 dt를 RK4로 다시 돌려 봅니다.</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <p>Kp 200, Euler에서 dt를 내 예측보다 <b>10% 작게</b>, <b>예측 그대로</b>, <b>10% 크게</b> 세 번 계산해 봅니다. 작으면 안정, 크면 발산해야 예측이 맞습니다.</p>
+        <div class="given">내 예측(2단계): <b id="p-dt">아직 없음</b></div>
+        <div class="row"><button id="btn-chk" disabled>예측 확인 (3번 실행)</button></div>
+        <div class="fb" id="fb-chk" hidden></div>
+        <p>이번에는 Euler가 터진 dt(내 예측 + 10%)를 <b>RK4 적분기</b>로 다시 계산해 봅니다.</p>
+        <div class="row"><button id="btn-rk4" disabled>같은 dt로 RK4 실행</button></div>
+        <div class="fb" id="fb-rk4" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택) — Kp를 4배(800)로 하면?</summary>
+          <div class="row" style="margin-top:8px"><label for="sel-kp">스프링 Kp</label>
+            <select id="sel-kp"><option value="50">50</option><option value="200" selected>200</option><option value="800">800</option></select></div>
+          <div class="row"><label for="sel-dt">dt</label>
+            <select id="sel-dt">
+              <option value="0.002" selected>2 ms (기본값)</option><option value="0.005">5 ms</option><option value="0.008">8 ms</option><option value="0.01">10 ms</option><option value="0.012">12 ms</option>
+              <option value="0.015">15 ms</option><option value="0.02">20 ms</option><option value="0.025">25 ms</option><option value="0.03">30 ms</option></select></div>
+          <div class="row"><label for="sel-int">적분기</label>
+            <select id="sel-int"><option value="0">Euler (MuJoCo 기본)</option><option value="1">RK4</option></select></div>
+          <div class="row"><button id="btn-run" disabled>실행</button></div>
+          <p class="note">Kp가 4배면 ω는 √4 = 2배, dt 한계는 절반이 됩니다. 결과는 아래 표에 쌓입니다.</p>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th class="n">Kp</th><th class="n">dt</th><th>적분기</th><th class="n">식 한계 2/ω</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>

@@ -151,7 +151,7 @@ select { font: 600 0.9rem var(--font-body); padding: 6px 8px; border: 1px solid 
 .jtoggle { position: absolute; left: 10px; bottom: 8px; font-size: 0.75rem; padding: 3px 9px; background: color-mix(in srgb, var(--panel) 85%, transparent); }
 
 /* 0 · 기초 개념 페이지 (시뮬레이션 없는 한 단 문서) */
-.doc { display: flex; flex-direction: column; gap: 14px; max-width: 920px; }
+.doc { display: flex; flex-direction: column; gap: 14px; }   /* 다른 페이지처럼 본문 폭(최대 1680px)을 다 씀. 글 줄 길이는 .card p 의 68ch 로 제한 */
 .doc h3 { margin: 6px 0 0; font-family: var(--font-head); font-size: 1rem; }
 .toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.88rem; }
 .toc a { color: var(--accent); text-decoration: none; font-weight: 600; }
@@ -384,3 +384,21 @@ header.top h1 .n { color: var(--muted); font-weight: 500; margin-right: 8px; }
   body:not(.shelled) { padding-left: var(--side-w); }
   body:not(.shelled)::before { content: ""; position: fixed; inset: 0 auto 0 0; width: var(--side-w); background: var(--side); border-right: 1px solid var(--line); }
 }
+
+/* 기구학 페이지: 옆에서 본 팔 그림, 각도 슬라이더 */
+.kin-fig { width: 100%; max-width: 420px; height: auto; display: block; }
+.kin-fig .ax { stroke: var(--line); stroke-width: 1; }
+.kin-fig .guide { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.kin-fig .link { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; opacity: 0.75; }
+.kin-fig .link.hand { stroke: var(--accent); opacity: 1; }
+.kin-fig .jt { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.kin-fig .tip { fill: var(--accent); }
+.kin-fig .arc { fill: none; stroke: var(--gravity); stroke-width: 1.5; }
+.kin-fig .lbl { fill: var(--ink); font: 600 12px var(--font-mono); }
+.kin-fig .lbl.sm { fill: var(--muted); font: 500 10px var(--font-body); }
+.kin-fig .tgt { fill: var(--gravity); }
+.sliders { display: flex; flex-direction: column; gap: 6px; }
+.sliders label { min-width: 6.5em; }
+kbd { font: 600 0.8em var(--font-mono); padding: 0 5px; border: 1px solid var(--line); border-radius: 4px; background: var(--soft); }
+.sliders .row { flex-wrap: nowrap; }
+.sliders .val { min-width: 3.6em; text-align: right; }

@@ -8,7 +8,7 @@
  */
 (() => {
   "use strict";
-  const { $, Q, A, B, GRAV, deg, logTable, pill, bracket, boundChip, narrow } = OmxLab;
+  const { $, Q, A, B, GRAV, deg, logTable, pill } = OmxLab;
   const R_PAD = 0.045, GRASP = 0.6, HOLD = 2.0, SLIP_MM = 10;
   OmxLab.shell("slip");
   const box = OmxLab.store("omx-lab-slip"), state = box.get(), save = () => box.set(state);
@@ -30,12 +30,13 @@
   const muEl = sl("sl-mu", (v) => v.toFixed(2)), tauEl = sl("sl-tau", (v) => v.toFixed(2) + " N·m"), mEl = sl("sl-m", (v) => v + " g");
   const mmax = (mu, tau) => mu * tau / (R_PAD * GRAV) * 1000;
 
-  function run() {
-    const mu = +muEl.value, tau = +tauEl.value, m = +mEl.value;
+  // 실행: 값을 안 주면 슬라이더 값. 끝나면 결과로 resolve
+  const run = (o = {}) => new Promise((resolve) => {
+    const mu = o.mu ?? +muEl.value, tau = o.tau ?? +tauEl.value, m = o.m ?? +mEl.value;
     let rel0 = null, slip = 0, Fn = 0;
     plot.reset(GRASP + HOLD);
     lab.run({
-      duration: GRASP + HOLD,
+      duration: GRASP + HOLD, speed: o.speed || 1,
       setup(model, data) {
         model.body_mass[OB] = m / 1000;
         for (const g of [OG, ...PADS]) model.geom_friction[g * 3] = mu;
@@ -57,23 +58,31 @@
         plot.push(t, [rel0 != null ? Math.min(slip, 40) : 0, SLIP_MM]);
       },
       judge() { const hold = slip < SLIP_MM; return { hold, slip, Fn, state: hold ? "버팀" : "미끄러짐", cls: hold ? "hold" : "fall" }; },
-      done(r) { logs.push({ n: logs.length + 1, mu, tau, m, pred: mmax(mu, tau), ...r }); render(); },
+      done(r) { logs.push({ n: logs.length + 1, mu, tau, m, pred: mmax(mu, tau), ...r }); render(); resolve(r); },
     });
-  }
+  });
 
   function render() {
     logTable($("log"), logs, [
       { f: (r) => r.n, n: 1 }, { f: (r) => r.mu.toFixed(2), n: 1 }, { f: (r) => r.tau.toFixed(2), n: 1 }, { f: (r) => r.m + " g", n: 1 },
       { f: (r) => r.Fn.toFixed(2) + " N", n: 1 }, { f: (r) => r.pred.toFixed(0) + " g", n: 1 }, { f: (r) => pill(r.hold, "버팀", "미끄러짐") },
     ]);
-    const base = logs.filter((r) => Math.abs(r.mu - 0.5) < 1e-6 && Math.abs(r.tau - 0.2) < 1e-6);
-    const b = bracket(base, "m", true);
-    $("bounds").innerHTML = boundChip("μ 0.5, τ 0.2 경계", b, "g", 10, 0) + (narrow(b, 10) ? `<span class="fb">식: ${mmax(0.5, 0.2).toFixed(0)} g</span>` : "");
-    if (narrow(b, 10)) $("c3").classList.add("done");
+    $("p-m").textContent = state.predM != null && isFinite(state.predM) ? state.predM + " g" : "아직 없음 (2단계에서 먼저 계산)";
+    if (state.okChk) $("c3").classList.add("done");
   }
+  $("btn-chk").addEventListener("click", async () => {
+    if (state.predM == null || !isFinite(state.predM)) { const fb = $("fb-chk"); fb.hidden = false; fb.className = "fb no"; fb.textContent = "2단계에서 최대 무게를 먼저 예측하세요."; return; }
+    const r = await OmxLab.check3({
+      pred: state.predM, lowGood: true, good: "버팁니다", bad: "미끄러집니다", fb: $("fb-chk"),
+      round: (v) => Math.round(v), fmt: (v) => v + " g",
+      run: (m) => run({ mu: 0.5, tau: 0.2, m, speed: 2 }).then((x) => x.hold),
+      hint: "Fn 합 = τ ÷ r, m최대 = μ × Fn 합 ÷ g 를 다시 확인해 보세요.",
+    });
+    if (r.ok) { state.okChk = 1; save(); render(); $("fb-chk").innerHTML += ` 식은 ${mmax(0.5, 0.2).toFixed(0)} g입니다.`; }
+  });
 
   $("btn-pred").addEventListener("click", () => {
-    const v = parseFloat($("pred-m").value); state.predM = v; save();
+    const v = parseFloat($("pred-m").value); state.predM = v; save(); render();
     if (OmxLab.checkPrediction($("fb-pred"), v, mmax(0.5, 0.2), 0.05, "g", "실험으로 경계를 찾아 보세요.", "Fn 합 = τ ÷ r, 그다음 μ × Fn 합 ÷ g. kg을 g으로 바꿨는지 확인하세요."))
       { $("c1").classList.add("done"); $("c2").classList.add("done"); }
   });
@@ -81,7 +90,7 @@
     const v = parseFloat($("pred-ma").value);
     OmxLab.checkPrediction($("fb-predma"), v, 0.5 * 0.2 / R_PAD / (GRAV + 4.9) * 1000, 0.05, "g", "가만히 들 때(227 g)의 2/3입니다. 가속도가 클수록 같은 손힘으로 들 수 있는 무게가 줄어듭니다.", "m최대 = μ·ΣFn ÷ (g + a) 입니다.");
   });
-  $("btn-run").addEventListener("click", run);
+  $("btn-run").addEventListener("click", () => run());
   $("quiz").addEventListener("change", (e) => {
     const fb = $("fb-quiz"); fb.hidden = false;
     if (e.target.value === "c") { fb.className = "fb ok"; fb.textContent = "맞습니다. 버틸 수 있는 마찰력은 μ × 누르는 힘으로 정해집니다. 닫는 속도는 상관없고, 오히려 빨리 닫으면 물체를 쳐서 밀어낼 수 있습니다. 가속도를 줄이거나(m(g+a) 감소), μ를 키우거나, 쥐는 힘을 키우는 것이 맞는 방법입니다."; $("c4").classList.add("done"); }
@@ -93,8 +102,8 @@
   OmxLab.start({ transform, home: { [Q.g1]: 0.3, [Q.g2]: -0.3 }, camera: { pos: [0.6, -0.42, 0.42], target: [0.2, 0, 0.17] } }).then((l) => {
     lab = l;
     OB = lab.id("body", "obj"); OG = lab.id("geom", "obj"); PADS = [lab.id("geom", "pad6"), lab.id("geom", "pad7")];
-    lab.onBusy((busy) => { $("btn-run").disabled = busy; });
-    $("btn-run").disabled = false;
+    lab.onBusy((busy) => { $("btn-run").disabled = busy; $("btn-chk").disabled = busy; });
+    $("btn-run").disabled = false; $("btn-chk").disabled = false;
     lab.readouts($("gauge"), [
       { k: "그리퍼 각도", v: () => `${deg(lab.data.qpos[Q.g1]).toFixed(1)}<small>°</small>` },
       { k: "그리퍼 모터 토크", v: () => `${Math.abs(lab.data.actuator_force[A.g]).toFixed(3)}<small> N·m</small>` },

@@ -34,11 +34,11 @@
     });
   }
 
-  function run() {
-    const key = $("sel-pose").value, m = +mEl.value, q = POSES[key].q;
+  const run = (o = {}) => new Promise((resolve) => {
+    const key = o.key ?? $("sel-pose").value, m = o.m ?? +mEl.value, q = POSES[key].q;
     plot.reset(RUN);
     lab.run({
-      duration: RUN,
+      duration: RUN, speed: o.speed || 1,
       setup(model, data) {
         for (let j = 0; j < 5; j++) model.dof_frictionloss[j] = 0;
         lab.setPayload(m / 1000);
@@ -50,37 +50,48 @@
         const k = err.indexOf(Math.max(...err)), hold = err[k] <= TOL;
         return { err, hold, worst: JN[k][0], state: hold ? "버팀" : `${JN[k][0]} 무너짐`, cls: hold ? "hold" : "fall" };
       },
-      done(r) { logs.push({ n: logs.length + 1, key, m, ...r }); render(); },
+      done(r) { logs.push({ n: logs.length + 1, key, m, ...r }); render(); resolve(r); },
     });
-  }
+  });
   function render() {
     logTable($("log"), logs, [
       { f: (r) => r.n, n: 1 }, { f: (r) => POSES[r.key].name }, { f: (r) => r.m + " g", n: 1 },
       { f: (r) => r.err.map((v) => v.toFixed(1)).join(" / ") + "°", n: 1 }, { f: (r) => pill(r.hold, "버팀", `${r.worst} 무너짐`) },
     ]);
-    const chip = (key) => {
-      const L = logs.filter((r) => r.key === key);
-      const ok = Math.max(-1, ...L.filter((r) => r.hold).map((r) => r.m)), badRows = L.filter((r) => !r.hold && r.m > ok);
-      if (ok < 0 || !badRows.length) return { html: `<span class="fb">${POSES[key].name}: 아직 모름</span>`, done: false };
-      const bad = badRows.reduce((a, r) => (r.m < a.m ? r : a));
-      const d = bad.m - ok <= 20;
-      return { html: `<span class="fb ${d ? "ok" : ""}">${POSES[key].name}: ${ok} g 버팀 ~ ${bad.m} g ${bad.worst} 무너짐${d ? " ✓" : " (더 좁혀 보세요)"}</span>`, done: d };
-    };
-    const a = chip("fold"), c = chip("reach");
-    $("bounds").innerHTML = a.html + c.html;
-    if (a.done && c.done) $("c3").classList.add("done");
+    $("p-m").textContent = state.predM != null && isFinite(state.predM) ? `${state.predJ || "?"} · ${state.predM} g` : "아직 없음 (2단계에서 먼저 계산)";
+    if (state.okChk && state.reach) $("c3").classList.add("done");
   }
-
+  const needPred = (fb) => { if (state.predM != null && isFinite(state.predM) && state.predM > 0 && state.predJ) return false; fb.hidden = false; fb.className = "fb no"; fb.textContent = "2단계에서 관절과 무게를 먼저 예측하세요."; return true; };
+  $("btn-chk").addEventListener("click", async () => {
+    if (needPred($("fb-chk"))) return;
+    let heavy = null;
+    const r = await OmxLab.check3({
+      pred: state.predM, lowGood: true, good: "버팁니다", bad: "무너집니다", fb: $("fb-chk"),
+      round: (v) => Math.round(v), fmt: (v) => v + " g",
+      run: (m) => run({ key: "fold", m, speed: 3 }).then((x) => { heavy = x; return { good: x.hold, worst: x.worst }; }),
+      hint: "관절마다 mᵢ = (한계 − gᵢ) ÷ (g·xᵢ)를 다시 확인해 보세요.",
+    });
+    const jOk = !r.res[2].good && r.res[2].worst === state.predJ;
+    if (r.ok && !jOk) { const fb = $("fb-chk"); fb.className = "fb no"; fb.innerHTML = fb.innerHTML.replace("예측이 맞습니다.", "무게는 맞습니다."); fb.innerHTML += ` 그런데 무너진 관절은 <b>${r.res[2].worst}</b>입니다. 예측한 ${state.predJ}가 아닙니다.`; }
+    if (r.ok && jOk) { state.okChk = 1; save(); render(); $("fb-chk").innerHTML += ` 무너진 관절도 예측대로 <b>${state.predJ}</b>입니다.`; }
+  });
+  $("btn-reach").addEventListener("click", async () => {
+    if (needPred($("fb-reach"))) return;
+    const m = Math.round(state.predM), r = await run({ key: "reach", m }), fb = $("fb-reach"), mr = table.reach ? Math.min(...table.reach.map((x) => x.m)) : 235;
+    fb.hidden = false; fb.className = "fb ok";
+    fb.innerHTML = r.hold ? `${m} g을 뻗은 자세로 들어도 버텼습니다.` : `뻗은 자세에서는 <b>${r.worst}</b>가 무너졌습니다. 팔을 뻗으면 어깨에서 손끝까지 거리가 길어져 어깨(joint2) 부담이 가장 커집니다. 뻗은 자세의 한계는 약 ${mr.toFixed(0)} g입니다.`;
+    state.reach = 1; save(); render();
+  });
   $("btn-pred").addEventListener("click", () => {
     if (!lab) return;
     const j = $("pred-j").value, v = parseFloat($("pred-m").value), fb = $("fb-pred");
     const rows = table.fold, first = rows.reduce((a, r) => (r.m < a.m ? r : a));
-    state.predJ = j; state.predM = v; save();
+    state.predJ = j; state.predM = v; save(); render();
     if (j !== first.name) { fb.hidden = false; fb.className = "fb no"; fb.textContent = "먼저 무너지는 관절이 다릅니다. 관절마다 mᵢ = (한계 − gᵢ) ÷ (g·xᵢ)를 계산해 가장 작은 것을 고르세요."; return; }
     if (OmxLab.checkPrediction(fb, v, first.m, 0.05, "g", `${first.name}가 가장 먼저입니다. 모터가 작은(0.52 N·m) 손목이 어깨보다 먼저 한계에 닿습니다.`, "관절은 맞았습니다. 한계에서 gᵢ를 빼고 g·xᵢ로 나눈 뒤 g 단위로 바꿨는지 확인하세요."))
       { $("c1").classList.add("done"); $("c2").classList.add("done"); }
   });
-  $("btn-run").addEventListener("click", run);
+  $("btn-run").addEventListener("click", () => run());
   $("sel-pose").addEventListener("change", () => { if (lab && lab.mode !== "run") lab.showPose(POSES[$("sel-pose").value].q, POSES[$("sel-pose").value].name); });
   $("quiz").addEventListener("change", (e) => {
     const fb = $("fb-quiz"); fb.hidden = false;
@@ -93,8 +104,9 @@
 
   OmxLab.start({ home: POSES.fold.q, camera: { pos: [0.3, -0.62, 0.32], target: [0.1, 0, 0.12] } }).then((l) => {
     lab = l;
-    lab.onBusy((busy) => { $("btn-run").disabled = busy; });
-    $("btn-run").disabled = false;
+    const BTN = ["btn-run", "btn-chk", "btn-reach"];
+    lab.onBusy((busy) => BTN.forEach((id) => { $(id).disabled = busy; }));
+    BTN.forEach((id) => { $(id).disabled = false; });
     table.fold = analyse("fold"); table.reach = analyse("reach");
     lab.resetPose(POSES.fold.q);
     $("jtbl").innerHTML = table.fold.map((r) => `<tr><td>${r.name}</td><td class="n">${r.lim.toFixed(2)} N·m</td><td class="n">${r.g.toFixed(3)} N·m</td><td class="n">${r.x.toFixed(3)} m</td><td class="n" style="color:var(--muted)">?</td></tr>`).join("");

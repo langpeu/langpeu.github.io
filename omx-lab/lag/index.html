@@ -58,16 +58,21 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 이동 시간과 피드포워드</h2>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
         <p>이동이 끝난 뒤 1.5초 더 봅니다. 계획과 실제의 최대 차이가 2° 이하면 <span class="pill hold">따라감</span>입니다.</p>
-        <div class="row"><label for="sl-T">이동 시간 T</label><input type="range" id="sl-T" min="0.3" max="2" step="0.02" value="1"><span class="val" id="v-T"></span></div>
-        <div class="row"><label><input type="checkbox" id="cb-ff"> 피드포워드 켜기 (+ I·α 미리 넣기)</label></div>
-        <div class="row"><button id="btn-run" disabled>실행</button></div>
-        <ol class="howto">
-          <li>피드포워드 <b>켬</b>: 따라가는 가장 짧은 T를 찾아 예측 T최소와 비교합니다 (0.05 s 폭).</li>
-          <li>피드포워드 <b>끔</b>: 같은 방법으로 경계를 찾습니다. 얼마나 더 느려야 하나요?</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <p>피드포워드를 켜고, 내 예측 T최소보다 <b>10% 짧게</b>, <b>예측 그대로</b>, <b>10% 길게</b> 세 번 움직여 봅니다. 짧으면 늦고 길면 따라가야 예측이 맞습니다.</p>
+        <div class="given">내 예측(2단계): <b id="p-T">아직 없음</b></div>
+        <div class="row"><button id="btn-chk" disabled>예측 확인 (3번 실행)</button></div>
+        <div class="fb" id="fb-chk" hidden></div>
+        <p>이번에는 <b>피드포워드를 끄고</b> 같은 시간(내 예측 + 10%)으로 움직여 봅니다.</p>
+        <div class="row"><button id="btn-noff" disabled>피드포워드 끄고 실행</button></div>
+        <div class="fb" id="fb-noff" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택) — 피드포워드 없이는 얼마나 느려야 할까?</summary>
+          <div class="row" style="margin-top:8px"><label for="sl-T">이동 시간 T</label><input type="range" id="sl-T" min="0.3" max="2" step="0.02" value="1"><span class="val" id="v-T"></span></div>
+          <div class="row"><label><input type="checkbox" id="cb-ff"> 피드포워드 켜기 (+ I·α 미리 넣기)</label></div>
+          <div class="row"><button id="btn-run" disabled>실행</button></div>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th class="n">T</th><th>피드포워드</th><th class="n">최대 오차</th><th class="n">토크 한계에 걸린 시간</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>

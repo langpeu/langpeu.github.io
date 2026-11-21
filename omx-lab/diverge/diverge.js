@@ -19,12 +19,12 @@
   const plot = OmxLab.Plot($("plot"), { T: RUN, yRange: [-10, 40], digits: 0, series: [{ name: "목표", color: "--muted", dash: true }, { name: "joint1 각도", color: "--accent" }] });
   plot.legend($("plot-legend"));
 
-  function run() {
-    const kp = +$("sel-kp").value, dt = +$("sel-dt").value, integ = +$("sel-int").value;
+  const run = (o = {}) => new Promise((resolve) => {
+    const kp = o.kp ?? +$("sel-kp").value, dt = o.dt ?? +$("sel-dt").value, integ = o.integ ?? +$("sel-int").value;
     let mx = 0;
     plot.reset(RUN);
     lab.run({
-      duration: RUN,
+      duration: RUN, speed: o.speed || 1,
       setup(model, data) {
         model.opt.timestep = dt; model.opt.integrator = integ;
         for (let j = 0; j < 5; j++) model.dof_frictionloss[j] = 0;
@@ -40,32 +40,45 @@
         logs.push({ n: logs.length + 1, kp, dt, integ, ok, tDiv: r.tDiv });
         render();
         if (r.diverged) { lab.resetPose(REACH); lab.setRunState(`발산 (${r.tDiv.toFixed(2)} s) → 처음 자세로`, "fall"); }   // 터진 자세는 보기 어려우니 처음 자세로
+        resolve({ ok, tDiv: r.tDiv });
       },
     });
-  }
+  });
   function render() {
     logTable($("log"), logs, [
-      { f: (r) => r.n, n: 1 }, { f: (r) => r.kp, n: 1 }, { f: (r) => (r.dt * 1000).toFixed(0) + " ms", n: 1 }, { f: (r) => INT[r.integ] },
+      { f: (r) => r.n, n: 1 }, { f: (r) => r.kp, n: 1 }, { f: (r) => +(r.dt * 1000).toFixed(1) + " ms", n: 1 }, { f: (r) => INT[r.integ] },
       { f: (r) => (dtMax(r.kp) * 1000).toFixed(1) + " ms", n: 1 },
       { f: (r) => r.ok ? pill(true, "안정", "") : pill(false, "", `발산 (${r.tDiv != null ? r.tDiv.toFixed(2) + " s" : ""})`) },
     ]);
-    const chip = (kp, integ) => {
-      const L = logs.filter((r) => r.kp === kp && r.integ === integ);
-      const okMax = Math.max(-1, ...L.filter((r) => r.ok).map((r) => r.dt)), badMin = Math.min(1, ...L.filter((r) => !r.ok).map((r) => r.dt));
-      if (okMax < 0 || badMin > 0.5 || okMax > badMin) return `<span class="fb">Kp ${kp} ${INT[integ]}: 아직 모름</span>`;
-      return `<span class="fb ok">Kp ${kp} ${INT[integ]}: ${(okMax * 1000).toFixed(0)} ms 안정 ~ ${(badMin * 1000).toFixed(0)} ms 발산 (식 ${(dtMax(kp) * 1000).toFixed(1)} ms${integ ? " × 1.4" : ""})</span>`;
-    };
-    $("bounds").innerHTML = chip(200, 0) + chip(800, 0) + chip(200, 1);
-    if ($("bounds").querySelectorAll(".fb.ok").length >= 2) $("c3").classList.add("done");
+    $("p-dt").textContent = state.predDt != null && isFinite(state.predDt) ? state.predDt + " ms" : "아직 없음 (2단계에서 먼저 계산)";
+    if (state.okChk && state.rk4) $("c3").classList.add("done");
   }
-
+  const needPred = (fb) => { if (state.predDt != null && isFinite(state.predDt) && state.predDt > 0) return false; fb.hidden = false; fb.className = "fb no"; fb.textContent = "2단계에서 dt 한계를 먼저 예측하세요."; return true; };
+  $("btn-chk").addEventListener("click", async () => {
+    if (needPred($("fb-chk"))) return;
+    const r = await OmxLab.check3({
+      pred: state.predDt, lowGood: true, good: "안정입니다", bad: "발산합니다", fb: $("fb-chk"),
+      round: (v) => Math.round(v * 10) / 10, fmt: (v) => v.toFixed(1) + " ms",
+      run: (ms) => run({ kp: 200, dt: ms / 1000, integ: 0, speed: 2 }).then((x) => x.ok),
+      hint: "ω = √(Kp ÷ I), dt 한계 = 2 ÷ ω (초 → ms) 를 다시 확인해 보세요.",
+    });
+    if (r.ok) { state.okChk = 1; save(); render(); $("fb-chk").innerHTML += ` 계산값은 ${(dtMax(200) * 1000).toFixed(1)} ms입니다.`; }
+  });
+  $("btn-rk4").addEventListener("click", async () => {
+    if (needPred($("fb-rk4"))) return;
+    const ms = Math.round(state.predDt * 1.1 * 10) / 10, r = await run({ kp: 200, dt: ms / 1000, integ: 1 }), fb = $("fb-rk4");
+    fb.hidden = false; fb.className = "fb " + (r.ok ? "ok" : "");
+    fb.innerHTML = r.ok ? `Euler로는 터지던 ${ms.toFixed(1)} ms인데, RK4로는 <b>안정</b>입니다. RK4는 한 칸을 4번 나눠 계산해서 한계가 약 1.4배 넓습니다. 그래도 dt를 더 키우면 결국 터집니다.`
+      : `RK4로도 ${ms.toFixed(1)} ms에서 발산했습니다. 예측이 커서 RK4 한계(약 1.4배)도 넘었을 수 있습니다.`;
+    state.rk4 = 1; save(); render();
+  });
   $("btn-pred").addEventListener("click", () => {
     if (!lab) return;
-    const v = parseFloat($("pred-dt").value); state.predDt = v; save();
+    const v = parseFloat($("pred-dt").value); state.predDt = v; save(); render();
     if (OmxLab.checkPrediction($("fb-pred"), v, dtMax(200) * 1000, 0.05, "ms", "실험에서 dt를 늘려 확인해 보세요.", "ω = √(Kp ÷ I) 를 먼저 구하고 dt = 2 ÷ ω 입니다. 초를 ms로 바꿨는지 확인하세요."))
       { $("c1").classList.add("done"); $("c2").classList.add("done"); }
   });
-  $("btn-run").addEventListener("click", run);
+  $("btn-run").addEventListener("click", () => run());
   $("quiz").addEventListener("change", (e) => {
     const fb = $("fb-quiz"); fb.hidden = false;
     if (e.target.value === "c") { fb.className = "fb ok"; fb.textContent = "맞습니다. ω = √(K ÷ m)라서 가벼운 링크일수록 진동이 빨라지고 dt 한계가 더 작아집니다. 아주 가벼운 링크는 오히려 질량을 현실적인 값으로 키우거나, 무거운 링크와의 질량비를 줄여야 합니다. (이 프로젝트 초기에 URDF의 질량 없는 링크 문제를 고친 것도 같은 이유입니다.)"; $("c4").classList.add("done"); }
@@ -76,8 +89,9 @@
 
   OmxLab.start({ home: REACH, camera: { pos: [0.55, -0.45, 0.45], target: [0.12, 0, 0.08] } }).then((l) => {
     lab = l;
-    lab.onBusy((busy) => { $("btn-run").disabled = busy; });
-    $("btn-run").disabled = false;
+    const BTN = ["btn-run", "btn-chk", "btn-rk4"];
+    lab.onBusy((busy) => BTN.forEach((id) => { $(id).disabled = busy; }));
+    BTN.forEach((id) => { $(id).disabled = false; });
     I = lab.fullM()[0];
     $("given2").innerHTML = `joint1 관성 I = ${I.toFixed(4)} kg·m² (뻗은 팔, MuJoCo M(q))<br>스프링 Kp = 200 N·m/rad, 적분기 Euler`;
     const w = Math.sqrt(200 / I);

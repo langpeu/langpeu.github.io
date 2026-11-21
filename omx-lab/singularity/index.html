@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>손끝 속도와 특이점 | 피지컬AI 실험실</title>
+<meta name="description" content="관절이 돌 때 손끝 속도는 '각속도 × 관절에서 손끝까지 거리'입니다. OMX-AI 팔에서 손끝 속도를 예측하고, 팔을 다 뻗은 특이점에서 손끝이 더 나가지 못하는 이유를 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+<link rel="expect" href="#shell-done" blocking="render">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>관절 속도로 손끝 속도 구하기, 다 뻗으면 멈추는 이유</h1>
+    <p>관절이 빨리 돌면 손끝은 얼마나 빨리 움직일까요? 그리고 팔을 끝까지 뻗은 자세에서는 왜 손끝을 더 내밀 수 없을까요? 위치(FK) 다음은 <b>속도</b>입니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">관절이 돌아야 하는 속도 [°/s]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 손끝 속도 = 각속도 × 거리</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#s-j">0 · 기초 개념: Jᵀ(자코비안) 읽는 법</a></p>
+        <p>관절 하나만 돌면 손끝은 그 관절을 중심으로 <b>원</b>을 그립니다(<a data-ref="fk" href="../fk/">상황 {n}</a> 4단계). 원을 도는 점의 속도는 <b>각속도 ω × 반지름 r</b>이고, 방향은 관절→손끝 선에 <b>수직</b>입니다.</p>
+        <div class="formula">손끝 속도 v = ω × r   (ω: rad/s, r: 관절에서 손끝까지 거리 m)</div>
+        <p>관절 여러 개가 함께 돌면 각 관절이 만든 속도를 <b>더합니다</b>. 이것을 한 번에 쓴 것이 자코비안 J입니다.</p>
+        <div class="formula">손끝 속도 = J · <span class="d1">q</span>   (<span class="d1">q</span> = 관절 각속도들)</div>
+        <p><b>특이점</b>: 팔을 끝까지 쭉 뻗으면 어깨·팔꿈치가 만드는 손끝 속도가 모두 위아래 방향이 됩니다. 바깥쪽 방향을 만들 관절이 없어서, 관절을 아무리 빨리 돌려도 손끝을 더 내밀 수 없습니다.</p>
+        <p class="note">OMX의 XL430은 12 V에서 최대 61 rpm = 6.39 rad/s = 366 °/s로 돕니다(무부하 속도). 이 실험은 힘을 쓰지 않는 기구학 계산입니다.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: 관절 하나를 61 rpm으로 돌리면</h2>
+        <div class="given">자세: 모든 관절 0° (<a data-ref="fk" href="../fk/">상황 {n}</a> 문제 1, 손끝 = 어깨 기준 (0.3241, 0.1132) m)<br>팔꿈치는 어깨 기준 (0.0415, 0.1132) m, 각속도 6.39 rad/s</div>
+        <div class="row"><label for="pv3">① 팔꿈치(θ3)만 돌 때 손끝 속도</label><input type="number" id="pv3" step="0.01" placeholder="0.00"><span class="note">m/s</span><button id="btn-pv3">확인</button></div>
+        <div class="fb" id="fb-pv3" hidden></div>
+        <div class="row"><label for="pv2">② 어깨(θ2)만 돌 때 손끝 속도</label><input type="number" id="pv2" step="0.01" placeholder="0.00"><span class="note">m/s</span><button id="btn-pv2">확인</button></div>
+        <div class="fb" id="fb-pv2" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 돌려 보고 손끝 속도 재기</h2>
+        <p>버튼을 누르면 그 관절만 6.39 rad/s로 0.06초 동안 돕니다(화면은 25배 느리게). 시뮬에서 잰 손끝 속도와 방향(화살표)이 왼쪽에 나옵니다.</p>
+        <div class="row"><button id="btn-spin3" disabled>팔꿈치(θ3)만 돌리기</button><button id="btn-spin2" disabled>어깨(θ2)만 돌리기</button></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th>돌린 관절</th><th class="n">r [m]</th><th class="n">예측 ω·r</th><th class="n">시뮬 손끝 속도</th></tr></thead>
+          <tbody id="log"><tr><td colspan="4" class="note">아직 실험 기록이 없습니다.</td></tr></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>응용: 손끝을 바깥으로 계속 밀면?</h2>
+        <p>어깨 높이(z = 0)에서 손을 수평으로 든 채, 손끝을 <b>5 cm/s로 바깥으로</b> 똑바로 밀어 봅니다. 매 순간 IK(<a data-ref="ik" href="../ik/">상황 {n}</a>)로 각도를 구하고, 관절은 366 °/s보다 빨리 돌 수 없습니다.</p>
+        <p>손끝은 x가 얼마일 때 더 나가지 못하고 멈출까요?</p>
+        <div class="row"><label for="pxm">x 최대</label><input type="number" id="pxm" step="0.001" placeholder="0.000"><span class="note">m</span><button id="btn-pxm">확인</button></div>
+        <div class="fb" id="fb-pxm" hidden></div>
+        <div class="row"><button id="btn-push" disabled>0.30 m부터 밀기 (3초)</button></div>
+        <p class="note">그래프는 팔꿈치와 어깨가 돌아야 하는 속도입니다. 멈추는 곳 바로 앞에서 어떻게 되는지 보세요.</p>
+      </article>
+
+      <article class="card" id="c5">
+        <h2><span class="num">5</span>확인: 다 뻗은 자세에서 손끝을 더 내밀려면?</h2>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 팔꿈치를 더 빨리 돌리면 된다</label>
+          <label><input type="radio" name="q" value="b"> 불가능하다. 이 자세에서는 어떤 관절을 돌려도 손끝이 바깥으로 가지 않는다(특이점)</label>
+          <label><input type="radio" name="q" value="c"> 손목(θ4)을 돌리면 된다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="../common/kin.js"></script>
+<script src="singularity.js"></script>
+<span id="shell-done" hidden></span>
+</body>
+</html>

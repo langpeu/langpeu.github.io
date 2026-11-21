@@ -58,18 +58,23 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 무게추와 동작 속도</h2>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
         <p>팔을 세운 자세에서 뻗은 자세(joint2 +80.2°, joint3 −80.2°)로 움직인 뒤 3초 더 봅니다. 베이스가 3° 넘게 기울면 <span class="pill fall">넘어짐</span>입니다. 3D 화면의 주황 점이 전체 무게중심입니다.</p>
-        <div class="row"><label for="sl-w">베이스 무게추</label><input type="range" id="sl-w" min="0" max="0.8" step="0.01" value="0"><span class="val" id="v-w"></span></div>
-        <div class="row"><label for="sel-T">뻗는 시간</label>
-          <select id="sel-T"><option value="5">5초 (아주 천천히)</option><option value="0.8">0.8초</option><option value="0.4">0.4초 (빠르게)</option></select></div>
-        <div class="row"><button id="btn-run" disabled>뻗기</button></div>
-        <ol class="howto">
-          <li>무게추 0으로 천천히(5초) 뻗어 봅니다 → 넘어지나요?</li>
-          <li>천천히(5초)일 때 버티는 최소 무게추를 0.02 kg 폭까지 찾아 예측과 비교합니다.</li>
-          <li>같은 무게추로 0.4초에 빠르게 뻗어 봅니다. 빠를 때의 경계도 찾아보세요.</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <p>천천히(5초) 뻗으면서 내 예측보다 <b>10% 가벼운</b>, <b>예측 그대로</b>, <b>10% 무거운</b> 무게추로 세 번 해 봅니다. 가벼우면 넘어지고 무거우면 버텨야 예측이 맞습니다.</p>
+        <div class="given">내 예측(2단계): <b id="p-w">아직 없음</b></div>
+        <div class="row"><button id="btn-chk" disabled>예측 확인 (3번 실행)</button></div>
+        <div class="fb" id="fb-chk" hidden></div>
+        <p>이번에는 <b>같은 무게추</b>(내 예측 + 10%)로 <b>0.4초 만에 빠르게</b> 뻗어 봅니다. 천천히는 버텼는데, 빠르면 어떻게 될까요?</p>
+        <div class="row"><button id="btn-fast" disabled>빠르게(0.4초) 뻗기</button></div>
+        <div class="fb" id="fb-fast" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택)</summary>
+          <div class="row" style="margin-top:8px"><label for="sl-w">베이스 무게추</label><input type="range" id="sl-w" min="0" max="0.8" step="0.01" value="0"><span class="val" id="v-w"></span></div>
+          <div class="row"><label for="sel-T">뻗는 시간</label>
+            <select id="sel-T"><option value="5">5초 (아주 천천히)</option><option value="0.8">0.8초</option><option value="0.4">0.4초 (빠르게)</option></select></div>
+          <div class="row"><button id="btn-run" disabled>뻗기</button></div>
+          <p class="note">빠르게 뻗을 때 버티려면 무게추가 얼마나 더 필요한지 찾아볼 수 있습니다. 결과는 아래 표에 쌓입니다.</p>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th class="n">무게추</th><th class="n">뻗는 시간</th><th class="n">최대 기울기</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>

@@ -64,17 +64,22 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 자세와 무게</h2>
-        <p>고른 자세에서 시작해 3초 동안 버팁니다. 어느 관절이든 목표에서 3° 넘게 벗어나면 <span class="pill fall">무너짐</span>이고, 가장 많이 벗어난 관절을 표시합니다.</p>
-        <div class="row"><label for="sel-pose">자세</label>
-          <select id="sel-pose"><option value="fold" selected>접은 자세 (위팔 수직, 손목 수평)</option><option value="reach" data-ref="torque">뻗은 자세 (상황 {n})</option></select></div>
-        <div class="row"><label for="sl-m">손끝 물체</label><input type="range" id="sl-m" min="0" max="500" step="10" value="200"><span class="val" id="v-m"></span></div>
-        <div class="row"><button id="btn-run" disabled>들고 버티기</button></div>
-        <ol class="howto">
-          <li>접은 자세에서 무게를 올려 무너지는 경계(20 g 폭)와 무너지는 관절을 찾아 예측과 비교합니다.</li>
-          <li>뻗은 자세로 바꿔 같은 실험을 합니다. 이번에는 어느 관절이 먼저인가요?</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
+        <p>자세를 잡고 3초 동안 버팁니다. 어느 관절이든 목표에서 3° 넘게 벗어나면 <span class="pill fall">무너짐</span>이고, 가장 많이 벗어난 관절을 표시합니다.</p>
+        <p>접은 자세에서 내 예측보다 <b>10% 가볍게</b>, <b>예측 그대로</b>, <b>10% 무겁게</b> 세 번 들어 봅니다. 가벼우면 버티고, 무거우면 <b>내가 고른 관절이</b> 무너져야 예측이 맞습니다.</p>
+        <div class="given">내 예측(2단계): <b id="p-m">아직 없음</b></div>
+        <div class="row"><button id="btn-chk" disabled>예측 확인 (3번 실행)</button></div>
+        <div class="fb" id="fb-chk" hidden></div>
+        <p>같은 무게를 <b>뻗은 자세</b>(<a data-ref="torque" href="../torque/">상황 {n}</a>)로 들면 어느 관절이 먼저 무너질까요?</p>
+        <div class="row"><button id="btn-reach" disabled>뻗은 자세로 같은 무게 들기</button></div>
+        <div class="fb" id="fb-reach" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택)</summary>
+          <div class="row" style="margin-top:8px"><label for="sel-pose">자세</label>
+            <select id="sel-pose"><option value="fold" selected>접은 자세 (위팔 수직, 손목 수평)</option><option value="reach" data-ref="torque">뻗은 자세 (상황 {n})</option></select></div>
+          <div class="row"><label for="sl-m">손끝 물체</label><input type="range" id="sl-m" min="0" max="500" step="10" value="200"><span class="val" id="v-m"></span></div>
+          <div class="row"><button id="btn-run" disabled>들고 버티기</button></div>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th>자세</th><th class="n">물체</th><th class="n">최대 오차 j2 / j3 / j4</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>

@@ -58,17 +58,20 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 버티는 최대 무게 찾기</h2>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
         <p>실행하면 0.6초 동안 무중력에서 물체를 쥔 뒤, 중력을 켜고 2초 동안 들고 있습니다. 물체가 손에서 1 cm 넘게 빠지면 <span class="pill fall">미끄러짐</span>입니다.</p>
-        <div class="row"><label for="sl-mu">마찰계수 μ</label><input type="range" id="sl-mu" min="0.2" max="0.6" step="0.05" value="0.5"><span class="val" id="v-mu"></span></div>
-        <div class="row"><label for="sl-tau">그리퍼 토크 τ</label><input type="range" id="sl-tau" min="0.05" max="0.2" step="0.01" value="0.2"><span class="val" id="v-tau"></span></div>
-        <div class="row"><label for="sl-m">물체 무게</label><input type="range" id="sl-m" min="20" max="320" step="5" value="100"><span class="val" id="v-m"></span></div>
-        <div class="row"><button id="btn-run" disabled>쥐고 들기</button></div>
-        <ol class="howto">
-          <li>μ 0.5, τ 0.2로 두고 무게를 바꿔 <b>버팀/미끄러짐 경계</b>를 10 g 폭까지 좁힙니다.</li>
-          <li>μ나 τ를 절반으로 줄이면 경계가 어떻게 되는지 확인합니다. 식과 맞나요?</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <p>μ 0.5, τ 0.2에서 내 예측보다 <b>10% 가볍게</b>, <b>예측 그대로</b>, <b>10% 무겁게</b> 세 번 들어 봅니다. 가벼우면 버티고 무거우면 미끄러져야 예측이 맞습니다.</p>
+        <div class="given">내 예측(2단계): <b id="p-m">아직 없음</b></div>
+        <div class="row"><button id="btn-chk" disabled>예측 확인 (3번 실행)</button></div>
+        <div class="fb" id="fb-chk" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택) — μ나 τ를 절반으로 줄이면?</summary>
+          <div class="row" style="margin-top:8px"><label for="sl-mu">마찰계수 μ</label><input type="range" id="sl-mu" min="0.2" max="0.6" step="0.05" value="0.5"><span class="val" id="v-mu"></span></div>
+          <div class="row"><label for="sl-tau">그리퍼 토크 τ</label><input type="range" id="sl-tau" min="0.05" max="0.2" step="0.01" value="0.2"><span class="val" id="v-tau"></span></div>
+          <div class="row"><label for="sl-m">물체 무게</label><input type="range" id="sl-m" min="20" max="320" step="5" value="100"><span class="val" id="v-m"></span></div>
+          <div class="row"><button id="btn-run" disabled>쥐고 들기</button></div>
+          <p class="note">μ나 τ를 절반으로 줄이면 들 수 있는 무게도 절반이 되는지 확인해 보세요. 결과는 아래 표에 쌓입니다.</p>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th class="n">μ</th><th class="n">τ</th><th class="n">무게</th><th class="n">잰 Fn 합</th><th class="n">식 m최대</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>

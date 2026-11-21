@@ -65,20 +65,27 @@
       </article>
 
       <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 높이, 두께, 접촉 강성</h2>
-        <p>공을 떨어뜨리고 1.5초 동안 봅니다. 가장 깊이 파고든 깊이를 재고, 공이 판 아래로 빠지면 <span class="pill fall">관통</span>입니다.</p>
-        <div class="row"><label for="sl-h">떨어뜨리는 높이</label><input type="range" id="sl-h" min="0.02" max="1.5" step="0.01" value="0.3"><span class="val" id="v-h"></span></div>
-        <div class="row"><label for="sel-t">판 두께</label>
-          <select id="sel-t"><option value="0.002">2 mm</option><option value="0.01" selected>10 mm</option><option value="0.02">20 mm</option></select>
-          <label for="sel-tc">접촉 시간 상수 τ</label>
-          <select id="sel-tc"><option value="0.004" selected>4 ms (딱딱)</option><option value="0.01">10 ms</option><option value="0.02">20 ms (MuJoCo 기본, 무름)</option></select></div>
-        <div class="row"><button id="btn-run" disabled>떨어뜨리기</button></div>
-        <ol class="howto">
-          <li>10 mm, τ 4 ms에서 30 cm로 떨어뜨려 2단계 (1)과 비교합니다.</li>
-          <li>높이를 올려 관통이 시작되는 높이를 찾아 (2)와 비교합니다 (0.1 m 폭).</li>
-          <li>τ를 20 ms(무른 접촉)로 바꾸면 같은 높이에서 어떻게 되나요?</li>
-        </ol>
-        <div class="row" id="bounds"></div>
+        <h2><span class="num">3</span>실험: 내 예측이 맞는지 확인</h2>
+        <p>공을 떨어뜨리고 1.5초 동안 봅니다. 가장 깊이 파고든 깊이를 재고, 공이 판 아래로 빠지면 <span class="pill fall">관통</span>입니다. 판 두께 10 mm, τ 4 ms입니다.</p>
+        <p><b>① 깊이</b>: 30 cm에서 떨어뜨려 (1) 예측과 비교합니다.</p>
+        <div class="row"><button id="btn-chk1" disabled>30 cm에서 떨어뜨리기</button></div>
+        <div class="fb" id="fb-chk1" hidden></div>
+        <p><b>② 관통 높이</b>: 내 예측 (2)의 0.6배부터 1.4배까지 0.1배 간격으로 9번 떨어뜨립니다. 처음 뚫리는 높이가 내 예측 근처(±15%)면 맞습니다.</p>
+        <div class="row"><button id="btn-sweep" disabled>높이를 바꿔 9번 떨어뜨리기</button></div>
+        <div class="row" id="strip"></div>
+        <div class="fb" id="fb-sweep" hidden></div>
+        <p><b>③ 무른 접촉</b>: τ를 MuJoCo 기본값 20 ms로 바꾸고 30 cm에서 떨어뜨려 봅니다.</p>
+        <div class="row"><button id="btn-soft" disabled>τ 20 ms로 떨어뜨리기</button></div>
+        <div class="fb" id="fb-soft" hidden></div>
+        <details>
+          <summary>직접 값 넣어 보기 (선택)</summary>
+          <div class="row" style="margin-top:8px"><label for="sl-h">떨어뜨리는 높이</label><input type="range" id="sl-h" min="0.02" max="1.5" step="0.01" value="0.3"><span class="val" id="v-h"></span></div>
+          <div class="row"><label for="sel-t">판 두께</label>
+            <select id="sel-t"><option value="0.002">2 mm</option><option value="0.01" selected>10 mm</option><option value="0.02">20 mm</option></select>
+            <label for="sel-tc">접촉 시간 상수 τ</label>
+            <select id="sel-tc"><option value="0.004" selected>4 ms (딱딱)</option><option value="0.01">10 ms</option><option value="0.02">20 ms (MuJoCo 기본, 무름)</option></select></div>
+          <div class="row"><button id="btn-run" disabled>떨어뜨리기</button></div>
+        </details>
         <div class="tblwrap"><table>
           <thead><tr><th class="n">#</th><th class="n">높이</th><th class="n">두께</th><th class="n">τ</th><th class="n">식 v·τ</th><th class="n">잰 깊이</th><th>결과</th></tr></thead>
           <tbody id="log"></tbody>
