@@ -1,4 +1,4 @@
-/* 상황 1 · 아예 안 움직임 — 중력 토크 g(q)와 모터 최대 토크
+/* torque · 아예 안 움직임 — 중력 토크 g(q)와 모터 최대 토크
  *
  * 실험: 팔을 세운 자세(모든 관절 0°)에서 1.5초 동안 뻗은 자세(joint2 +80.2°, joint3 −80.2°)로 움직이고,
  * 4초 뒤 joint2가 목표에서 3° 안이면 '버팀'. joint2 최대 토크(forcerange)와 관절 마찰만 바꿉니다.
@@ -11,8 +11,8 @@
   const RAMP = 1.5, RUN = 4.0, TOL_DEG = 3, FMAX_ROBOTIS = 1.5;
   const BTN = ["btn-run", "btn-reset", "btn-runm"];
 
-  OmxLab.renderNav($("nav"), "p01-torque");
-  const box = OmxLab.store("omx-lab-1");
+  OmxLab.shell("torque");
+  const box = OmxLab.store("omx-lab-torque");
   const state = box.get();
   const save = () => box.set(state);
   const truth = { g: 0, eeX: 0, rows: [] };

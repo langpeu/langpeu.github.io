@@ -1,4 +1,4 @@
-OMX 동역학 실험실 (비공식 학습 자료)
+피지컬AI 실험실 (비공식 학습 자료, 제작 Langpeu · https://www.youtube.com/@langpeudoit)
 이 프로젝트는 ROBOTIS와 관계없는 비공식 자료입니다.
 
 이 저장소에는 아래 제3자 자료가 포함되어 있습니다.
@@ -19,5 +19,7 @@ OMX 동역학 실험실 (비공식 학습 자료)
    https://threejs.org/
    Copyright © 2010-2021 three.js authors — MIT License (lib/LICENSE-three.txt)
    - lib/three.min.js, lib/OrbitControls.js : 수정 없이 그대로.
+
+4. common/logo.jpg : 랑프 두잇(Langpeu) 채널 로고. 제작자 소유이며 위 라이선스 대상이 아닙니다.
 
 Apache License 2.0 전문은 LICENSE 파일에 있습니다.

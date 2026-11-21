@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>단위 변환·어림 계산 | OMX 동역학 실험실</title>
+<title>단위 변환·어림 계산 | 피지컬AI 실험실</title>
 <meta name="description" content="로봇팔 어림 계산기: 중력 토크, 가속에 드는 토크, 미끄러지지 않을 파지력, 그리고 rad·deg, rpm, kg·cm·Nm 등 단위 변환. AI 답이나 시뮬레이션 결과의 자릿수를 직접 확인할 때 씁니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
@@ -12,10 +12,8 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <span class="crumb"><a href="../">OMX 동역학 실험실</a> / 도구</span>
     <h1>도구 · 단위 변환·어림 계산</h1>
     <p>복잡한 계산은 AI나 시뮬레이터에 맡기더라도, <b>자릿수가 맞는지</b>는 직접 확인해야 합니다. 답이 아래 어림값과 <b>10배 이상</b> 다르면 단위나 모델 값부터 의심하세요.</p>
-    <nav class="tabs" id="nav" aria-label="상황 선택"></nav>
   </header>
 
   <nav class="toc" aria-label="이 페이지 차례">
@@ -32,7 +30,7 @@
         <div class="field"><label for="g-th">수평에서 기운 각도 θ (°)</label><input type="number" id="g-th" inputmode="decimal" step="any" value="0"><span class="hint">0° = 수평, 90° = 똑바로 위나 아래</span></div>
       </div>
       <div class="result" id="g-out"></div>
-      <p class="note">링크가 여러 개면 링크마다 m × L을 구해 모두 더합니다(Σ). → <a href="../p01-torque/">상황 1</a>에서 OMX 팔로 직접 해 보기</p>
+      <p class="note">링크가 여러 개면 링크마다 m × L을 구해 모두 더합니다(Σ). → <a data-ref="torque" href="../torque/">상황 {n}</a>에서 OMX 팔로 직접 해 보기</p>
     </article>
 
     <article class="card" id="acc">
@@ -46,7 +44,7 @@
       <div class="result" id="a-out"></div>
       <details>
         <summary>α를 모르면: 움직일 각도와 시간으로 구하기</summary>
-        <p class="note">각도 Δq를 T초 동안 부드러운 코사인 궤적으로 움직이면 가장 큰 가속도는 α최대 = Δq(rad) × π² ÷ (2 × T²) 입니다. (<a href="../p09-lag/">상황 9</a>와 같은 식)</p>
+        <p class="note">각도 Δq를 T초 동안 부드러운 코사인 궤적으로 움직이면 가장 큰 가속도는 α최대 = Δq(rad) × π² ÷ (2 × T²) 입니다. (<a data-ref="lag" href="../lag/">상황 {n}</a>와 같은 식)</p>
         <div class="row">
           <label for="a-dq">Δq (°)</label><input type="number" id="a-dq" inputmode="decimal" step="any" value="90">
           <label for="a-t">T (s)</label><input type="number" id="a-t" inputmode="decimal" step="any" value="1">
@@ -67,7 +65,7 @@
         <div class="field"><label for="p-n">닿는 손가락 수</label><input type="number" id="p-n" inputmode="decimal" step="1" min="1" value="2"></div>
       </div>
       <div class="result" id="p-out"></div>
-      <p class="note">→ <a href="../p04-slip/">상황 4</a>에서 OMX 그리퍼로 직접 해 보기</p>
+      <p class="note">→ <a data-ref="slip" href="../slip/">상황 {n}</a>에서 OMX 그리퍼로 직접 해 보기</p>
     </article>
 
     <article class="card" id="units">
@@ -88,6 +86,7 @@
 </div>
 <footer class="foot" id="foot"></footer>
 <script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
 <script src="estimate.js"></script>
 </body>
 </html>

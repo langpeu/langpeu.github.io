@@ -3,100 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>상황 2 · 떨림·진동 | OMX 동역학 실험실</title>
-<meta name="description" content="OMX 관절이 목표 근처에서 떨리는 이유: PD 게인과 감쇠비 ζ, 제어 지연을 손계산으로 예측하고 MuJoCo로 확인합니다.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
-<link rel="stylesheet" href="../common/lab.css">
+<title>이동: 떨림·진동 | 피지컬AI 실험실</title>
+<meta http-equiv="refresh" content="0; url=../vibration/">
+<link rel="canonical" href="../vibration/">
+<script>location.replace("../vibration/" + location.hash);</script>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <span class="crumb"><a href="../">OMX 동역학 실험실</a> / 상황 2</span>
-    <h1>상황 2 · 목표 근처에서 부르르 떨림</h1>
-    <p>목표 근처에서 부르르 떨거나, 멈추지 않고 왔다 갔다 합니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
-    <nav class="tabs" id="nav" aria-label="상황 선택"></nav>
-  </header>
-
-  <div class="grid">
-    <section class="simcol" aria-label="시뮬레이션">
-      <div class="viewport" id="viewport">
-        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
-        <span class="vlabel" id="simclock">t = 0.00 s</span>
-        <span class="runstate" id="runstate">준비</span>
-      </div>
-      <div class="gauges" id="gauge"></div>
-      <div class="plot">
-        <span class="ptitle" id="plot-title">joint1 각도 [°] — 목표 10°</span>
-        <canvas id="plot" aria-label="시간 그래프"></canvas>
-        <div class="legend" id="plot-legend"></div>
-      </div>
-    </section>
-
-    <section class="steps">
-      <article class="card" id="c1">
-        <h2><span class="num">1</span>개념: 관절 하나 = 스프링 + 브레이크 + 질량</h2>
-        <p class="basics-link">기호가 낯설면 → <a href="../p00-basics/#s-zeta">0 · 기초 개념: Kp·Kd·ζ(제타) 읽는 법</a></p>
-        <p>PD 제어기는 관절에 <b>스프링(Kp)</b>과 <b>브레이크(Kd)</b>를 달아 주는 것과 같습니다. 관절이 돌려야 하는 <b>관성 I</b>가 질량 역할을 합니다.</p>
-        <div class="formula">τ = Kp·(q목표 − q) − Kd·<span class="d1">q</span></div>
-        <p>이 셋이 정하는 값이 <b>감쇠비 ζ</b>입니다. ζ가 1보다 작으면 목표를 지나쳤다가(오버슈트) 돌아오고, 작을수록 더 많이 지나치고 오래 흔들립니다.</p>
-        <div class="formula">ζ = (Kd + b) / (2·√(Kp·I))<br>오버슈트 = e<sup>−π·ζ/√(1−ζ²)</sup> × 100 %</div>
-        <p class="note">b는 관절 자체의 점성 감쇠(ROBOTIS 모델 값 0.2 N·m·s/rad)입니다. 중력이 영향을 주지 않도록 바닥에서 도는 joint1로 실험합니다. 팔은 앞으로 뻗은 자세로 고정하고, 관절 마찰은 끕니다.</p>
-      </article>
-
-      <article class="card" id="c2">
-        <h2><span class="num">2</span>예측: 브레이크 없이(Kd = 0) 얼마나 지나칠까?</h2>
-        <div class="given" id="given2">모델을 불러오는 중…</div>
-        <p>joint1을 10° 돌리라고 명령합니다. <b>Kp = 4, Kd = 0</b>일 때 오버슈트는 몇 %일까요?</p>
-        <div class="row">
-          <label for="pred-os">내 예측 오버슈트</label>
-          <input type="number" id="pred-os" step="0.1" min="0" placeholder="0.0">
-          <span class="note">%</span>
-          <button id="btn-pred">확인</button>
-        </div>
-        <div class="fb" id="fb-pred" hidden></div>
-        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
-      </article>
-
-      <article class="card" id="c3">
-        <h2><span class="num">3</span>실험: 게인을 바꿔 떨림 줄이기</h2>
-        <p>실행하면 0.2초 뒤에 목표가 0°에서 10°로 바뀝니다. 3초 동안 오른쪽 그래프로 움직임을 봅니다.</p>
-        <div class="row"><label for="sl-kp">Kp</label><input type="range" id="sl-kp" min="1" max="8" step="0.5" value="4"><span class="val" id="v-kp"></span></div>
-        <div class="row"><label for="sl-kd">Kd</label><input type="range" id="sl-kd" min="0" max="0.5" step="0.01" value="0"><span class="val" id="v-kd"></span></div>
-        <div class="row"><label for="sl-dl">제어 지연</label><input type="range" id="sl-dl" min="0" max="80" step="10" value="0"><span class="val" id="v-dl"></span></div>
-        <div class="row"><button id="btn-run" disabled>실행</button></div>
-        <ol class="howto">
-          <li>Kp 4, Kd 0, 지연 0으로 실행해 2단계 예측과 비교합니다.</li>
-          <li>Kd를 올려 오버슈트를 <b>5% 이하</b>로 만들어 보세요. 몇 Kd부터 되나요? (식으로 미리 계산해 보면 더 좋습니다)</li>
-        </ol>
-        <div class="row" id="goal3"></div>
-        <div class="tblwrap"><table>
-          <thead><tr><th class="n">#</th><th class="n">Kp</th><th class="n">Kd</th><th class="n">지연</th><th class="n">예측 오버슈트</th><th class="n">실험 오버슈트</th><th>결과</th></tr></thead>
-          <tbody id="log"></tbody>
-        </table></div>
-      </article>
-
-      <article class="card" id="c4">
-        <h2><span class="num">4</span>실험: 같은 게인인데 명령이 늦게 도착하면?</h2>
-        <p>실제 로봇은 센서 값을 읽고 모터에 명령이 도착하기까지 시간이 걸립니다. 제어기가 <b>몇 ms 전의 각도</b>를 보고 힘을 낸다고 생각하면 됩니다.</p>
-        <p>Kp 4, Kd 0.05로 두고 <b>지연</b>만 0 → 20 → 40 → 60 ms로 올려 실행해 보세요. 식(ζ)에는 지연이 없는데, 결과는 어떻게 되나요?</p>
-        <div class="row" id="goal4"></div>
-        <p style="margin-top:6px">왜 지연이 있으면 더 흔들릴까요?</p>
-        <div class="choices" id="quiz">
-          <label><input type="radio" name="q" value="a"> 지연이 있으면 모터 최대 토크가 줄어들기 때문에</label>
-          <label><input type="radio" name="q" value="b"> 제어기가 이미 지나간 각도를 보고 힘을 내서, 목표를 지나친 뒤에도 한동안 같은 방향으로 밀기 때문에</label>
-          <label><input type="radio" name="q" value="c"> 지연이 있으면 관성 I가 커지기 때문에</label>
-        </div>
-        <div class="fb" id="fb-quiz" hidden></div>
-      </article>
-    </section>
-  </div>
-</div>
-<footer class="foot" id="foot"></footer>
-
-<script src="../lib/three.min.js"></script>
-<script src="../lib/OrbitControls.js"></script>
-<script src="../common/lab.js"></script>
-<script src="p02.js"></script>
+<p>주소가 바뀌었습니다: <a href="../vibration/">떨림·진동</a></p>
 </body>
 </html>

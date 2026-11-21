@@ -1,4 +1,4 @@
-/* 상황 9 · 너무 느림·궤적 지연 — 토크 한계와 관성: T최소 = π·√(I·Δq ÷ (2·τ한계)), 피드포워드
+/* lag · 너무 느림·궤적 지연 — 토크 한계와 관성: T최소 = π·√(I·Δq ÷ (2·τ한계)), 피드포워드
  *
  * joint1을 토크 모터로: 0 → 90° 코사인 궤적(T초), PD Kp 20 Kd 0.5 (+ 선택: I·α + b·ω 피드포워드). 한계 1.5 N·m.
  * 팔은 뻗은 자세, 손끝 200 g, 마찰 끔. 판정: 최대 오차 ≤ 2°.
@@ -10,8 +10,8 @@
   const { $, Q, A, deg, rad, smooth, logTable, pill } = OmxLab;
   const REACH = { [Q.j2]: 1.4, [Q.j3]: -1.4 };
   const DQ = rad(90), TAU = 1.5, KP = 20, KD = 0.5, PAY = 0.2, AFTER = 1.5, TOL = 2;
-  OmxLab.renderNav($("nav"), "p09-lag");
-  const box = OmxLab.store("omx-lab-9"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("lag");
+  const box = OmxLab.store("omx-lab-lag"), state = box.get(), save = () => box.set(state);
   let lab = null, I = 0.0528, b = 0.2;
   const logs = [];
   const tmin = () => Math.PI * Math.sqrt(I * DQ / (2 * TAU));

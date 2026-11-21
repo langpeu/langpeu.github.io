@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>목표까지 못 감·처짐 | 피지컬AI 실험실</title>
+<meta name="description" content="OMX 팔이 목표보다 처져서 멈추는 이유: 중력보상 없는 PD 제어의 정상상태 오차 g(q)/Kp를 예측하고 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>목표보다 조금 아래에서 멈춤</h1>
+    <p>목표보다 조금 아래에서 멈추고, 팔을 멀리 뻗을수록 오차가 커집니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">joint2 처짐 (실제 − 목표) [°]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: PD만 쓰면 중력만큼 처진다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#t-gcomp">0 · 기초 개념: 중력보상과 Kp 단위</a></p>
+        <p>PD 제어기는 <b>오차가 있어야</b> 힘을 냅니다. 팔이 멈춘 상태에서는 속도가 0이라 Kd 항이 없고, 스프링 힘 Kp·e가 중력 토크 g(q)와 같아지는 곳에서 멈춥니다.</p>
+        <div class="formula">Kp · e = g(q)  →  처짐 e ≈ g(q) ÷ Kp  [rad]</div>
+        <p><b>중력보상</b>은 모델로 계산한 g(q)를 처음부터 더해 주는 방법입니다. 그러면 스프링은 중력을 버틸 필요가 없어 처짐이 0이 됩니다.</p>
+        <div class="formula">τ = Kp·(q목표 − q) − Kd·<span class="d1">q</span> + g(q)</div>
+        <p class="note">팔을 뻗은 자세(joint2 +80.2°, joint3 −80.2°)에서 joint2만 이 제어기로 버팁니다. 관절 마찰은 끄고 봅니다(마찰이 있으면 그 근처 어딘가에서 멈춰 결과가 흩어집니다).</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: Kp = 10이면 몇 도 처질까?</h2>
+        <div class="given" id="given2">모델을 불러오는 중…</div>
+        <div class="row">
+          <label for="pred-e">내 예측 처짐</label>
+          <input type="number" id="pred-e" step="0.01" min="0" placeholder="0.00">
+          <span class="note">°</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: Kp와 중력보상</h2>
+        <p>목표 자세에서 시작해 4초 동안 버팁니다. 4초 뒤 joint2가 목표에서 몇 도 처졌는지 잽니다.</p>
+        <div class="row"><label for="sl-kp">Kp</label><input type="range" id="sl-kp" min="5" max="50" step="1" value="10"><span class="val" id="v-kp"></span></div>
+        <div class="row"><label><input type="checkbox" id="cb-gc"> 중력보상 켜기 (+ g(q))</label></div>
+        <div class="row"><button id="btn-run" disabled>실행</button></div>
+        <ol class="howto">
+          <li>중력보상 끔, Kp 10 → 2단계 예측과 비교</li>
+          <li>Kp를 5, 20, 50으로 바꿔 보기 → 처짐이 Kp에 반비례하나요?</li>
+          <li>중력보상 켬 → 처짐이 얼마가 되나요?</li>
+        </ol>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th class="n">Kp</th><th>중력보상</th><th class="n">손끝 물체</th><th class="n">예측 g÷Kp</th><th class="n">실험 처짐</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>응용: 모델에 없는 무게가 있으면?</h2>
+        <p>중력보상은 <b>모델의 질량</b>으로 g(q)를 계산합니다. 손끝에 모델이 모르는 물체(예: 케이블, 카메라)가 달려 있으면, 그만큼은 다시 스프링이 버텨야 합니다.</p>
+        <div class="formula">처짐 ≈ m · g · x손끝 ÷ Kp</div>
+        <p>중력보상을 켜고 Kp = 10일 때, 모델에 없는 <b>100 g</b>이 손끝(joint2에서 수평거리 <span id="xee">—</span> m)에 있으면 몇 도 처질까요?</p>
+        <div class="row">
+          <label for="pred-e2">내 예측</label>
+          <input type="number" id="pred-e2" step="0.01" min="0" placeholder="0.00">
+          <span class="note">°</span>
+          <button id="btn-pred2">확인</button>
+        </div>
+        <div class="fb" id="fb-pred2" hidden></div>
+        <div class="row"><label for="sl-m">모델에 없는 손끝 물체</label><input type="range" id="sl-m" min="0" max="150" step="10" value="100"><span class="val" id="v-m"></span><button id="btn-run2" disabled>중력보상 켜고 실행</button></div>
+        <p class="note">이 실행은 Kp 10, 중력보상 켬으로 합니다. 결과는 위 표에 함께 쌓입니다.</p>
+      </article>
+
+      <article class="card" id="c5">
+        <h2><span class="num">5</span>정리 퀴즈</h2>
+        <p>팔이 처지는 것을 고치는 가장 좋은 방법은?</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> Kp를 아주 크게 올린다</label>
+          <label><input type="radio" name="q" value="b"> 정확한 질량 모델로 중력보상을 넣고, Kp는 떨리지 않는 범위로 둔다</label>
+          <label><input type="radio" name="q" value="c"> 목표 각도를 처지는 만큼 미리 높게 준다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="sag.js"></script>
+</body>
+</html>

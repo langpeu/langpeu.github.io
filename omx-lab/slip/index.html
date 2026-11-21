@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미끄러짐 | 피지컬AI 실험실</title>
+<meta name="description" content="OMX 그리퍼로 쥔 물체가 빠지는 이유: 쿨롱 마찰 한계 Ft ≤ μ·Fn과 파지력을 손계산으로 예측하고 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>쥔 물체가 미끄러져 빠짐</h1>
+    <p>그리퍼로 쥔 물체가 빠지거나, 들어 올리는 순간 미끄러집니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">물체가 손에서 빠진 거리 [mm]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 마찰이 버틸 수 있는 힘에는 한계가 있다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#t-mu">0 · 기초 개념: 마찰계수 μ·Fn·Ft</a></p>
+        <p class="basics-link">계산을 확인하려면 → <a href="../tool-estimate/#grip">도구 · 파지력 어림 계산</a></p>
+        <p>그리퍼는 물체를 <b>양쪽에서 눌러(Fn)</b> 생기는 <b>마찰력</b>으로 듭니다. 마찰력은 누르는 힘에 마찰계수 μ를 곱한 값을 넘을 수 없습니다.</p>
+        <div class="formula">미끄러지지 않으려면  m·g ≤ μ · (Fn₁ + Fn₂)</div>
+        <p>OMX 그리퍼는 모터 하나가 두 손가락을 함께 돌립니다. 모터 토크 τ가 두 손가락 패드에 나뉘고, 손가락 회전축에서 패드까지 거리가 r이면 두 패드의 누르는 힘 합은 대략 τ ÷ r입니다.</p>
+        <div class="formula">Fn₁ + Fn₂ ≈ τ ÷ r   →   m최대 ≈ μ · τ ÷ (r · g)</div>
+        <p class="note">시뮬레이션에서는 손가락 안쪽에 평평한 패드(주황색)를 충돌 형상으로 붙였습니다. 손가락 겉모양 메시를 그대로 접촉에 쓰면 쐐기처럼 물체를 밀어내 실제와 달라지기 때문입니다(접촉 모델 개념). 물체 크기 2.4 × 2.2 × 2.4 cm.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: 몇 g까지 들 수 있을까?</h2>
+        <div class="given">그리퍼 토크 τ = 0.2 N·m (XL330 전류 제한 값)<br>패드까지 거리 r = 0.045 m<br>마찰계수 μ = 0.5, g = 9.81 m/s²</div>
+        <div class="row">
+          <label for="pred-m">내 예측 최대 무게</label>
+          <input type="number" id="pred-m" step="1" min="0" placeholder="0">
+          <span class="note">g</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula">Fn 합 = 0.2 ÷ 0.045 = 4.44 N<br>m최대 = 0.5 × 4.44 ÷ 9.81 = 0.227 kg = <b>227 g</b></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 버티는 최대 무게 찾기</h2>
+        <p>실행하면 0.6초 동안 무중력에서 물체를 쥔 뒤, 중력을 켜고 2초 동안 들고 있습니다. 물체가 손에서 1 cm 넘게 빠지면 <span class="pill fall">미끄러짐</span>입니다.</p>
+        <div class="row"><label for="sl-mu">마찰계수 μ</label><input type="range" id="sl-mu" min="0.2" max="0.6" step="0.05" value="0.5"><span class="val" id="v-mu"></span></div>
+        <div class="row"><label for="sl-tau">그리퍼 토크 τ</label><input type="range" id="sl-tau" min="0.05" max="0.2" step="0.01" value="0.2"><span class="val" id="v-tau"></span></div>
+        <div class="row"><label for="sl-m">물체 무게</label><input type="range" id="sl-m" min="20" max="320" step="5" value="100"><span class="val" id="v-m"></span></div>
+        <div class="row"><button id="btn-run" disabled>쥐고 들기</button></div>
+        <ol class="howto">
+          <li>μ 0.5, τ 0.2로 두고 무게를 바꿔 <b>버팀/미끄러짐 경계</b>를 10 g 폭까지 좁힙니다.</li>
+          <li>μ나 τ를 절반으로 줄이면 경계가 어떻게 되는지 확인합니다. 식과 맞나요?</li>
+        </ol>
+        <div class="row" id="bounds"></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th class="n">μ</th><th class="n">τ</th><th class="n">무게</th><th class="n">잰 Fn 합</th><th class="n">식 m최대</th><th>결과</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>응용: 빠르게 들어 올리면?</h2>
+        <p>물체를 위로 가속도 a로 들어 올리면, 마찰이 버텨야 할 힘이 m·g에서 <b>m·(g + a)</b>로 커집니다.</p>
+        <p>μ 0.5, τ 0.2에서 a = 4.9 m/s²(중력의 절반)로 들어 올리면 최대 몇 g까지 버틸까요?</p>
+        <div class="row">
+          <label for="pred-ma">내 예측</label>
+          <input type="number" id="pred-ma" step="1" min="0" placeholder="0">
+          <span class="note">g</span>
+          <button id="btn-predma">확인</button>
+        </div>
+        <div class="fb" id="fb-predma" hidden></div>
+        <p style="margin-top:6px">같은 물체를 덜 미끄러지게 드는 방법으로 <b>틀린</b> 것은?</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 들어 올릴 때 가속도를 줄인다 (천천히 출발)</label>
+          <label><input type="radio" name="q" value="b"> 고무 패드를 붙여 μ를 키운다</label>
+          <label><input type="radio" name="q" value="c"> 그리퍼를 더 빨리 닫는다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="slip.js"></script>
+</body>
+</html>

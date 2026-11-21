@@ -1,4 +1,4 @@
-/* 상황 4 · 미끄러짐 — 마찰 한계 m·g ≤ μ·ΣFn, 파지력 ΣFn ≈ τ ÷ r
+/* slip · 미끄러짐 — 마찰 한계 m·g ≤ μ·ΣFn, 파지력 ΣFn ≈ τ ÷ r
  *
  * 모델 변형: 손가락 안쪽에 평평한 충돌 패드(pad6, pad7), 물체 상자(obj), 바닥이 물체와 부딪히게 conaffinity 3.
  * 손가락 메시(contype 1)는 물체(contype 2)와 부딪히지 않음 → 물체는 패드로만 쥠.
@@ -10,8 +10,8 @@
   "use strict";
   const { $, Q, A, B, GRAV, deg, logTable, pill, bracket, boundChip, narrow } = OmxLab;
   const R_PAD = 0.045, GRASP = 0.6, HOLD = 2.0, SLIP_MM = 10;
-  OmxLab.renderNav($("nav"), "p04-slip");
-  const box = OmxLab.store("omx-lab-4"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("slip");
+  const box = OmxLab.store("omx-lab-slip"), state = box.get(), save = () => box.set(state);
   let lab = null, OB, OG, PADS;
   const logs = [];
 

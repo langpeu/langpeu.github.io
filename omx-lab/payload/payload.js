@@ -1,4 +1,4 @@
-/* 상황 10 · 물체를 들면 동작 이상 — 손끝 하중이 관절마다 퍼짐: 관절 i 토크 = gᵢ + m·g·xᵢ
+/* payload · 물체를 들면 동작 이상 — 손끝 하중이 관절마다 퍼짐: 관절 i 토크 = gᵢ + m·g·xᵢ
  *
  * ROBOTIS 위치 제어(Kp 50, 한계 joint2·3 1.5 N·m, joint4 0.52 N·m) 그대로, 마찰 끔. 3초 버틴 뒤 최종 오차 > 3° 이면 무너짐.
  * 확인한 값 (MuJoCo 3.17.0): 접은 자세(j2 0, j3 +90°, j4 −90°) 식 j4 398 g (j2 858, j3 1229) → 380 g 버팀 / 400 g j4 무너짐.
@@ -13,8 +13,8 @@
   };
   const JN = [["joint2", Q.j2, A.j2, B.link2], ["joint3", Q.j3, A.j3, B.link3], ["joint4", Q.j4, A.j4, B.link4]];
   const RUN = 3, TOL = 3;
-  OmxLab.renderNav($("nav"), "p10-payload");
-  const box = OmxLab.store("omx-lab-10"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("payload");
+  const box = OmxLab.store("omx-lab-payload"), state = box.get(), save = () => box.set(state);
   let lab = null, table = {};
   const logs = [];
 

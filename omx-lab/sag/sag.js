@@ -1,4 +1,4 @@
-/* 상황 3 · 목표까지 못 감·처짐 — 중력보상 누락: 처짐 ≈ g(q) ÷ Kp
+/* sag · 목표까지 못 감·처짐 — 중력보상 누락: 처짐 ≈ g(q) ÷ Kp
  *
  * 뻗은 자세에서 시작해 joint2만 토크 모터 PD(+선택: 중력보상)로 4초 버팁니다. 관절 마찰 끔.
  * 중력보상은 '모델이 아는 질량'으로 계산(손끝 물체 제외) → 모델에 없는 물체만큼 처짐.
@@ -10,8 +10,8 @@
   const { $, Q, A, B, GRAV, deg, logTable } = OmxLab;
   const REACH = { [Q.j2]: 1.4, [Q.j3]: -1.4 };
   const RUN = 4.0, KD = 0.3;
-  OmxLab.renderNav($("nav"), "p03-sag");
-  const box = OmxLab.store("omx-lab-3"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("sag");
+  const box = OmxLab.store("omx-lab-sag"), state = box.get(), save = () => box.set(state);
   let lab = null, g0 = 0.574, xee = 0.401, d2 = null;
   const logs = [];
 
@@ -78,7 +78,7 @@
   $("btn-run2").addEventListener("click", () => run(10, true, +mEl.value / 1000));
   $("quiz").addEventListener("change", (e) => {
     const fb = $("fb-quiz"); fb.hidden = false;
-    if (e.target.value === "b") { fb.className = "fb ok"; fb.textContent = "맞습니다. Kp를 크게 올리면 처짐은 줄지만 상황 2처럼 떨림과 지연에 약해집니다. 목표를 미리 높이는 방법은 자세나 들고 있는 물체가 바뀌면 바로 틀립니다. 중력은 모델로 계산해 미리 넣고, PD는 남은 작은 오차만 맡기는 것이 기본입니다."; $("c5").classList.add("done"); }
+    if (e.target.value === "b") { fb.className = "fb ok"; fb.textContent = "맞습니다. Kp를 크게 올리면 처짐은 줄지만 " + OmxLab.label("vibration") + "처럼 떨림과 지연에 약해집니다. 목표를 미리 높이는 방법은 자세나 들고 있는 물체가 바뀌면 바로 틀립니다. 중력은 모델로 계산해 미리 넣고, PD는 남은 작은 오차만 맡기는 것이 기본입니다."; $("c5").classList.add("done"); }
     else { fb.className = "fb no"; fb.textContent = "그 방법도 처짐을 줄이긴 하지만 부작용이 있습니다. 자세가 바뀌어도, 떨림 없이 처짐을 없애는 방법을 골라 보세요."; }
   });
   if (state.predE != null) $("pred-e").value = state.predE;
@@ -92,7 +92,7 @@
     const { mj, model, data } = lab;
     data.qpos[Q.j2] = REACH[Q.j2]; data.qpos[Q.j3] = REACH[Q.j3]; mj.mj_forward(model, data);
     g0 = Math.abs(data.qfrc_bias[Q.j2]); xee = data.xpos[B.ee * 3] - data.xpos[B.link2 * 3];
-    $("given2").innerHTML = `뻗은 자세의 joint2 중력 토크 g(q) = ${g0.toFixed(3)} N·m (상황 1에서 계산한 값)<br>Kp = 10 N·m/rad, 중력보상 없음`;
+    $("given2").innerHTML = `뻗은 자세의 joint2 중력 토크 g(q) = ${g0.toFixed(3)} N·m (${OmxLab.label("torque")}에서 계산한 값)<br>Kp = 10 N·m/rad, 중력보상 없음`;
     $("sol").innerHTML = `e = ${g0.toFixed(3)} ÷ 10 = ${(g0 / 10).toFixed(4)} rad<br>× 180/π = <b>${deg(g0 / 10).toFixed(2)}°</b>`;
     $("xee").textContent = xee.toFixed(3);
     lab.jointGauge($("gauge"), { dof: Q.j2, act: A.j2, targetDeg: deg(REACH[Q.j2]), max: 1.6, limit: () => 1.5 });

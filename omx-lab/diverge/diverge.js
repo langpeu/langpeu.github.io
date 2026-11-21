@@ -1,4 +1,4 @@
-/* 상황 7 · 시뮬 폭발·발산 — 적분기, dt와 강성: 오일러 안정 조건 dt < 2/ω, ω = √(Kp/I)
+/* diverge · 시뮬 폭발·발산 — 적분기, dt와 강성: 오일러 안정 조건 dt < 2/ω, ω = √(Kp/I)
  *
  * joint1 position 액추에이터를 한계 없는 스프링(Kp, kv = 0)으로 바꾸고 10° 스텝. 팔은 뻗은 자세, 마찰 끔.
  * 확인한 값 (MuJoCo 3.17.0, I = 0.0206): Kp 200 → 식 20.3 ms. Euler 20 ms 버팀 / 25 ms 발산. RK4 25 ms 버팀 / 30 ms 발산.
@@ -9,8 +9,8 @@
   const { $, Q, A, deg, rad, logTable, pill } = OmxLab;
   const REACH = { [Q.j2]: 1.4, [Q.j3]: -1.4 };
   const RUN = 3.0;
-  OmxLab.renderNav($("nav"), "p07-diverge");
-  const box = OmxLab.store("omx-lab-7"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("diverge");
+  const box = OmxLab.store("omx-lab-diverge"), state = box.get(), save = () => box.set(state);
   let lab = null, I = 0.0206;
   const logs = [];
   const dtMax = (kp) => 2 * Math.sqrt(I / kp);

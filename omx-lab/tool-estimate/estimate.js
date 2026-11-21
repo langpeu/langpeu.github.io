@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   const $ = (id) => document.getElementById(id);
-  OmxLab.renderNav($("nav"), "tool-estimate");
+  OmxLab.shell("tool-estimate");
 
   const G = 9.81;
   const KGF = 9.80665;

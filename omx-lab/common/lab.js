@@ -1,4 +1,4 @@
-/* OMX 동역학 실험실 · 공통 코드
+/* 피지컬AI 실험실 · 공통 코드
  *
  * 모든 문제 페이지가 같이 쓰는 부분입니다.
  *   - 문제 목록(PROBLEMS)과 위쪽 탭 / 첫 화면 목록
@@ -16,25 +16,64 @@
   // 사이트 루트 = 이 파일(common/lab.js)이 있는 폴더의 부모
   const ROOT = new URL("../", document.currentScript.src).href;
 
-  // ---- 문제 목록: 새 문제를 만들면 여기에 한 줄 추가 ----
+  // ---- 단원과 문제 목록: 번호·단원·제목은 여기에만 둔다 (페이지에는 번호를 쓰지 않음) ----
+  // 새 문제: 여기 한 줄 + <id>/ 폴더. ready:false 는 목록에 '준비 중'으로만 나온다.
+  const UNITS = [
+    { key: "basics", name: "기초", sub: "식, 기호, 단위" },
+    { key: "kin", name: "기구학", sub: "위치와 각도" },
+    { key: "statics", name: "정역학", sub: "멈춰서 버티는 힘" },
+    { key: "dyn", name: "동역학", sub: "움직일 때의 관성" },
+    { key: "control", name: "제어", sub: "목표를 따라가게 하기" },
+    { key: "actuator", name: "액추에이터", sub: "모터·서보 특성" },
+    { key: "sim", name: "시뮬레이션", sub: "시뮬레이터의 한계" },
+    { key: "tools", name: "도구", sub: "계산기" },
+  ];
   const PROBLEMS = [
-    { n: 0, id: "p00-basics", title: "기초 개념", concept: "식 하나, 기호 읽는 법, 단위, 용어 사전 — 먼저 읽기", basics: true },
-    { n: 1, id: "p01-torque", title: "아예 안 움직임", concept: "중력 토크 g(q)와 모터 최대 토크" },
-    { n: 2, id: "p02-vibration", title: "떨림·진동", concept: "PD 게인, 감쇠비 ζ, 제어 지연" },
-    { n: 3, id: "p03-sag", title: "목표까지 못 감·처짐", concept: "중력보상 누락: 처짐 ≈ g(q) ÷ Kp" },
-    { n: 4, id: "p04-slip", title: "미끄러짐", concept: "마찰 한계 Ft ≤ μ·Fn, 파지력" },
-    { n: 5, id: "p05-tipping", title: "넘어짐", concept: "무게중심과 지지 영역, 빠른 동작의 관성" },
-    { n: 6, id: "p06-sim2real", title: "Sim-to-Real 갭", concept: "모델 파라미터 오차와 시스템 식별" },
-    { n: 7, id: "p07-diverge", title: "시뮬 폭발·발산", concept: "적분기, dt와 강성: dt < 2/ω" },
-    { n: 8, id: "p08-contact", title: "관통·튕김", concept: "접촉 강성: 파고듦 ≈ v·τ" },
-    { n: 9, id: "p09-lag", title: "너무 느림·궤적 지연", concept: "토크 한계, 관성 M(q), 피드포워드" },
-    { n: 10, id: "p10-payload", title: "물체를 들면 동작 이상", concept: "페이로드 하중이 관절마다 퍼지는 방식 Jᵀ·F" },
+    { n: 0, id: "basics", unit: "basics", ready: true, title: "기초 개념", concept: "식 하나, 기호 읽는 법, 단위, 용어 사전" },
+    { n: 1, id: "fk", unit: "kin", ready: false, title: "FK: 손끝은 어디에?", concept: "순기구학, 링크 길이, 각도 더하기" },
+    { n: 2, id: "ik", unit: "kin", ready: false, title: "IK: 공을 잡으려면 몇 도?", concept: "역기구학, 코사인 법칙, 해가 2개" },
+    { n: 3, id: "singularity", unit: "kin", ready: false, title: "손끝 속도와 특이점", concept: "자코비안 v = J·q̇, 특이점" },
+    { n: 4, id: "torque", unit: "statics", ready: true, title: "명령을 보내도 안 움직임", concept: "중력 토크 g(q)와 모터 최대 토크" },
+    { n: 5, id: "payload", unit: "statics", ready: true, title: "물체를 들면 동작 이상", concept: "페이로드 하중이 관절마다 퍼지는 방식 Jᵀ·F" },
+    { n: 6, id: "push", unit: "statics", ready: false, title: "어느 방향으로 밀 때 제일 셀까", concept: "손끝 힘 방향과 τ = Jᵀ·F" },
+    { n: 7, id: "slip", unit: "statics", ready: true, title: "미끄러짐", concept: "마찰 한계 Ft ≤ μ·Fn, 파지력" },
+    { n: 8, id: "tipping", unit: "statics", ready: true, title: "넘어짐", concept: "무게중심과 지지 영역, 빠른 동작의 관성" },
+    { n: 9, id: "inertia", unit: "dyn", ready: false, title: "뻗은 팔은 왜 느리게 돌까", concept: "자세에 따라 바뀌는 관성 M(q)" },
+    { n: 10, id: "pendulum", unit: "dyn", ready: false, title: "힘 빠진 팔 흔들기", concept: "진자 주기로 관성과 중력 확인" },
+    { n: 11, id: "coupling", unit: "dyn", ready: false, title: "어깨를 돌리면 팔꿈치가 끌려간다", concept: "관절 결합, M(q)의 대각선 밖 항" },
+    { n: 12, id: "centrifugal", unit: "dyn", ready: false, title: "원심력은 무시해도 될까", concept: "코리올리·원심력 C(q, q̇)·q̇" },
+    { n: 13, id: "vibration", unit: "control", ready: true, title: "떨림·진동", concept: "PD 게인, 감쇠비 ζ, 제어 지연" },
+    { n: 14, id: "sag", unit: "control", ready: true, title: "목표까지 못 감·처짐", concept: "중력보상 누락: 처짐 ≈ g(q) ÷ Kp" },
+    { n: 15, id: "pid", unit: "control", ready: false, title: "처짐을 I항으로 없애기", concept: "PID 적분항과 와인드업" },
+    { n: 16, id: "lag", unit: "control", ready: true, title: "너무 느림·궤적 지연", concept: "토크 한계, 관성 M(q), 피드포워드" },
+    { n: 17, id: "speed-torque", unit: "actuator", ready: false, title: "빠를수록 힘이 약해진다", concept: "모터 토크-속도 곡선" },
+    { n: 18, id: "current", unit: "actuator", ready: false, title: "서보가 뜨거워지는 이유", concept: "토크와 전류, 전력 τ·ω" },
+    { n: 19, id: "diverge", unit: "sim", ready: true, title: "시뮬 폭발·발산", concept: "적분기, dt와 강성: dt < 2/ω" },
+    { n: 20, id: "contact", unit: "sim", ready: true, title: "관통·튕김", concept: "접촉 강성: 파고듦 ≈ v·τ" },
+    { n: 21, id: "sim2real", unit: "sim", ready: true, title: "Sim-to-Real 갭", concept: "모델 파라미터 오차와 시스템 식별" },
   ];
   // 도구: 문제가 아니라 문제를 풀 때 옆에 두고 쓰는 계산기
   const TOOLS = [
-    { id: "tool-servo", title: "서보 스펙 계산기", desc: "토크·속도 단위 환산, 팔 길이별 버티는 무게, 내 팔에 충분한지 판정" },
-    { id: "tool-estimate", title: "단위 변환·어림 계산", desc: "중력 토크, 가속 토크, 파지력 어림 + 단위 변환기" },
+    { id: "tool-servo", unit: "tools", ready: true, title: "서보 스펙 계산기", desc: "토크·속도 단위 환산, 팔 길이별 버티는 무게, 내 팔에 충분한지 판정" },
+    { id: "tool-estimate", unit: "tools", ready: true, title: "단위 변환·어림 계산", desc: "중력 토크, 가속 토크, 파지력 어림 + 단위 변환기" },
+    { id: "tool-kinematics", unit: "tools", ready: false, title: "FK·IK 계산기", desc: "관절 각도 ↔ 손끝 위치, 두 IK 해, 작업 공간" },
   ];
+  const find = (id) => PROBLEMS.find((p) => p.id === id) || TOOLS.find((t) => t.id === id) || null;
+  // 다른 페이지를 가리키는 이름: 상황 → "상황 N", 기초 → "0 · 기초 개념", 도구 → "도구 · 제목"
+  function label(id) {
+    const p = find(id); if (!p) return id;
+    if (p.unit === "tools") return `도구 · ${p.title}`;
+    if (p.n === 0) return `0 · ${p.title}`;
+    return `상황 ${p.n}`;
+  }
+  // <a data-ref="sag">상황 {n}</a> → 글자의 {n}·{t} 를 번호·제목으로, href 가 없으면 채움
+  function refLinks(root) {
+    (root || document).querySelectorAll("[data-ref]").forEach((a) => {
+      const p = find(a.dataset.ref); if (!p) return;
+      a.textContent = a.textContent.replace(/\{n\}/g, p.n ?? "").replace(/\{t\}/g, p.title);
+      if (a.tagName === "A" && !a.getAttribute("href")) a.setAttribute("href", ROOT + p.id + "/");
+    });
+  }
 
   // ---- ROBOTIS omx.xml 인덱스 (팔이 바닥에 고정된 기본 모델, MuJoCo 3.17.0으로 확인) ----
   const Q = { j1: 0, j2: 1, j3: 2, j4: 3, j5: 4, g1: 5, g2: 6 };   // qpos / dof
@@ -48,23 +87,166 @@
   const rad = (d) => d * Math.PI / 180;
   const smooth = (s) => { s = Math.min(Math.max(s, 0), 1); return (1 - Math.cos(Math.PI * s)) / 2; };   // 0→1 코사인
 
-  // ---- 탭 / 목록 ----
-  function renderNav(el, currentId) {
-    el.innerHTML = PROBLEMS.map((p) => {
-      if (p.id === currentId) return `<span class="tab on" aria-current="page">${p.basics ? "" : "상황 "}${p.n} · ${p.title}</span>`;
-      if (p.id) return `<a class="tab" href="${ROOT}${p.id}/">${p.n} ${p.title}</a>`;
-      return `<span class="tab" aria-disabled="true">${p.n} ${p.title}</span>`;
-    }).join("") + `<span class="tabsep" aria-hidden="true"></span>` + TOOLS.map((t) => t.id === currentId
-      ? `<span class="tab tool on" aria-current="page">도구 · ${t.title}</span>`
-      : `<a class="tab tool" href="${ROOT}${t.id}/">도구 · ${t.title}</a>`).join("");
+  // ---- 사이드바 틀: 모든 페이지가 OmxLab.shell(현재 id) 를 한 번 부른다 (첫 화면은 null) ----
+  const LS = {   // 브라우저 저장: 막혀 있어도 기본값으로 동작
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 무시 */ } },
+  };
+  const SIDE_W = { def: 288, min: 220, max: 520 };
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // 설명 글자: q̇·q̈ 결합 문자는 글꼴에서 점이 밀리므로 CSS 로 점을 그리는 표기로 (lab.css .d1/.d2)
+  const rich = (t) => esc(t).replace(/q\u0307/g, '<span class="d1">q</span>').replace(/q\u0308/g, '<span class="d2">q</span>');
+  const unitOf = (key) => UNITS.find((u) => u.key === key);
+  const isProblem = (p) => p && p.unit !== "tools";
+
+  function shell(currentId) {
+    const cur = currentId ? find(currentId) : null;
+    const body = document.body;
+    const app = document.createElement("div"); app.className = "app";
+    const main = document.createElement("main"); main.className = "main";
+    // 기존 내용(.wrap, footer 등)을 본문으로 옮김
+    [...body.childNodes].filter((n) => !(n.tagName === "SCRIPT")).forEach((n) => main.appendChild(n));
+    const top = document.createElement("div"); top.className = "topbar";
+    top.innerHTML = `<button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">☰ 문제 목록</button>` +
+      (cur ? `<span class="crumb">${esc(unitOf(cur.unit).name)} / <b>${isProblem(cur) ? cur.n + " · " : ""}${esc(cur.title)}</b></span>` : "");
+    main.prepend(top);
+    const side = document.createElement("aside"); side.className = "side"; side.id = "side"; side.setAttribute("aria-label", "문제 목록");
+    side.innerHTML = `
+      <a class="brand" href="${ROOT}"><img class="logo" src="${ROOT}common/logo.jpg" alt="랑프 두잇 로고" width="36" height="36">
+        <span><b>피지컬AI 실험실</b><small>OMX-AI로 배우는 기구학·동역학</small></span></a>
+      <div class="side-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="side-q" type="search" placeholder="문제·개념 찾기 (예: 관성, Kp)" aria-label="문제 찾기" autocomplete="off"></div>
+      <div class="progress"><div class="row"><span>내 진행</span><span class="cnt"></span></div><div class="track"><span></span></div></div>
+      <nav aria-label="단원별 문제"></nav>
+      <div class="side-foot">
+        <a class="maker" href="https://www.youtube.com/@langpeudoit" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="M10 9v6l5-3z" fill="#fff"/></svg>
+          <span><small>제작</small><b>Langpeu</b></span><span class="yt">YouTube ↗</span></a>
+        <span>비공식 학습 자료 · ROBOTIS와 관계없음</span>
+      </div>`;
+    const rs = document.createElement("div"); rs.className = "resizer"; rs.tabIndex = 0;
+    rs.setAttribute("role", "separator"); rs.setAttribute("aria-orientation", "vertical"); rs.setAttribute("aria-label", "목록 폭 조절");
+    rs.title = "끌어서 목록 폭 조절 · 두 번 클릭하면 원래대로";
+    const scrim = document.createElement("div"); scrim.className = "scrim";
+    app.append(side, rs, scrim, main);
+    body.prepend(app);
+
+    // 목록
+    const nav = side.querySelector("nav"), q = side.querySelector("#side-q");
+    let closed = new Set(LS.get("omx-lab-units", []));
+    if (cur) closed.delete(cur.unit);   // 현재 문제 단원은 항상 펼친 채로 시작
+    const progress = () => LS.get("omx-lab-progress", {});
+    function drawList() {
+      const f = q.value.trim().toLowerCase(), prog = progress();
+      const html = UNITS.map((u) => {
+        const list = PROBLEMS.concat(TOOLS).filter((p) => p.unit === u.key &&
+          (!f || `${p.n ?? ""} ${p.title} ${p.concept || ""} ${p.desc || ""}`.toLowerCase().includes(f)));
+        if (!list.length) return "";
+        const isClosed = !f && closed.has(u.key);
+        return `<div class="unit${isClosed ? " closed" : ""}" data-u="${u.key}"><button type="button" aria-expanded="${!isClosed}"><span>${esc(u.name)}<small class="usub">${esc(u.sub)}</small></span><span class="chev" aria-hidden="true">▾</span></button><ul>` +
+          list.map((p) => {
+            const on = cur && p.id === cur.id, st = prog[p.id] || "";
+            const inner = `<span class="no">${isProblem(p) ? p.n : "⚙"}</span><span class="t">${esc(p.title)}</span><span class="st ${st}"${st ? ` aria-label="${st === "done" ? "완료" : "진행 중"}"` : ""}></span>`;
+            return p.ready
+              ? `<li><a class="item${on ? " on" : ""}" data-id="${p.id}" href="${ROOT}${p.id}/"${on ? ' aria-current="page"' : ""}>${inner}</a></li>`
+              : `<li><div class="item soon" data-id="${p.id}">${inner}</div></li>`;
+          }).join("") + "</ul></div>";
+      }).join("");
+      nav.innerHTML = html || `<p class="none">‘${esc(q.value.trim())}’와 맞는 문제가 없습니다.</p>`;
+      const ready = PROBLEMS.filter((p) => p.ready), done = ready.filter((p) => prog[p.id] === "done").length;
+      side.querySelector(".progress .cnt").textContent = `${done} / ${ready.length}`;
+      side.querySelector(".progress .track span").style.width = (100 * done / ready.length) + "%";
+    }
+    drawList();
+    q.addEventListener("input", drawList);
+    nav.addEventListener("click", (e) => {
+      const b = e.target.closest(".unit > button"); if (!b) return;
+      const u = b.parentElement, key = u.dataset.u, now = !u.classList.contains("closed");
+      u.classList.toggle("closed", now); b.setAttribute("aria-expanded", String(!now));
+      if (now) closed.add(key); else closed.delete(key);
+      LS.set("omx-lab-units", [...closed]);
+    });
+
+    // 서랍 (좁은 화면)
+    const menu = top.querySelector(".menu-btn");
+    const drawer = (open) => { app.classList.toggle("open", open); body.classList.toggle("drawer", open); menu.setAttribute("aria-expanded", String(open)); };
+    menu.addEventListener("click", () => drawer(!app.classList.contains("open")));
+    scrim.addEventListener("click", () => drawer(false));
+    nav.addEventListener("click", (e) => { if (e.target.closest("a.item")) drawer(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && app.classList.contains("open")) drawer(false); });
+
+    // 폭 조절
+    const root = document.documentElement;
+    const setW = (w) => { w = Math.round(Math.min(SIDE_W.max, Math.max(SIDE_W.min, +w || SIDE_W.def))); root.style.setProperty("--side-w", w + "px"); rs.setAttribute("aria-valuenow", w); return w; };
+    setW(LS.get("omx-lab-side-w", SIDE_W.def));
+    rs.setAttribute("aria-valuemin", SIDE_W.min); rs.setAttribute("aria-valuemax", SIDE_W.max);
+    rs.addEventListener("pointerdown", (e) => {
+      rs.setPointerCapture(e.pointerId); rs.classList.add("drag"); body.classList.add("resizing");
+      const move = (ev) => setW(ev.clientX);
+      const up = (ev) => { LS.set("omx-lab-side-w", setW(ev.clientX)); rs.classList.remove("drag"); body.classList.remove("resizing"); rs.removeEventListener("pointermove", move); rs.removeEventListener("pointerup", up); };
+      rs.addEventListener("pointermove", move); rs.addEventListener("pointerup", up);
+    });
+    rs.addEventListener("dblclick", () => LS.set("omx-lab-side-w", setW(SIDE_W.def)));
+    rs.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault(); LS.set("omx-lab-side-w", setW(parseInt(getComputedStyle(root).getPropertyValue("--side-w"), 10) + (e.key === "ArrowRight" ? 16 : -16)));
+    });
+
+    // 문제 페이지: 제목 번호, 단원 칩, 단계 진행줄, 이전·다음, 진행 기록
+    const h1 = main.querySelector("header.top h1");
+    if (cur && h1) {
+      if (isProblem(cur) && cur.n > 0) h1.insertAdjacentHTML("afterbegin", `<span class="n">${cur.n}</span>`);
+      h1.insertAdjacentHTML("beforebegin", `<div class="eyebrow"><span class="chip c">${esc(unitOf(cur.unit).name)}</span><span>${rich(cur.concept || cur.desc || "")}</span></div>`);
+    }
+    const cards = [...main.querySelectorAll('article.card[id^="c"]')];
+    if (cur && cards.length > 1) {
+      const st = document.createElement("nav"); st.className = "stepper"; st.setAttribute("aria-label", "단계");
+      (main.querySelector("header.top") || main).appendChild(st);
+      const drawSteps = () => {
+        const firstOpen = cards.findIndex((c) => !c.classList.contains("done"));
+        st.innerHTML = cards.map((c, k) => {
+          const h = c.querySelector("h2"), name = (h ? h.textContent.replace(/^\s*\d+/, "") : "").split(":")[0].trim();
+          const done = c.classList.contains("done");
+          return `<a href="#${c.id}" class="${done ? "done" : k === firstOpen ? "cur" : ""}"><i>${done ? "✓" : k + 1}</i>${esc(name)}</a>`;
+        }).join("");
+      };
+      drawSteps();
+      const mark = () => {
+        if (!isProblem(cur)) return;
+        const n = cards.filter((c) => c.classList.contains("done")).length;
+        const prog = progress(), want = n === cards.length ? "done" : n > 0 ? "part" : prog[cur.id];
+        if (want && prog[cur.id] !== "done" && prog[cur.id] !== want) { prog[cur.id] = want; LS.set("omx-lab-progress", prog); drawList(); }
+      };
+      new MutationObserver(() => { drawSteps(); mark(); }).observe(main, { subtree: true, attributes: true, attributeFilter: ["class"] });
+      mark();
+    } else if (cur && isProblem(cur)) {   // 단계 카드가 없는 읽기 페이지(기초 개념)는 열면 완료
+      const prog = progress(); if (prog[cur.id] !== "done") { prog[cur.id] = "done"; LS.set("omx-lab-progress", prog); drawList(); }
+    }
+    if (cur && isProblem(cur)) {
+      const ready = PROBLEMS.filter((p) => p.ready), k = ready.findIndex((p) => p.id === cur.id);
+      const prev = ready[k - 1], next = ready[k + 1];
+      const lab = (p) => `${p.n} · ${esc(p.title)}`;
+      const pg = document.createElement("nav"); pg.className = "pager"; pg.setAttribute("aria-label", "이전·다음 문제");
+      pg.innerHTML = (prev ? `<a class="prev" href="${ROOT}${prev.id}/"><small>← 이전</small><b>${lab(prev)}</b></a>` : "") +
+        (next ? `<a class="next" href="${ROOT}${next.id}/"><small>다음 →</small><b>${lab(next)}</b></a>` : "");
+      const wrap = main.querySelector(".wrap"); (wrap || main).appendChild(pg);
+    }
+    refLinks(main);
   }
-  function renderTools(el) {
-    el.innerHTML = TOOLS.map((t) => `<li><a href="${ROOT}${t.id}/"><span class="no">도구</span><span class="t">${t.title}</span><span class="c">${t.desc}</span></a></li>`).join("");
-  }
-  function renderList(el) {
-    el.innerHTML = PROBLEMS.map((p) => p.id
-      ? `<li${p.basics ? ' class="basics"' : ""}><a href="${ROOT}${p.id}/"><span class="no">${p.basics ? "0 · 처음이면 여기부터" : `상황 ${p.n}`}</span><span class="t">${p.title}</span><span class="c">${p.concept || ""}</span></a></li>`
-      : `<li><div class="soon"><span class="no">상황 ${p.n}</span><span class="t">${p.title}</span><span class="c">준비 중</span></div></li>`).join("");
+
+  // ---- 첫 화면: 단원별 카드 ----
+  function renderHome(el) {
+    const prog = LS.get("omx-lab-progress", {});
+    el.innerHTML = UNITS.map((u) => {
+      const list = PROBLEMS.concat(TOOLS).filter((p) => p.unit === u.key);
+      return `<section class="hunit"><h2>${esc(u.name)} <small>${esc(u.sub)}</small></h2><ul class="plist${u.key === "tools" ? " tools" : ""}">` +
+        list.map((p) => {
+          const no = isProblem(p) ? (p.n === 0 ? "0 · 처음이면 여기부터" : `상황 ${p.n}`) : "도구";
+          const st = prog[p.id] ? `<span class="hst ${prog[p.id]}">${prog[p.id] === "done" ? "완료" : "진행 중"}</span>` : "";
+          const inner = `<span class="no">${no}${st}</span><span class="t">${esc(p.title)}</span><span class="c">${rich(p.concept || p.desc || "")}</span>`;
+          return p.ready ? `<li><a href="${ROOT}${p.id}/">${inner}</a></li>` : `<li><div class="soon">${inner.replace('</span><span class="t">', ' · 준비 중</span><span class="t">')}</div></li>`;
+        }).join("") + "</ul></section>";
+    }).join("");
   }
 
   // ---- 꼬리말: 페이지에 <footer id="foot"> 가 있으면 출처를 채움 ----
@@ -548,7 +730,7 @@
   }
 
   window.OmxLab = {
-    ROOT, PROBLEMS, TOOLS, Q, A, B, GRAV, $, deg, rad, smooth, fmt, renderNav, renderList, renderTools, store,
+    ROOT, UNITS, PROBLEMS, TOOLS, find, label, refLinks, Q, A, B, GRAV, $, deg, rad, smooth, fmt, shell, renderHome, store,
     bracket, narrow, boundChip, checkPrediction, logTable, pill, Plot, start,
   };
 })();

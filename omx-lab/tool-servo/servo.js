@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   const $ = (id) => document.getElementById(id);
-  OmxLab.renderNav($("nav"), "tool-servo");
+  OmxLab.shell("tool-servo");
 
   const KGF = 9.80665;          // 1 kgf = 9.80665 N  →  1 kg·cm = 0.0980665 Nm
   const OZIN = 0.00706155;      // 1 oz·in [Nm]

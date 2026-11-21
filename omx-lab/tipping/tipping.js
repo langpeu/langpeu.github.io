@@ -1,4 +1,4 @@
-/* 상황 5 · 넘어짐 — 무게중심과 지지 영역, 빠른 동작의 관성
+/* tipping · 넘어짐 — 무게중심과 지지 영역, 빠른 동작의 관성
  *
  * 모델 변형: link0(베이스)에 freejoint → 바닥에 고정되지 않음. 관절 qpos는 7칸 뒤로 밀림(lab.qadr 사용).
  * 베이스 바닥면 x = −0.06 ~ +0.06 m (충돌 메시 바닥 꼭짓점에서 확인). 무게추는 베이스 질량(link0, 무게중심 x ≈ −0.0144)에 더함.
@@ -9,8 +9,8 @@
   "use strict";
   const { $, A, B, deg, smooth, logTable, pill, bracket, boundChip, narrow } = OmxLab;
   const X_EDGE = 0.06, HOLD = 3, TILT = 3;
-  OmxLab.renderNav($("nav"), "p05-tipping");
-  const box = OmxLab.store("omx-lab-5"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("tipping");
+  const box = OmxLab.store("omx-lab-tipping"), state = box.get(), save = () => box.set(state);
   let lab = null, qa = {}, m0 = 0, truth = { M: 0.5588, xc: 0.0922, xb: -0.0144, w: 0.242 };
   const logs = [];
   const transform = (x) => x.replace('<body name="link0">', '<body name="link0" pos="0 0 0"><freejoint name="base"/>');

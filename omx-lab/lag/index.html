@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>너무 느림·궤적 지연 | 피지컬AI 실험실</title>
+<meta name="description" content="로봇팔이 빠른 궤적을 따라가지 못하는 이유: 관성 M(q)과 토크 한계로 정해지는 최소 이동 시간을 손계산으로 예측하고, 피드포워드 효과를 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>궤적을 늦게 따라옴</h1>
+    <p>계획한 궤적을 늦게 따라오고, 빠른 구간에서 오차가 크게 벌어집니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">joint1 각도 [°] — 계획(점선)과 실제</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 빨리 돌리려면 토크가 필요하다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#s-alpha">0 · 기초 개념: α(알파)·관성 I 읽는 법</a></p>
+        <p class="basics-link">계산을 확인하려면 → <a href="../tool-estimate/#acc">도구 · 가속 토크 어림 계산</a></p>
+        <p>관절을 각가속도 α로 돌리려면 <b>관성 × 가속도</b>만큼 토크가 필요합니다(τ = I·α, 운동방정식의 M(q)·<span class="d2">q</span> 항). 같은 각도를 더 짧은 시간에 가려면 α가 시간의 제곱에 반비례해 커집니다.</p>
+        <p>0에서 Δq만큼 부드러운 코사인 궤적으로 T초 동안 움직이면 가장 큰 가속도는:</p>
+        <div class="formula">α최대 = Δq · π² ÷ (2·T²)<br>필요 토크 I·α최대 ≤ τ한계  →  T최소 = π · √(I·Δq ÷ (2·τ한계))</div>
+        <p><b>피드포워드</b>는 필요한 토크 I·α를 미리 계산해 넣는 방법입니다. PD만 쓰면 오차가 생긴 뒤에야 힘을 내서 늦습니다. 하지만 T최소보다 빠른 궤적은 어떤 제어기로도 따라갈 수 없습니다.</p>
+        <p class="note">joint1(바닥 회전)을 0° → 90°로 돌립니다. 팔은 뻗은 자세, 손끝에 200 g 물체, 모터 한계 1.5 N·m (XL430), PD는 Kp 20, Kd 0.5. 관절 마찰은 끕니다.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: 90°를 가장 빨리 몇 초에 갈 수 있을까?</h2>
+        <div class="given" id="given2">모델을 불러오는 중…</div>
+        <div class="row">
+          <label for="pred-T">내 예측 T최소</label>
+          <input type="number" id="pred-T" step="0.001" min="0" placeholder="0.000">
+          <span class="note">s</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 이동 시간과 피드포워드</h2>
+        <p>이동이 끝난 뒤 1.5초 더 봅니다. 계획과 실제의 최대 차이가 2° 이하면 <span class="pill hold">따라감</span>입니다.</p>
+        <div class="row"><label for="sl-T">이동 시간 T</label><input type="range" id="sl-T" min="0.3" max="2" step="0.02" value="1"><span class="val" id="v-T"></span></div>
+        <div class="row"><label><input type="checkbox" id="cb-ff"> 피드포워드 켜기 (+ I·α 미리 넣기)</label></div>
+        <div class="row"><button id="btn-run" disabled>실행</button></div>
+        <ol class="howto">
+          <li>피드포워드 <b>켬</b>: 따라가는 가장 짧은 T를 찾아 예측 T최소와 비교합니다 (0.05 s 폭).</li>
+          <li>피드포워드 <b>끔</b>: 같은 방법으로 경계를 찾습니다. 얼마나 더 느려야 하나요?</li>
+        </ol>
+        <div class="row" id="bounds"></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th class="n">T</th><th>피드포워드</th><th class="n">최대 오차</th><th class="n">토크 한계에 걸린 시간</th><th>결과</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>정리 퀴즈</h2>
+        <p>T = 0.4초(T최소보다 빠름)로 실행했더니 피드포워드를 켜도 크게 늦습니다. 맞는 해결책은?</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> Kp를 크게 올린다</label>
+          <label><input type="radio" name="q" value="b"> 궤적 시간을 늘리거나(시간 스케일링), 물체를 가볍게 하거나, 팔을 접어 관성을 줄인다</label>
+          <label><input type="radio" name="q" value="c"> 피드포워드 값을 2배로 넣는다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="lag.js"></script>
+</body>
+</html>

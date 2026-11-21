@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>관통·튕김 | 피지컬AI 실험실</title>
+<meta name="description" content="시뮬레이션에서 물체가 테이블을 뚫는 이유: 접촉 강성(time constant)과 충돌 속도로 정해지는 파고듦 깊이를 손계산으로 예측하고 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>물체가 테이블을 뚫고 지나감</h1>
+    <p>손이나 물체가 테이블을 뚫고 들어가거나, 살짝 닿은 물체가 비현실적으로 튕겨 나갑니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">공 바닥면 높이 − 판 윗면 [mm] (음수 = 파고듦)</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 시뮬의 접촉은 '아주 딱딱한 스프링'이다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#t-solref">0 · 기초 개념: 접촉 시간 상수 τ (모터 토크 τ와 다른 것)</a></p>
+        <p>MuJoCo는 두 물체가 <b>조금 겹친 뒤에</b> 밀어내는 힘을 계산합니다. 얼마나 빨리 밀어내는지를 정하는 값이 <b>접촉 시간 상수 τ</b>(solref의 첫 번째 값)입니다. τ가 크면 무른 접촉, 작으면 딱딱한 접촉입니다.</p>
+        <p>속도 v로 부딪힌 물체는 대략 τ 동안 그 속도로 파고든다고 보면 됩니다. 파고든 깊이가 <b>판 두께의 절반 + 공 반지름</b>을 넘으면, 판의 반대쪽으로 밀려 나가 버립니다(관통).</p>
+        <div class="formula">충돌 속도 v = √(2·g·h)<br>파고듦 깊이 ≈ v · τ<br>관통 조건  v · τ > 두께/2 + 반지름</div>
+        <p class="note">로봇 앞 옆쪽(y = 0.25 m)의 높이 10 cm 얇은 판 위로 지름 2 cm, 20 g 공을 떨어뜨립니다. dt = 2 ms로 고정합니다. MuJoCo 문서는 τ를 dt의 2배 이상으로 두라고 권합니다(여기서는 4 ms 이상).</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: 두께 10 mm 판, τ = 4 ms</h2>
+        <div class="given">공 반지름 r = 10 mm, 판 두께 10 mm, τ = 4 ms, g = 9.81 m/s²</div>
+        <p>(1) 30 cm 높이에서 떨어뜨리면 몇 mm 파고들까요?</p>
+        <div class="row">
+          <label for="pred-d">내 예측 깊이</label>
+          <input type="number" id="pred-d" step="0.1" min="0" placeholder="0.0">
+          <span class="note">mm</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <p>(2) 몇 m보다 높은 곳에서 떨어뜨리면 판을 뚫을까요?</p>
+        <div class="row">
+          <label for="pred-h">내 예측 높이</label>
+          <input type="number" id="pred-h" step="0.01" min="0" placeholder="0.00">
+          <span class="note">m</span>
+          <button id="btn-predh">확인</button>
+        </div>
+        <div class="fb" id="fb-predh" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula">(1) v = √(2 × 9.81 × 0.3) = 2.43 m/s → 2.43 × 0.004 = 0.0097 m = <b>9.7 mm</b><br>(2) 두께/2 + r = 5 + 10 = 15 mm → v > 0.015 ÷ 0.004 = 3.75 m/s<br>h > 3.75² ÷ (2 × 9.81) = <b>0.72 m</b></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 높이, 두께, 접촉 강성</h2>
+        <p>공을 떨어뜨리고 1.5초 동안 봅니다. 가장 깊이 파고든 깊이를 재고, 공이 판 아래로 빠지면 <span class="pill fall">관통</span>입니다.</p>
+        <div class="row"><label for="sl-h">떨어뜨리는 높이</label><input type="range" id="sl-h" min="0.02" max="1.5" step="0.01" value="0.3"><span class="val" id="v-h"></span></div>
+        <div class="row"><label for="sel-t">판 두께</label>
+          <select id="sel-t"><option value="0.002">2 mm</option><option value="0.01" selected>10 mm</option><option value="0.02">20 mm</option></select>
+          <label for="sel-tc">접촉 시간 상수 τ</label>
+          <select id="sel-tc"><option value="0.004" selected>4 ms (딱딱)</option><option value="0.01">10 ms</option><option value="0.02">20 ms (MuJoCo 기본, 무름)</option></select></div>
+        <div class="row"><button id="btn-run" disabled>떨어뜨리기</button></div>
+        <ol class="howto">
+          <li>10 mm, τ 4 ms에서 30 cm로 떨어뜨려 2단계 (1)과 비교합니다.</li>
+          <li>높이를 올려 관통이 시작되는 높이를 찾아 (2)와 비교합니다 (0.1 m 폭).</li>
+          <li>τ를 20 ms(무른 접촉)로 바꾸면 같은 높이에서 어떻게 되나요?</li>
+        </ol>
+        <div class="row" id="bounds"></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th class="n">높이</th><th class="n">두께</th><th class="n">τ</th><th class="n">식 v·τ</th><th class="n">잰 깊이</th><th>결과</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>정리 퀴즈</h2>
+        <p>τ를 MuJoCo 기본값 20 ms에서 4 ms로 줄이면 관통이 줄어듭니다. 그럼 τ를 1 ms(dt 2 ms보다 작게)로 더 줄이면?</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 더 딱딱해져서 항상 더 좋아진다</label>
+          <label><input type="radio" name="q" value="b"> dt보다 빠른 반응을 계산할 수 없어 접촉이 불안정해지고, 비현실적으로 튕기거나 떨 수 있다</label>
+          <label><input type="radio" name="q" value="c"> 아무 변화가 없다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+        <p class="note">그래서 얇은 물체나 빠른 물체가 있으면 '접촉을 딱딱하게'와 'dt를 작게'를 함께 조절하고, 충돌 형상은 두께가 있는 단순한 모양(상자, 캡슐)을 씁니다.</p>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="contact.js"></script>
+</body>
+</html>

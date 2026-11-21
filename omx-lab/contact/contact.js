@@ -1,4 +1,4 @@
-/* 상황 8 · 관통·튕김 — 접촉 시간 상수 τ: 파고듦 ≈ v·τ, 관통 조건 v·τ > 두께/2 + r
+/* contact · 관통·튕김 — 접촉 시간 상수 τ: 파고듦 ≈ v·τ, 관통 조건 v·τ > 두께/2 + r
  *
  * 모델 변형: 로봇 옆(y = 0.25 m) 높이 0.10 m의 얇은 판(table)과 반지름 1 cm, 20 g 공(ball).
  * τ는 판(table)의 solref[0]만 바꿈(공은 기본값). dt 2 ms 고정.
@@ -9,8 +9,8 @@
   "use strict";
   const { $, GRAV, logTable, pill } = OmxLab;
   const R = 0.01, TOP0 = 0.10, RUN = 1.5;
-  OmxLab.renderNav($("nav"), "p08-contact");
-  const box = OmxLab.store("omx-lab-8"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("contact");
+  const box = OmxLab.store("omx-lab-contact"), state = box.get(), save = () => box.set(state);
   let lab = null, TG, BQ;
   const logs = [];
   const transform = (x) => x.replace(/<\/worldbody>\s*<\/mujoco>\s*$/,

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>서보 스펙 계산기 | OMX 동역학 실험실</title>
+<title>서보 스펙 계산기 | 피지컬AI 실험실</title>
 <meta name="description" content="서보 스펙의 토크(kg·cm, Nm)와 속도(rpm, sec/60°)를 환산하고, 팔 길이별로 버틸 수 있는 무게와 내 팔에 충분한지 계산합니다. OMX-AI(DYNAMIXEL XL430·XL330)와 SO-ARM(STS3215) 프리셋 포함.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
@@ -12,10 +12,8 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <span class="crumb"><a href="../">OMX 동역학 실험실</a> / 도구</span>
     <h1>도구 · 서보 스펙 계산기</h1>
     <p>스펙의 토크와 속도를 넣으면 단위를 바꿔 주고, 실제로 어느 정도 힘인지 무게로 보여 줍니다. 아래쪽에 내 팔 길이와 무게를 넣으면 충분한지도 판정합니다. 값을 바꾸면 바로 다시 계산됩니다.</p>
-    <nav class="tabs" id="nav" aria-label="상황 선택"></nav>
   </header>
 
   <div class="doc">
@@ -71,7 +69,7 @@
       <p class="note" id="needtxt"></p>
       <div id="bars"></div>
       <p class="note">판정: 연속 사용 토크 ÷ 필요 토크가 1.3배 이상이면 여유, 1~1.3배는 빠듯, 1배 미만은 부족. 어림 계산이므로 정확한 선정은 제조사의 토크-속도 곡선을 확인하세요.</p>
-      <p class="note">실제 OMX 팔에서 확인해 보려면 → <a href="../p01-torque/#c5">상황 1 응용(손끝 최대 물체)</a>, <a href="../p10-payload/">상황 10 페이로드</a></p>
+      <p class="note">실제 OMX 팔에서 확인해 보려면 → <a data-ref="torque" href="../torque/#c5">상황 {n} 응용(손끝 최대 물체)</a>, <a data-ref="payload" href="../payload/">상황 {n} 페이로드</a></p>
     </article>
 
     <article class="card" id="read">
@@ -109,6 +107,7 @@
 </div>
 <footer class="foot" id="foot"></footer>
 <script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
 <script src="servo.js"></script>
 </body>
 </html>

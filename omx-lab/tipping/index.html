@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>넘어짐 | 피지컬AI 실험실</title>
+<meta name="description" content="바닥에 고정하지 않은 OMX가 팔을 뻗을 때 넘어지는 이유: 무게중심과 지지 영역, 빠른 동작의 관성 효과를 손계산과 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>팔을 뻗으면 로봇이 넘어짐</h1>
+    <p>바닥에 나사로 고정하지 않은 로봇이 팔을 뻗다가 앞으로 기울어지고, 빠르게 움직일수록 더 쉽게 넘어집니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">베이스 기울기 [°]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 무게중심이 받침 밖으로 나가면 넘어진다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#t-com">0 · 기초 개념: 무게중심과 지지 영역</a></p>
+        <p>가만히 있는 물체는 <b>전체 무게중심(CoM)을 바닥에 내린 점</b>이 바닥과 닿는 면(지지 영역) 안에 있어야 버팁니다. 앞쪽 모서리를 축으로 생각하면, 모서리 앞쪽 무게가 만드는 회전력이 뒤쪽 무게보다 크면 넘어집니다.</p>
+        <div class="formula">Σ mᵢ · (xᵢ − x모서리) > 0  →  앞으로 넘어짐</div>
+        <p>베이스에 무게추(m추)를 더하면 뒤쪽 회전력이 커집니다. 무게추 위치를 x추라 하면 필요한 최소 무게는:</p>
+        <div class="formula">m추 ≥ M · (x무게중심 − x모서리) ÷ (x모서리 − x추)</div>
+        <p>움직이는 중에는 링크를 가속하는 힘까지 바닥이 받쳐야 합니다. 그래서 같은 자세라도 <b>빠르게</b> 뻗으면 더 쉽게 넘어집니다(ZMP 개념).</p>
+        <p class="note">이 상황에서는 OMX 베이스를 바닥에 고정하지 않았습니다(free joint). 베이스 바닥면은 앞뒤 12 cm (x = −0.06 ~ +0.06 m)입니다. 실제 OMX도 고정하지 않으면 이렇게 넘어집니다.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: 천천히 뻗을 때 베이스에 몇 kg을 더해야 버틸까?</h2>
+        <div class="given" id="given2">모델을 불러오는 중…</div>
+        <div class="row">
+          <label for="pred-w">내 예측 무게추</label>
+          <input type="number" id="pred-w" step="0.001" min="0" placeholder="0.000">
+          <span class="note">kg</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 무게추와 동작 속도</h2>
+        <p>팔을 세운 자세에서 뻗은 자세(joint2 +80.2°, joint3 −80.2°)로 움직인 뒤 3초 더 봅니다. 베이스가 3° 넘게 기울면 <span class="pill fall">넘어짐</span>입니다. 3D 화면의 주황 점이 전체 무게중심입니다.</p>
+        <div class="row"><label for="sl-w">베이스 무게추</label><input type="range" id="sl-w" min="0" max="0.8" step="0.01" value="0"><span class="val" id="v-w"></span></div>
+        <div class="row"><label for="sel-T">뻗는 시간</label>
+          <select id="sel-T"><option value="5">5초 (아주 천천히)</option><option value="0.8">0.8초</option><option value="0.4">0.4초 (빠르게)</option></select></div>
+        <div class="row"><button id="btn-run" disabled>뻗기</button></div>
+        <ol class="howto">
+          <li>무게추 0으로 천천히(5초) 뻗어 봅니다 → 넘어지나요?</li>
+          <li>천천히(5초)일 때 버티는 최소 무게추를 0.02 kg 폭까지 찾아 예측과 비교합니다.</li>
+          <li>같은 무게추로 0.4초에 빠르게 뻗어 봅니다. 빠를 때의 경계도 찾아보세요.</li>
+        </ol>
+        <div class="row" id="bounds"></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th class="n">무게추</th><th class="n">뻗는 시간</th><th class="n">최대 기울기</th><th>결과</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>확인: 왜 빠르면 더 무거운 추가 필요할까?</h2>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 빠르게 움직이면 팔의 질량이 늘어나기 때문에</label>
+          <label><input type="radio" name="q" value="b"> 팔을 앞으로 가속하는 힘의 반작용이 베이스를 앞으로 밀고, 멈출 때도 팔이 앞으로 계속 가려 해서 받침점(ZMP)이 무게중심보다 더 앞으로 가기 때문에</label>
+          <label><input type="radio" name="q" value="c"> 빠르게 움직이면 바닥 마찰이 줄기 때문에</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="tipping.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/* 상황 2 · 떨림·진동 — PD 게인, 감쇠비 ζ, 제어 지연
+/* vibration · 떨림·진동 — PD 게인, 감쇠비 ζ, 제어 지연
  *
  * joint1(바닥 회전, 중력 영향 없음)을 토크 모터로 바꿔 PD로 10° 스텝을 따라가게 합니다.
  * 팔은 뻗은 자세(joint2 +80.2°, joint3 −80.2°)로 고정, 관절 마찰 끔.
@@ -10,8 +10,8 @@
   const { $, Q, A, deg, rad, fmt, logTable, pill } = OmxLab;
   const REACH = { [Q.j2]: 1.4, [Q.j3]: -1.4 };
   const STEP = rad(10), T0 = 0.2, RUN = 3.0;
-  OmxLab.renderNav($("nav"), "p02-vibration");
-  const box = OmxLab.store("omx-lab-2"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("vibration");
+  const box = OmxLab.store("omx-lab-vibration"), state = box.get(), save = () => box.set(state);
   let lab = null, I = 0.0206, b = 0.2;
   const logs = [];
   const zeta = (kp, kd) => (kd + b) / (2 * Math.sqrt(kp * I));

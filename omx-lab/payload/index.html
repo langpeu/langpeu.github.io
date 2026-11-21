@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>물체를 들면 동작 이상 | 피지컬AI 실험실</title>
+<meta name="description" content="손끝 물체 무게가 관절마다 다른 토크로 퍼지는 방식(Jᵀ·F)을 손계산으로 예측하고, 어느 관절이 먼저 한계에 닿는지 MuJoCo로 확인합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>물체를 들면 한 관절이 먼저 무너짐</h1>
+    <p>빈손일 때는 괜찮다가 물체를 들면 처지거나, 한 관절만 버티지 못합니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">관절별 각도 오차 [°]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 손끝 무게는 모든 관절에 퍼진다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../basics/#s-j">0 · 기초 개념: Jᵀ·F 읽는 법</a></p>
+        <p class="basics-link">계산을 확인하려면 → <a href="../tool-servo/">도구 · 서보 스펙 계산기</a></p>
+        <p>손끝에 무게 m·g가 걸리면, 그 힘이 <b>각 관절에</b> 토크를 만듭니다. 크기는 그 관절축에서 손끝까지의 <b>수평거리</b>로 정해집니다. 이것을 식으로 쓴 것이 외력 항 Jᵀ·F입니다.</p>
+        <div class="formula">관절 i에 필요한 토크 = gᵢ(q) + m · g · xᵢ</div>
+        <p>관절마다 원래 버티던 토크 gᵢ, 거리 xᵢ, 모터 한계가 다르기 때문에, 무게를 늘리면 <b>어느 한 관절이 먼저</b> 한계에 닿습니다.</p>
+        <div class="formula">관절 i가 버티는 최대 무게  mᵢ = (한계ᵢ − gᵢ) ÷ (g · xᵢ)</div>
+        <p class="note">OMX는 어깨·팔꿈치(joint2, 3)에 XL430(1.5 N·m), 손목(joint4)에 더 작은 XL330(0.52 N·m)을 씁니다. 관절은 ROBOTIS 모델 그대로의 위치 제어(Kp 50)로 버팁니다. 관절 마찰은 끕니다.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>예측: '접은 자세'에서 어느 관절이 먼저, 몇 g에서?</h2>
+        <p>접은 자세 = 위팔 수직, 아래팔 수직 아래로, 손목 수평 (joint2 0°, joint3 +90°, joint4 −90°)</p>
+        <div class="tblwrap"><table>
+          <thead><tr><th>관절</th><th class="n">모터 한계</th><th class="n">빈손 gᵢ</th><th class="n">손끝까지 xᵢ</th><th class="n">mᵢ</th></tr></thead>
+          <tbody id="jtbl"><tr><td colspan="5" class="note">모델을 불러오면 채워집니다.</td></tr></tbody>
+        </table></div>
+        <div class="row">
+          <label for="pred-j">먼저 무너지는 관절</label>
+          <select id="pred-j"><option value="">고르기</option><option value="joint2">joint2 (어깨)</option><option value="joint3">joint3 (팔꿈치)</option><option value="joint4">joint4 (손목)</option></select>
+          <label for="pred-m">무게</label>
+          <input type="number" id="pred-m" step="1" min="0" placeholder="0">
+          <span class="note">g</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <details><summary>풀이 보기</summary><div class="formula" id="sol"></div></details>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>실험: 자세와 무게</h2>
+        <p>고른 자세에서 시작해 3초 동안 버팁니다. 어느 관절이든 목표에서 3° 넘게 벗어나면 <span class="pill fall">무너짐</span>이고, 가장 많이 벗어난 관절을 표시합니다.</p>
+        <div class="row"><label for="sel-pose">자세</label>
+          <select id="sel-pose"><option value="fold" selected>접은 자세 (위팔 수직, 손목 수평)</option><option value="reach" data-ref="torque">뻗은 자세 (상황 {n})</option></select></div>
+        <div class="row"><label for="sl-m">손끝 물체</label><input type="range" id="sl-m" min="0" max="500" step="10" value="200"><span class="val" id="v-m"></span></div>
+        <div class="row"><button id="btn-run" disabled>들고 버티기</button></div>
+        <ol class="howto">
+          <li>접은 자세에서 무게를 올려 무너지는 경계(20 g 폭)와 무너지는 관절을 찾아 예측과 비교합니다.</li>
+          <li>뻗은 자세로 바꿔 같은 실험을 합니다. 이번에는 어느 관절이 먼저인가요?</li>
+        </ol>
+        <div class="row" id="bounds"></div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th>자세</th><th class="n">물체</th><th class="n">최대 오차 j2 / j3 / j4</th><th>결과</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>정리 퀴즈</h2>
+        <p>무거운 물체를 들어야 하는데 손목이 먼저 무너집니다. 가장 알맞은 방법은?</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 어깨 모터를 더 큰 것으로 바꾼다</label>
+          <label><input type="radio" name="q" value="b"> 손목에서 물체까지 수평거리가 짧아지도록 자세를 바꾸거나(손목을 세움), 손목 모터를 키운다</label>
+          <label><input type="radio" name="q" value="c"> 모든 관절의 Kp를 올린다</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="../common/calc.js"></script>
+<script src="payload.js"></script>
+</body>
+</html>

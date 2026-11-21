@@ -1,16 +1,16 @@
-/* 상황 6 · Sim-to-Real 갭 — 모델 파라미터 오차와 시스템 식별
+/* sim2real · Sim-to-Real 갭 — 모델 파라미터 오차와 시스템 식별
  *
  * '실물 로봇' = 손끝에 숨은 무게(40~100 g, 브라우저마다 무작위, localStorage에 저장)가 붙은 같은 모델.
- * 제어기는 상황 3과 같음: joint2 토크 PD(Kp 10, Kd 0.3) + 모델 g(q). 모델 g(q)는 '보정 무게'만 손끝에 넣어 계산.
- * 처짐 e ≈ (숨은 − 보정)·g·x손끝 ÷ Kp (상황 3에서 확인: 100 g → 2.25°)
+ * 제어기는 sag(처짐) 상황과 같음: joint2 토크 PD(Kp 10, Kd 0.3) + 모델 g(q). 모델 g(q)는 '보정 무게'만 손끝에 넣어 계산.
+ * 처짐 e ≈ (숨은 − 보정)·g·x손끝 ÷ Kp (sag 상황에서 확인: 100 g → 2.25°)
  */
 (() => {
   "use strict";
   const { $, Q, A, B, GRAV, deg, logTable } = OmxLab;
   const REACH = { [Q.j2]: 1.4, [Q.j3]: -1.4 };
   const RUN = 4.0, KP = 10, KD = 0.3;
-  OmxLab.renderNav($("nav"), "p06-sim2real");
-  const box = OmxLab.store("omx-lab-6"), state = box.get(), save = () => box.set(state);
+  OmxLab.shell("sim2real");
+  const box = OmxLab.store("omx-lab-sim2real"), state = box.get(), save = () => box.set(state);
   const draw = () => 40 + Math.floor(Math.random() * 61);
   if (!state.hidden) { state.hidden = draw(); save(); }
   let lab = null, d2 = null, xee = 0.401;
