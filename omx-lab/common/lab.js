@@ -18,6 +18,7 @@
 
   // ---- 문제 목록: 새 문제를 만들면 여기에 한 줄 추가 ----
   const PROBLEMS = [
+    { n: 0, id: "p00-basics", title: "기초 개념", concept: "식 하나, 기호 읽는 법, 단위, 용어 사전 — 먼저 읽기", basics: true },
     { n: 1, id: "p01-torque", title: "아예 안 움직임", concept: "중력 토크 g(q)와 모터 최대 토크" },
     { n: 2, id: "p02-vibration", title: "떨림·진동", concept: "PD 게인, 감쇠비 ζ, 제어 지연" },
     { n: 3, id: "p03-sag", title: "목표까지 못 감·처짐", concept: "중력보상 누락: 처짐 ≈ g(q) ÷ Kp" },
@@ -28,6 +29,11 @@
     { n: 8, id: "p08-contact", title: "관통·튕김", concept: "접촉 강성: 파고듦 ≈ v·τ" },
     { n: 9, id: "p09-lag", title: "너무 느림·궤적 지연", concept: "토크 한계, 관성 M(q), 피드포워드" },
     { n: 10, id: "p10-payload", title: "물체를 들면 동작 이상", concept: "페이로드 하중이 관절마다 퍼지는 방식 Jᵀ·F" },
+  ];
+  // 도구: 문제가 아니라 문제를 풀 때 옆에 두고 쓰는 계산기
+  const TOOLS = [
+    { id: "tool-servo", title: "서보 스펙 계산기", desc: "토크·속도 단위 환산, 팔 길이별 버티는 무게, 내 팔에 충분한지 판정" },
+    { id: "tool-estimate", title: "단위 변환·어림 계산", desc: "중력 토크, 가속 토크, 파지력 어림 + 단위 변환기" },
   ];
 
   // ---- ROBOTIS omx.xml 인덱스 (팔이 바닥에 고정된 기본 모델, MuJoCo 3.17.0으로 확인) ----
@@ -45,14 +51,19 @@
   // ---- 탭 / 목록 ----
   function renderNav(el, currentId) {
     el.innerHTML = PROBLEMS.map((p) => {
-      if (p.id === currentId) return `<span class="tab on" aria-current="page">상황 ${p.n} · ${p.title}</span>`;
+      if (p.id === currentId) return `<span class="tab on" aria-current="page">${p.basics ? "" : "상황 "}${p.n} · ${p.title}</span>`;
       if (p.id) return `<a class="tab" href="${ROOT}${p.id}/">${p.n} ${p.title}</a>`;
       return `<span class="tab" aria-disabled="true">${p.n} ${p.title}</span>`;
-    }).join("");
+    }).join("") + `<span class="tabsep" aria-hidden="true"></span>` + TOOLS.map((t) => t.id === currentId
+      ? `<span class="tab tool on" aria-current="page">도구 · ${t.title}</span>`
+      : `<a class="tab tool" href="${ROOT}${t.id}/">도구 · ${t.title}</a>`).join("");
+  }
+  function renderTools(el) {
+    el.innerHTML = TOOLS.map((t) => `<li><a href="${ROOT}${t.id}/"><span class="no">도구</span><span class="t">${t.title}</span><span class="c">${t.desc}</span></a></li>`).join("");
   }
   function renderList(el) {
     el.innerHTML = PROBLEMS.map((p) => p.id
-      ? `<li><a href="${ROOT}${p.id}/"><span class="no">상황 ${p.n}</span><span class="t">${p.title}</span><span class="c">${p.concept || ""}</span></a></li>`
+      ? `<li${p.basics ? ' class="basics"' : ""}><a href="${ROOT}${p.id}/"><span class="no">${p.basics ? "0 · 처음이면 여기부터" : `상황 ${p.n}`}</span><span class="t">${p.title}</span><span class="c">${p.concept || ""}</span></a></li>`
       : `<li><div class="soon"><span class="no">상황 ${p.n}</span><span class="t">${p.title}</span><span class="c">준비 중</span></div></li>`).join("");
   }
 
@@ -537,7 +548,7 @@
   }
 
   window.OmxLab = {
-    ROOT, PROBLEMS, Q, A, B, GRAV, $, deg, rad, smooth, fmt, renderNav, renderList, store,
+    ROOT, PROBLEMS, TOOLS, Q, A, B, GRAV, $, deg, rad, smooth, fmt, renderNav, renderList, renderTools, store,
     bracket, narrow, boundChip, checkPrediction, logTable, pill, Plot, start,
   };
 })();

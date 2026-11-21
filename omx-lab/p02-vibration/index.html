@@ -36,8 +36,9 @@
     <section class="steps">
       <article class="card" id="c1">
         <h2><span class="num">1</span>개념: 관절 하나 = 스프링 + 브레이크 + 질량</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../p00-basics/#s-zeta">0 · 기초 개념: Kp·Kd·ζ(제타) 읽는 법</a></p>
         <p>PD 제어기는 관절에 <b>스프링(Kp)</b>과 <b>브레이크(Kd)</b>를 달아 주는 것과 같습니다. 관절이 돌려야 하는 <b>관성 I</b>가 질량 역할을 합니다.</p>
-        <div class="formula">τ = Kp·(q목표 − q) − Kd·q̇</div>
+        <div class="formula">τ = Kp·(q목표 − q) − Kd·<span class="d1">q</span></div>
         <p>이 셋이 정하는 값이 <b>감쇠비 ζ</b>입니다. ζ가 1보다 작으면 목표를 지나쳤다가(오버슈트) 돌아오고, 작을수록 더 많이 지나치고 오래 흔들립니다.</p>
         <div class="formula">ζ = (Kd + b) / (2·√(Kp·I))<br>오버슈트 = e<sup>−π·ζ/√(1−ζ²)</sup> × 100 %</div>
         <p class="note">b는 관절 자체의 점성 감쇠(ROBOTIS 모델 값 0.2 N·m·s/rad)입니다. 중력이 영향을 주지 않도록 바닥에서 도는 joint1로 실험합니다. 팔은 앞으로 뻗은 자세로 고정하고, 관절 마찰은 끕니다.</p>

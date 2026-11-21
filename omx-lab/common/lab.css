@@ -157,3 +157,78 @@ select { font: 600 0.9rem var(--font-body); padding: 6px 8px; border: 1px solid 
   border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 0 6px; border-radius: 4px; line-height: 1.5; }
 .jlabel.below { transform: translate(8px, 70%); }   /* joint4와 겹치지 않게 아래로 */
 .jtoggle { position: absolute; left: 10px; bottom: 8px; font-size: 0.75rem; padding: 3px 9px; background: color-mix(in srgb, var(--panel) 85%, transparent); }
+
+/* 0 · 기초 개념 페이지 (시뮬레이션 없는 한 단 문서) */
+.doc { display: flex; flex-direction: column; gap: 14px; max-width: 920px; }
+.doc h3 { margin: 6px 0 0; font-family: var(--font-head); font-size: 1rem; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.88rem; }
+.toc a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.toc a:hover { text-decoration: underline; }
+.doc .card { scroll-margin-top: 12px; }
+.formula.eqn { font-size: clamp(0.95rem, 3.4vw, 1.3rem); text-align: center; padding: 14px 12px; }
+.say { color: var(--muted); font-size: 0.86rem; }
+table.gloss td { white-space: normal; vertical-align: top; min-width: 5.5em; }
+table.gloss td.sym { font: 600 0.95rem var(--font-mono); white-space: nowrap; min-width: 0; }
+table.gloss td.go { white-space: nowrap; min-width: 0; }
+table.gloss td.go a { display: inline-block; min-width: 1.7em; text-align: center; margin: 0 2px 2px 0; padding: 0 5px; border: 1px solid var(--line);
+  border-radius: 999px; color: var(--accent); text-decoration: none; font: 600 0.8rem var(--font-mono); }
+table.gloss td.go a:hover { border-color: var(--accent); }
+table.gloss tr:target td { background: color-mix(in srgb, var(--gravity) 14%, transparent); }
+.warn { color: var(--gravity); }
+a.btn { display: inline-block; font: 600 0.9rem var(--font-body); padding: 7px 14px; border-radius: 7px; background: var(--ink); color: var(--bg); text-decoration: none; }
+a.btn:focus-visible, .toc a:focus-visible, table.gloss td.go a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.plist li.basics { grid-column: 1 / -1; }
+.plist li.basics a { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--panel)); }
+.plist li.basics .no { color: var(--accent); }
+.basics-link { font-size: 0.86rem; color: var(--muted); }
+.basics-link a { color: var(--accent); }
+
+/* q̇, q̈: 결합 점(U+0307/0308)이 글꼴마다 옆으로 밀려 찍혀서 점을 직접 그림. <span class="d1">q</span> */
+.d1, .d2 { position: relative; display: inline-block; line-height: 1; }
+.d1::after, .d2::after { content: ""; position: absolute; top: 0.08em; left: 50%; width: 0.15em; height: 0.15em; margin-left: -0.075em;
+  border-radius: 50%; background: currentColor; }
+.d2::after { margin-left: -0.215em; box-shadow: 0.28em 0 0 currentColor; }
+@media (max-width: 600px) {   /* 휴대폰: 용어 표는 행마다 한 덩어리로 쌓음 */
+  table.gloss thead { display: none; }
+  table.gloss tr { display: block; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  table.gloss td { display: block; border: 0; padding: 1px 4px; min-width: 0; }
+  table.gloss td.sym { font-size: 1.05rem; }
+}
+
+/* 도구 페이지 (계산기) */
+:root { --warn: #b45309; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --warn: #fbbf24; } }
+:root[data-theme="dark"] { --warn: #fbbf24; }
+.tabsep { width: 1px; align-self: stretch; background: var(--line); margin: 0 4px; }
+.tab.tool { border-style: dashed; }
+.tab.tool.on { border-style: solid; }
+h2.sect { font-family: var(--font-head); font-size: 1.2rem; margin: 10px 0 0; }
+.sectnote { margin: -12px 0 0; color: var(--muted); font-size: 0.9rem; }
+.plist.tools a { border-style: dashed; }
+.plist.tools .no { color: var(--accent); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.presets button { font-size: 0.82rem; padding: 5px 11px; border-radius: 999px; }
+.presets button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field input[type="number"] { width: 100%; }
+.row.tight { flex-wrap: nowrap; gap: 6px; }
+.row.tight input[type="number"] { flex: 1 1 auto; min-width: 0; width: auto; }
+.hint { font-size: 0.78rem; color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 8px; }
+.kpi { background: var(--soft); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; }
+.kpi .v { font: 600 1.15rem var(--font-mono); font-variant-numeric: tabular-nums; }
+.kpi .k { font-size: 0.76rem; color: var(--muted); }
+tr.mine td { background: var(--soft); font-weight: 600; }
+tr.si td:first-child { font-weight: 700; }
+.verdict { font: 700 1.1rem var(--font-head); color: var(--muted); }
+.verdict.good { color: var(--good); } .verdict.warn { color: var(--warn); } .verdict.bad { color: var(--bad); }
+.vbar { display: flex; flex-direction: column; gap: 3px; margin: 4px 0; }
+.vbar .vl { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); }
+.vbar .vt { height: 10px; background: var(--soft); border-radius: 5px; overflow: hidden; }
+.vbar .vt span { display: block; height: 100%; border-radius: 5px; }
+.vbar .need { background: var(--accent); } .vbar .use { background: var(--good); } .vbar .stall { background: var(--muted); opacity: 0.6; }
+.result { background: var(--soft); border-radius: 8px; padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.result .big { font: 700 1.3rem var(--font-mono); font-variant-numeric: tabular-nums; }
+.result .unit { color: var(--muted); font-size: 0.9rem; }
+.result .calc { flex-basis: 100%; font: 0.82rem var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }

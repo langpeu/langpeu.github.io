@@ -13,7 +13,9 @@ common/lab.css        공통 디자인
 common/lab.js         공통 코드: 문제 목록, MuJoCo 불러오기, 3D, 계기판, 경계 계산
 lib/                  mujoco.js/.wasm (MuJoCo 3.17.0), three.js r128
 model/                omx_lab.xml + meshes/*.stl (ROBOTIS 원본에서 생성)
+p00-basics/           0 · 기초 개념: 운동방정식, 기호 읽는 법, 단위, 용어 사전 (시뮬레이션 없음)
 p01-torque/ … p10-payload/   상황 1~10: index.html(내용) + pNN.js(이 문제의 실험)
+tool-servo/ tool-estimate/   도구: 서보 스펙 계산기, 단위 변환·어림 계산 (common/lab.js 의 TOOLS)
 tools/build_xml.py    model/ 을 ROBOTIS 원본에서 다시 만들기
 ```
 

@@ -36,6 +36,7 @@
     <section class="steps">
       <article class="card" id="c1">
         <h2><span class="num">1</span>개념: 계산 간격 dt가 진동보다 느리면 터진다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../p00-basics/#s-omega">0 · 기초 개념: ω(오메가)·dt 읽는 법</a></p>
         <p>시뮬레이터는 dt마다 '지금 힘으로 dt 뒤 위치'를 계산합니다. 스프링이 딱딱하고(K↑) 가벼울수록(I↓) 빠르게 진동하는데, dt가 그 진동을 따라가지 못하면 계산할 때마다 에너지가 커져 발산합니다.</p>
         <div class="formula">고유 진동수 ω = √(K ÷ I)  [rad/s]<br>오일러 적분 안정 조건  dt &lt; 2 ÷ ω</div>
         <p>RK4 같은 고급 적분기는 한계가 조금 더 넓지만(약 2.8 ÷ ω), 결국 dt가 크면 똑같이 터집니다.</p>

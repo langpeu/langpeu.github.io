@@ -16,9 +16,12 @@
     <p>OMX-AI 팔로워 팔(OMX-F)이 이상하게 움직이는 상황을 하나씩 골라, <b>손으로 예측 → 브라우저 속 MuJoCo 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인이 되는 동역학 개념을 익힙니다. 설치 없이 브라우저에서 바로 실행됩니다.</p>
   </header>
   <ul class="plist" id="plist" aria-label="상황 목록"></ul>
+  <h2 class="sect">도구</h2>
+  <p class="sectnote">문제를 풀 때나 직접 로봇팔을 만들 때 옆에 두고 쓰는 계산기입니다.</p>
+  <ul class="plist tools" id="tlist" aria-label="도구 목록"></ul>
 </div>
 <footer class="foot" id="foot"></footer>
 <script src="common/lab.js"></script>
-<script>OmxLab.renderList(document.getElementById("plist"));</script>
+<script>OmxLab.renderList(document.getElementById("plist")); OmxLab.renderTools(document.getElementById("tlist"));</script>
 </body>
 </html>

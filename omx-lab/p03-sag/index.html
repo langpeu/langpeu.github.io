@@ -36,10 +36,11 @@
     <section class="steps">
       <article class="card" id="c1">
         <h2><span class="num">1</span>개념: PD만 쓰면 중력만큼 처진다</h2>
+        <p class="basics-link">기호가 낯설면 → <a href="../p00-basics/#t-gcomp">0 · 기초 개념: 중력보상과 Kp 단위</a></p>
         <p>PD 제어기는 <b>오차가 있어야</b> 힘을 냅니다. 팔이 멈춘 상태에서는 속도가 0이라 Kd 항이 없고, 스프링 힘 Kp·e가 중력 토크 g(q)와 같아지는 곳에서 멈춥니다.</p>
         <div class="formula">Kp · e = g(q)  →  처짐 e ≈ g(q) ÷ Kp  [rad]</div>
         <p><b>중력보상</b>은 모델로 계산한 g(q)를 처음부터 더해 주는 방법입니다. 그러면 스프링은 중력을 버틸 필요가 없어 처짐이 0이 됩니다.</p>
-        <div class="formula">τ = Kp·(q목표 − q) − Kd·q̇ + g(q)</div>
+        <div class="formula">τ = Kp·(q목표 − q) − Kd·<span class="d1">q</span> + g(q)</div>
         <p class="note">팔을 뻗은 자세(joint2 +80.2°, joint3 −80.2°)에서 joint2만 이 제어기로 버팁니다. 관절 마찰은 끄고 봅니다(마찰이 있으면 그 근처 어딘가에서 멈춰 결과가 흩어집니다).</p>
       </article>
 
