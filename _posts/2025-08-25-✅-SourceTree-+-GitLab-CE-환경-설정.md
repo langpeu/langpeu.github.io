@@ -15,7 +15,7 @@ categories: [DevOps, ]
 
 1. 로컬에서 키 생성
 
-```plain text
+```text
 ssh-keygen -t ed25519 -C "you@example.com"
 ```
 
@@ -33,7 +33,7 @@ ssh-keygen -t ed25519 -C "you@example.com"
 ~/.ssh/config 파일 생성/수정:
 
 
-```plain text
+```text
 Host git.xx.com
   HostName git.xx.com
   User git
@@ -52,7 +52,7 @@ Host git.xx.com
 ### **3. 연결 테스트**
 
 
-```plain text
+```text
 ssh -T git@git.xx.com
 ```
 
@@ -60,7 +60,7 @@ ssh -T git@git.xx.com
 → 성공 시:
 
 
-```plain text
+```text
 Welcome to GitLab, @username!
 ```
 
@@ -73,7 +73,7 @@ Welcome to GitLab, @username!
 
 1. Clone (SSH 주소 사용)
 
-```plain text
+```text
 git clone git@git.xx.com:username/bitapi.git
 ```
 

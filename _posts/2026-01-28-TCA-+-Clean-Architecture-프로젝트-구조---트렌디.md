@@ -235,7 +235,7 @@ struct LoginFeature {
 ### 7. 데이터 흐름
 
 
-```plain text
+```text
 Feature
    ↓ (Entity)
 Service (Repository + UseCase 역할)

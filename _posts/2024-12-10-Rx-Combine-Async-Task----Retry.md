@@ -139,7 +139,7 @@ TodosAPI.fetchTodosWithObservable(page: 800)
 
 
 ```swift
-var requestCount: Int = 1
+        var requestCount: Int = 1
         var retryCount: Int = 3
         
         TodosAPI.fetchTodosWithObservable(page: 800)
@@ -508,7 +508,7 @@ TodosAPI.fetchTodosWithPublisher(page: 800)
 
 
 ```swift
-let retryCount: Int = 3
+        let retryCount: Int = 3
         
         Task {
 	          //횟수

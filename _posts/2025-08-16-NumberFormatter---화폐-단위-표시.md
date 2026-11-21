@@ -8,7 +8,7 @@ categories: [Swift, ]
 
 
 ```swift
-var moneyString: String {
+ var moneyString: String {
         let formatter: NumberFormatter = NumberFormatter()
         formatter.locale = .current
         formatter.numberStyle = .decimal

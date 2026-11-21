@@ -23,7 +23,7 @@ RxCombine 라이브러리 사용
 
 
 ```swift
-TodosAPI.fetchTodosWithPublisher(page: 1)
+        TodosAPI.fetchTodosWithPublisher(page: 1)
             .asObservable()
             .subscribe (onNext: {
                 print("onNext \($0)")

@@ -259,7 +259,7 @@ struct CovidCountriesWrapper: Codable {
 
 
 ```swift
-func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
+ func fetchWebData(completion: @escaping (Result<[ModelObject], Error>) -> ()) {
     // 1. - endpoint URL string
     let endpointURLString = "https://........"
     
