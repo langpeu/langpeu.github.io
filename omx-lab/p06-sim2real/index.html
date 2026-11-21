@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상황 6 · Sim-to-Real 갭 | OMX 동역학 실험실</title>
+<meta name="description" content="시뮬레이션에서 맞춘 제어가 실물에서 틀어지는 이유: 모델 파라미터 오차를 실험으로 찾아내는 시스템 식별을 MuJoCo로 연습합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<link rel="stylesheet" href="../common/lab.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="crumb"><a href="../">OMX 동역학 실험실</a> / 상황 6</span>
+    <h1>상황 6 · 시뮬에선 되는데 실물에선 처짐</h1>
+    <p>시뮬레이션에서 잘 되던 제어가 실물에서는 처지거나 느려집니다. <b>손으로 예측 → 시뮬레이션으로 실험 → 예측과 비교</b> 순서로 원인을 확인합니다.</p>
+    <nav class="tabs" id="nav" aria-label="상황 선택"></nav>
+  </header>
+
+  <div class="grid">
+    <section class="simcol" aria-label="시뮬레이션">
+      <div class="viewport" id="viewport">
+        <div class="overlay" id="overlay">MuJoCo 엔진과 OMX 모델을 불러오는 중입니다… (약 17 MB)</div>
+        <span class="vlabel" id="simclock">t = 0.00 s</span>
+        <span class="runstate" id="runstate">준비</span>
+      </div>
+      <div class="gauges" id="gauge"></div>
+      <div class="plot">
+        <span class="ptitle" id="plot-title">joint2 처짐 [°]</span>
+        <canvas id="plot" aria-label="시간 그래프"></canvas>
+        <div class="legend" id="plot-legend"></div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <article class="card" id="c1">
+        <h2><span class="num">1</span>개념: 시뮬과 실물의 숫자가 다르다</h2>
+        <p>시뮬레이션은 <b>모델에 적힌 질량·마찰·지연</b>으로 계산합니다. 실제 로봇에 케이블, 카메라, 다른 그리퍼가 붙어 있으면 그 차이만큼 결과가 달라집니다.</p>
+        <p>해결 순서는 두 가지입니다.</p>
+        <ol class="howto">
+          <li><b>시스템 식별</b>: 실물에서 간단한 실험을 해서, 모델과 다른 값을 숫자로 알아낸다.</li>
+          <li><b>도메인 랜덤화</b>: 정확히 모르는 값은 범위를 정해 시뮬에서 여러 값으로 학습·검증한다. 이때 범위가 실제 값을 포함해야 한다.</li>
+        </ol>
+        <p class="note">이 페이지의 '실물 로봇'은 실제 로봇 대신 쓰는 시뮬레이션입니다. 손끝에 모델에 없는 무게가 붙어 있는데, 그 값은 브라우저마다 무작위로 정해지고 숨겨져 있습니다. 상황 3의 중력보상 제어기(Kp 10, + 모델 g(q))를 그대로 씁니다.</p>
+      </article>
+
+      <article class="card" id="c2">
+        <h2><span class="num">2</span>실험: 시뮬과 '실물'에서 같은 제어기 돌리기</h2>
+        <p>팔을 뻗은 자세에서 4초 버틴 뒤 joint2 처짐을 잽니다.</p>
+        <div class="row">
+          <button id="btn-sim" disabled>시뮬 모델로 실행</button>
+          <button id="btn-real" disabled>'실물 로봇'으로 실행</button>
+        </div>
+        <div class="tblwrap"><table>
+          <thead><tr><th class="n">#</th><th>대상</th><th class="n">모델 보정 무게</th><th class="n">처짐</th></tr></thead>
+          <tbody id="log"></tbody>
+        </table></div>
+      </article>
+
+      <article class="card" id="c3">
+        <h2><span class="num">3</span>예측(식별): 숨은 무게는 몇 g일까?</h2>
+        <p>상황 3에서 본 식을 거꾸로 씁니다. 실물에서 잰 처짐 e로부터 모델에 없는 무게를 구합니다.</p>
+        <div class="formula">e ≈ m · g · x손끝 ÷ Kp   →   m ≈ Kp · e ÷ (g · x손끝)   (e는 rad)</div>
+        <div class="given" id="given3">모델을 불러오는 중…</div>
+        <div class="row">
+          <label for="pred-m">내 추정 숨은 무게</label>
+          <input type="number" id="pred-m" step="1" min="0" placeholder="0">
+          <span class="note">g</span>
+          <button id="btn-pred">확인</button>
+        </div>
+        <div class="fb" id="fb-pred" hidden></div>
+        <p class="note">'실물 로봇'으로 한 번 이상 실행해야 확인할 수 있습니다.</p>
+      </article>
+
+      <article class="card" id="c4">
+        <h2><span class="num">4</span>모델 보정: 추정한 무게를 모델에 넣고 다시 실물로</h2>
+        <p>추정한 무게를 시뮬 모델의 손끝에 더해 중력보상을 다시 계산합니다. 맞게 추정했다면 실물의 처짐이 거의 0이 됩니다.</p>
+        <div class="row"><label for="in-corr">모델에 더할 손끝 무게</label><input type="number" id="in-corr" step="1" min="0" value="0"><span class="note">g</span><button id="btn-corr" disabled>보정 모델로 '실물' 실행</button></div>
+        <div class="fb" id="fb-corr" hidden></div>
+        <div class="row" style="margin-top:6px"><button class="ghost" id="btn-new">새 '실물 로봇' 받기 (숨은 무게 다시 뽑기)</button></div>
+      </article>
+
+      <article class="card" id="c5">
+        <h2><span class="num">5</span>정리 퀴즈: 도메인 랜덤화</h2>
+        <p>숨은 무게를 측정할 수 없어서, 시뮬에서 손끝 무게를 무작위로 바꿔 가며 제어기를 검증하려 합니다. 어떤 범위가 좋을까요? (실제 값은 40~100 g 사이 어딘가)</p>
+        <div class="choices" id="quiz">
+          <label><input type="radio" name="q" value="a"> 0~20 g (작은 값 위주로)</label>
+          <label><input type="radio" name="q" value="b"> 0~150 g (실제 가능 범위를 넉넉히 포함)</label>
+          <label><input type="radio" name="q" value="c"> 범위 없이 모델 값 0 g 하나로</label>
+        </div>
+        <div class="fb" id="fb-quiz" hidden></div>
+      </article>
+    </section>
+  </div>
+</div>
+<footer class="foot" id="foot"></footer>
+
+<script src="../lib/three.min.js"></script>
+<script src="../lib/OrbitControls.js"></script>
+<script src="../common/lab.js"></script>
+<script src="p06.js"></script>
+</body>
+</html>

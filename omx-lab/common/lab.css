@@ -143,3 +143,17 @@ footer.foot a { color: var(--muted); }
 .plist .t { font: 700 1.05rem var(--font-head); }
 .plist .c { font-size: 0.88rem; color: var(--muted); }
 .plist .soon { opacity: 0.55; }
+
+/* 시간 그래프 */
+.plot { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.plot .ptitle { font-size: 0.78rem; color: var(--muted); }
+.plot canvas { display: block; width: 100%; height: 170px; }
+select { font: 600 0.9rem var(--font-body); padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.given { font: 0.88rem var(--font-mono); background: var(--soft); padding: 8px 12px; border-radius: 8px; line-height: 1.8; overflow-x: auto; }
+
+/* 3D 위 관절 이름표 */
+.jlabel { position: absolute; left: 0; top: 0; transform: translate(8px, -50%); pointer-events: none; white-space: nowrap;
+  font: 600 0.7rem var(--font-body); color: var(--ink); background: color-mix(in srgb, var(--panel) 82%, transparent);
+  border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 0 6px; border-radius: 4px; line-height: 1.5; }
+.jlabel.below { transform: translate(8px, 70%); }   /* joint4와 겹치지 않게 아래로 */
+.jtoggle { position: absolute; left: 10px; bottom: 8px; font-size: 0.75rem; padding: 3px 9px; background: color-mix(in srgb, var(--panel) 85%, transparent); }
